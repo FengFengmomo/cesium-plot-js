@@ -3,9 +3,11 @@ import Base from '../base';
 // @ts-ignore
 import { Cartesian3 } from 'cesium';
 import { LineStyle } from '../interface';
+import { Vector3 } from 'three';
+import UnitUtils from '../UnitUtils';
 
 export default class StraightArrow extends Base {
-  points: Cartesian3[] = [];
+  points: Vector3[] = [];
   arrowLengthScale: number = 5;
   maxArrowLength: number = 3000000;
   minPointsForShape: number;
@@ -24,7 +26,7 @@ export default class StraightArrow extends Base {
   /**
    * Add points only on click events
    */
-  addPoint(cartesian: Cartesian3) {
+  addPoint(cartesian: Vector3) {
     if (this.points.length < 2) {
       this.points.push(cartesian);
       this.onMouseMove();
@@ -40,7 +42,7 @@ export default class StraightArrow extends Base {
   /**
    * Draw a shape based on mouse movement points during the initial drawing.
    */
-  updateMovingPoint(cartesian: Cartesian3) {
+  updateMovingPoint(cartesian: Vector3) {
     const tempPoints = [...this.points, cartesian];
     const geometryPoints = this.createGraphic(tempPoints);
     this.setGeometryPoints(geometryPoints);
@@ -50,7 +52,7 @@ export default class StraightArrow extends Base {
   /**
    * In edit mode, drag key points to update corresponding key point data.
    */
-  updateDraggingPoint(cartesian: Cartesian3, index: number) {
+  updateDraggingPoint(cartesian: Vector3, index: number) {
     this.points[index] = cartesian;
     const geometryPoints = this.createGraphic(this.points);
     this.setGeometryPoints(geometryPoints);
@@ -60,7 +62,7 @@ export default class StraightArrow extends Base {
   /**
    * Generate geometric shapes based on key points.
    */
-  createGraphic(positions: Cartesian3[]) {
+  createGraphic(positions: Vector3[]) {
     const [pnt1, pnt2] = positions.map(this.cartesianToLnglat);
     const distance = Utils.MathDistance(pnt1, pnt2);
     let len = distance / this.arrowLengthScale;
@@ -68,7 +70,7 @@ export default class StraightArrow extends Base {
     const leftPnt = Utils.getThirdPoint(pnt1, pnt2, Math.PI / 6, len / 2, false);
     const rightPnt = Utils.getThirdPoint(pnt1, pnt2, Math.PI / 6, len / 2, true);
     const points = [...pnt1, ...pnt2, ...leftPnt, ...pnt2, ...rightPnt];
-    const cartesianPoints = this.cesium.Cartesian3.fromDegreesArray(points);
+    const cartesianPoints = UnitUtils.fromDegreesArray(points);
     return cartesianPoints;
   }
 

@@ -3,9 +3,11 @@ import * as Utils from '../utils';
 // @ts-ignore
 import { Cartesian3 } from 'cesium';
 import { PolygonStyle } from '../interface';
+import { Uniform, Vector3 } from 'three';
+import UnitUtils from '../UnitUtils';
 
 export default class Lune extends Base {
-  points: Cartesian3[] = [];
+  points: Vector3[] = [];
   freehand: boolean;
 
   constructor(cesium: any, viewer: any, style?: PolygonStyle) {
@@ -22,7 +24,7 @@ export default class Lune extends Base {
   /**
    * Add points only on click events
    */
-  addPoint(cartesian: Cartesian3) {
+  addPoint(cartesian: Vector3) {
     this.points.push(cartesian);
     if (this.points.length === 1) {
       this.onMouseMove();
@@ -35,7 +37,7 @@ export default class Lune extends Base {
   /**
    * Draw a shape based on mouse movement points during the initial drawing.
    */
-  updateMovingPoint(cartesian: Cartesian3) {
+  updateMovingPoint(cartesian: Vector3) {
     const tempPoints = [...this.points, cartesian];
     const geometryPoints = this.createGraphic(tempPoints);
     this.setGeometryPoints(geometryPoints);
@@ -45,14 +47,14 @@ export default class Lune extends Base {
   /**
    * In edit mode, drag key points to update corresponding key point data.
    */
-  updateDraggingPoint(cartesian: Cartesian3, index: number) {
+  updateDraggingPoint(cartesian: Vector3, index: number) {
     this.points[index] = cartesian;
     const geometryPoints = this.createGraphic(this.points);
     this.setGeometryPoints(geometryPoints);
     this.drawPolygon();
   }
 
-  createGraphic(positions: Cartesian3[]) {
+  createGraphic(positions: Vector3[]) {
     const lnglatPoints = positions.map((pnt) => {
       return this.cartesianToLnglat(pnt);
     });
@@ -84,7 +86,7 @@ export default class Lune extends Base {
 
     let points = Utils.getArcPoints(center, radius, startAngle, endAngle);
     const temp = [].concat(...points);
-    const cartesianPoints = this.cesium.Cartesian3.fromDegreesArray(temp);
+    const cartesianPoints = UnitUtils.fromDegreesArray(temp);
     return cartesianPoints;
   }
 

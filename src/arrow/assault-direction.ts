@@ -1,11 +1,13 @@
 import FineArrow from './fine-arrow';
 import * as Utils from '../utils';
 // @ts-ignore
-import { Cartesian3 } from 'cesium';
+import { Vector3} from 'three';
 import { PolygonStyle } from '../interface';
+import UnitUtils from '../UnitUtils';
+
 
 export default class AssaultDirection extends FineArrow {
-  points: Cartesian3[] = [];
+  points: Vector3[] = [];
   arrowLengthScale: number = 5;
   maxArrowLength: number = 2;
   tailWidthFactor: number;
@@ -27,7 +29,7 @@ export default class AssaultDirection extends FineArrow {
     this.setState('drawing');
   }
 
-  createGraphic(positions: Cartesian3[]) {
+  createGraphic(positions: Vector3[]) {
     const [p1, p2] = positions.map(this.cartesianToLnglat);
     const len = Utils.getBaseLength([p1, p2]) * 1.5;
     const tailWidth = len * this.tailWidthFactor;
@@ -40,7 +42,7 @@ export default class AssaultDirection extends FineArrow {
     const neckLeft = Utils.getThirdPoint(p1, p2, this.neckAngle, neckWidth, false);
     const neckRight = Utils.getThirdPoint(p1, p2, this.neckAngle, neckWidth, true);
     const points = [...tailLeft, ...neckLeft, ...headLeft, ...p2, ...headRight, ...neckRight, ...tailRight, ...p1];
-    const cartesianPoints = this.cesium.Cartesian3.fromDegreesArray(points);
+    const cartesianPoints = UnitUtils.fromDegreesArray(points);
     return cartesianPoints;
   }
 }

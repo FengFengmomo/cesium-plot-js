@@ -3,9 +3,11 @@ import Base from '../base';
 // @ts-ignore
 import { Cartesian3 } from 'kmap-3d-engine';
 import { LineStyle } from '../interface';
+import { Vector3 } from 'three';
+import UnitUtils from '../UnitUtils';
 
 export default class Curve extends Base {
-	points: Cartesian3[] = [];
+	points: Vector3[] = [];
 	arrowLengthScale: number = 5;
 	maxArrowLength: number = 3000000;
 	t: number;
@@ -38,7 +40,7 @@ export default class Curve extends Base {
 	/**
 	 * Draw the shape based on the mouse movement position during the initial drawing.
 	 */
-	updateMovingPoint(cartesian: Cartesian3) {
+	updateMovingPoint(cartesian: Vector3) {
 		const tempPoints = [...this.points, cartesian];
 		let geometryPoints = [];
 		if (tempPoints.length === 2) {
@@ -53,7 +55,7 @@ export default class Curve extends Base {
 	/**
 	 * During editing mode, drag key points to update the corresponding data.
 	 */
-	updateDraggingPoint(cartesian: Cartesian3, index: number) {
+	updateDraggingPoint(cartesian: Vector3, index: number) {
 		this.points[index] = cartesian;
 		const geometryPoints = this.createGraphic(this.points);
 		this.setGeometryPoints(geometryPoints);
@@ -63,14 +65,14 @@ export default class Curve extends Base {
 	/**
 	 * Generate geometric shape points based on key points..
 	 */
-	createGraphic(positions: Cartesian3[]) {
+	createGraphic(positions: Vector3[]) {
 		const lnglatPoints = positions.map(pnt => {
 			return this.cartesianToLnglat(pnt);
 		});
 
 		const curvePoints = Utils.getCurvePoints(this.t, lnglatPoints);
 		const temp = [].concat(...curvePoints);
-		const cartesianPoints = this.cesium.Cartesian3.fromDegreesArray(temp);
+		const cartesianPoints = UnitUtils.fromDegreesArray(temp);
 		return cartesianPoints;
 	}
 

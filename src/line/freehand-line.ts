@@ -2,9 +2,10 @@ import Base from '../base';
 // @ts-ignore
 import { Cartesian3 } from 'cesium';
 import { PolygonStyle } from '../interface';
+import { Vector3 } from 'three';
 
 export default class FreehandLine extends Base {
-  points: Cartesian3[] = [];
+  points: Vector3[] = [];
   freehand: boolean;
 
   constructor(cesium: any, viewer: any, style?: PolygonStyle) {
@@ -21,7 +22,7 @@ export default class FreehandLine extends Base {
   /**
    * Add points only on click events
    */
-  addPoint(cartesian: Cartesian3) {
+  addPoint(cartesian: Vector3) {
     this.points.push(cartesian);
     if (this.points.length < 2) {
       this.onMouseMove();
@@ -33,7 +34,7 @@ export default class FreehandLine extends Base {
   /**
    * Draw a shape based on mouse movement points during the initial drawing.
    */
-  updateMovingPoint(cartesian: Cartesian3) {
+  updateMovingPoint(cartesian: Vector3) {
     this.points.push(cartesian);
     this.setGeometryPoints(this.points);
     this.drawLine();
@@ -43,7 +44,7 @@ export default class FreehandLine extends Base {
   /**
    * In edit mode, drag key points to update corresponding key point data.
    */
-  updateDraggingPoint(cartesian: Cartesian3, index: number) {
+  updateDraggingPoint(cartesian: Vector3, index: number) {
     this.points[index] = cartesian;
     this.setGeometryPoints(this.points);
     this.drawLine();

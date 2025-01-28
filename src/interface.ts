@@ -1,15 +1,12 @@
 // @ts-ignore
-import * as CesiumTypeOnly from 'cesium';
 
 export type PolygonStyle = {
-  material?: CesiumTypeOnly.MaterialProperty | CesiumTypeOnly.Color;
-  outlineWidth?: number;
-  outlineMaterial?: CesiumTypeOnly.MaterialProperty | CesiumTypeOnly.Color;
+  PolygonStyle?: undefined;
 };
 
 export type LineStyle = {
-  material?: CesiumTypeOnly.Color;
-  lineWidth?: number;
+  LineStyle?: undefined;
+  
 };
 
 export type State = 'drawing' | 'edit' | 'static' | 'animating' | 'hidden';

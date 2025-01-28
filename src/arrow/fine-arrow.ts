@@ -3,9 +3,12 @@ import * as Utils from '../utils';
 // @ts-ignore
 import { Cartesian3 } from 'cesium';
 import { PolygonStyle } from '../interface';
+import { Vector3 } from 'three';
+import UnitUtils from '../UnitUtils';
 
 export default class FineArrow extends Base {
-  points: Cartesian3[] = [];
+  // points: Cartesian3[] = [];
+  points: Vector3[] = [];
   arrowLengthScale: number = 5;
   maxArrowLength: number = 2;
   tailWidthFactor: number;
@@ -34,7 +37,7 @@ export default class FineArrow extends Base {
   /**
    * Add points only on click events
    */
-  addPoint(cartesian: Cartesian3) {
+  addPoint(cartesian: Vector3) {
     if (this.points.length < 2) {
       this.points.push(cartesian);
       this.onMouseMove();
@@ -60,7 +63,7 @@ export default class FineArrow extends Base {
   /**
    * In edit mode, drag key points to update corresponding key point data.
    */
-  updateDraggingPoint(cartesian: Cartesian3, index: number) {
+  updateDraggingPoint(cartesian: Vector3, index: number) {
     this.points[index] = cartesian;
     const geometryPoints = this.createGraphic(this.points);
     this.setGeometryPoints(geometryPoints);
@@ -70,7 +73,7 @@ export default class FineArrow extends Base {
   /**
    * Generate geometric shapes based on key points.
    */
-  createGraphic(positions: Cartesian3[]) {
+  createGraphic(positions: Vector3[]) {
     const [p1, p2] = positions.map(this.cartesianToLnglat);
     const len = Utils.getBaseLength([p1, p2]);
     const tailWidth = len * this.tailWidthFactor;
@@ -83,7 +86,7 @@ export default class FineArrow extends Base {
     const neckLeft = Utils.getThirdPoint(p1, p2, this.neckAngle, neckWidth, false);
     const neckRight = Utils.getThirdPoint(p1, p2, this.neckAngle, neckWidth, true);
     const points = [...tailLeft, ...neckLeft, ...headLeft, ...p2, ...headRight, ...neckRight, ...tailRight, ...p1];
-    const cartesianPoints = this.cesium.Cartesian3.fromDegreesArray(points);
+    const cartesianPoints =  UnitUtils.fromDegreesArray(points);
     return cartesianPoints;
   }
 

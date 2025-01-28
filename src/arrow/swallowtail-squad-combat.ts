@@ -3,9 +3,11 @@ import SquadCombat from './squad-combat';
 // @ts-ignore
 import { Cartesian3 } from 'cesium';
 import { PolygonStyle } from '../interface';
+import { Vector3 } from 'three';
+import UnitUtils from '../UnitUtils';
 
 export default class SwallowtailSquadCombat extends SquadCombat {
-  points: Cartesian3[] = [];
+  points: Vector3[] = [];
   headHeightFactor: number;
   headWidthFactor: number;
   neckHeightFactor: number;
@@ -29,7 +31,7 @@ export default class SwallowtailSquadCombat extends SquadCombat {
   /**
    * Generate geometric shapes based on key points.
    */
-  createGraphic(positions: Cartesian3[]): Cartesian3[] {
+  createGraphic(positions: Vector3[]): Vector3[] {
     const lnglatPoints = positions.map((pnt) => {
       return this.cartesianToLnglat(pnt);
     });
@@ -49,7 +51,7 @@ export default class SwallowtailSquadCombat extends SquadCombat {
 
     const points = leftPnts.concat(headPnts, rightPnts.reverse(), [tailPnts[1], leftPnts[0]]);
     const temp = [].concat(...points);
-    const cartesianPoints = this.cesium.Cartesian3.fromDegreesArray(temp);
+    const cartesianPoints = UnitUtils.fromDegreesArray(temp);
     return cartesianPoints;
   }
 

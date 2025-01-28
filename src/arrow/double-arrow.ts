@@ -3,10 +3,12 @@ import * as Utils from '../utils';
 // @ts-ignore
 import { Cartesian3 } from 'cesium';
 import { PolygonStyle } from '../interface';
+import { Vector3 } from 'three';
+import UnitUtils from '../UnitUtils';
 type Position = [number, number];
 
 export default class DoubleArrow extends Base {
-  points: Cartesian3[] = [];
+  points: Vector3[] = [];
   arrowLengthScale: number = 5;
   maxArrowLength: number = 2;
   neckWidthFactor: number;
@@ -18,8 +20,8 @@ export default class DoubleArrow extends Base {
   minPointsForShape: number;
   llBodyPnts: Position[] = [];
   rrBodyPnts: Position[] = [];
-  curveControlPointLeft: Cartesian3;
-  curveControlPointRight: Cartesian3;
+  curveControlPointLeft: Vector3;
+  curveControlPointRight: Vector3;
   isClockWise: boolean;
 
   constructor(cesium: any, viewer: any, style?: PolygonStyle) {
@@ -42,7 +44,7 @@ export default class DoubleArrow extends Base {
   /**
    * Add points only on click events
    */
-  addPoint(cartesian: Cartesian3) {
+  addPoint(cartesian: Vector3) {
     this.points.push(cartesian);
     if (this.points.length < 2) {
       this.onMouseMove();
@@ -75,14 +77,14 @@ export default class DoubleArrow extends Base {
   }
 
   finishDrawing() {
-    this.curveControlPointLeft = this.cesium.Cartesian3.fromDegrees(this.llBodyPnts[2][0], this.llBodyPnts[2][1]);
-    this.curveControlPointRight = this.cesium.Cartesian3.fromDegrees(this.rrBodyPnts[1][0], this.rrBodyPnts[1][1]);
+    this.curveControlPointLeft = UnitUtils.fromDegrees(this.llBodyPnts[2][0], this.llBodyPnts[2][1]);
+    this.curveControlPointRight = UnitUtils.fromDegrees(this.rrBodyPnts[1][0], this.rrBodyPnts[1][1]);
     super.finishDrawing();
   }
   /**
    * Draw a shape based on mouse movement points during the initial drawing.
    */
-  updateMovingPoint(cartesian: Cartesian3) {
+  updateMovingPoint(cartesian: Vector3) {
     const tempPoints = [...this.points, cartesian];
     this.setGeometryPoints(tempPoints);
     if (tempPoints.length === 2) {
@@ -98,7 +100,7 @@ export default class DoubleArrow extends Base {
   /**
    * In edit mode, drag key points to update corresponding key point data.
    */
-  updateDraggingPoint(cartesian: Cartesian3, index: number) {
+  updateDraggingPoint(cartesian: Vector3, index: number) {
     this.points[index] = cartesian;
     const geometryPoints = this.createGraphic(this.points);
     this.setGeometryPoints(geometryPoints);
@@ -108,7 +110,7 @@ export default class DoubleArrow extends Base {
   /**
    * Generate geometric shapes based on key points.
    */
-  createGraphic(positions: Cartesian3[]) {
+  createGraphic(positions: Vector3[]) {
     const lnglatPoints = positions.map((pnt) => {
       return this.cartesianToLnglat(pnt);
     });
@@ -149,7 +151,7 @@ export default class DoubleArrow extends Base {
     lrBodyPnts = Utils.getBezierPoints(lrBodyPnts);
     const pnts = rlBodyPnts.concat(rArrowPnts, bodyPnts, lArrowPnts, lrBodyPnts);
     const temp = [].concat(...pnts);
-    const cartesianPoints = this.cesium.Cartesian3.fromDegreesArray(temp);
+    const cartesianPoints = UnitUtils.fromDegreesArray(temp);
     return cartesianPoints;
   }
 

@@ -14,31 +14,34 @@ import EventDispatcher from './events';
 import cloneDeep from 'lodash.clonedeep';
 // import merge from 'lodash.merge';
 import * as Utils from './utils';
+import { BufferGeometry, Color, DoubleSide, Line, LineBasicMaterial, Material, Mesh, MeshBasicMaterial, Shape, ShapeGeometry, SphereGeometry, Vector2, Vector3 } from 'three';
+import UnitUtils from './UnitUtils';
+import Listener from './lsitener';
 
 export default class Base {
   cesium: typeof CesiumTypeOnly;
-  viewer: CesiumTypeOnly.Viewer;
-  eventHandler: CesiumTypeOnly.ScreenSpaceEventHandler;
-  polygonEntity: CesiumTypeOnly.Entity;
-  geometryPoints: CesiumTypeOnly.Cartesian3[] = [];
+  viewer: any; // 这里的viewer是wegeo对象
+  eventHandler: Listener;
+  polygonEntity: Mesh| undefined;
+  geometryPoints: Vector3[] = [];
   state: State = 'drawing';
-  controlPoints: CesiumTypeOnly.EntityCollection = [];
-  controlPointsEventHandler: CesiumTypeOnly.ScreenSpaceEventHandler;
-  lineEntity: CesiumTypeOnly.Entity;
+  controlPoints: Mesh[] = []; // 控制点
+  controlPointsEventHandler: Listener;
+  lineEntity: Mesh|undefined;
   type!: 'polygon' | 'line';
   freehand!: boolean;
   style: GeometryStyle | undefined;
-  outlineEntity: CesiumTypeOnly.Entity;
+  outlineEntity: Mesh|undefined;
   eventDispatcher: EventDispatcher;
-  dragEventHandler: CesiumTypeOnly.ScreenSpaceEventHandler;
-  entityId: string = '';
-  points: CesiumTypeOnly.Cartesian3[] = [];
+  dragEventHandler: Listener;
+  entityId: number | undefined;
+  // points: CesiumTypeOnly.Cartesian3[] = [];
+  points: Vector3[] = [];
   styleCache: GeometryStyle | undefined;
   minPointsForShape: number = 0;
-  tempLineEntity: CesiumTypeOnly.Entity;
+  tempLineEntity: Mesh|undefined;
 
-  constructor(cesium: CesiumTypeOnly, viewer: CesiumTypeOnly.Viewer, style?: GeometryStyle) {
-    this.cesium = cesium;
+  constructor(viewer: any, style?: GeometryStyle) {
     this.viewer = viewer;
     this.type = this.getType();
 
@@ -48,7 +51,7 @@ export default class Base {
     this.eventDispatcher = new EventDispatcher();
     // Disable default behavior for double-clicking on entities.
     viewer.trackedEntity = undefined;
-    viewer.cesiumWidget.screenSpaceEventHandler.removeInputAction(this.cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
+    // viewer.cesiumWidget.screenSpaceEventHandler.removeInputAction(this.cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
 
     this.onClick();
   }
@@ -57,17 +60,22 @@ export default class Base {
     if (this.type === 'polygon') {
       this.style = Object.assign(
         {
-          material: new this.cesium.Color(),
-          outlineMaterial: new this.cesium.Color(),
-          outlineWidth: 2,
+          PolygonStyle: new MeshBasicMaterial({
+            color: 0x0000ff,
+            side: DoubleSide,
+            transparent: true,
+            opacity: 1.0,
+          }),
         },
         style,
       );
     } else if (this.type === 'line') {
       this.style = Object.assign(
         {
-          material: new this.cesium.Color(),
-          lineWidth: 2,
+          LineStyle: new LineBasicMaterial({
+            color: 0xffffff,
+            linewidth: 2,
+          })
         },
         style,
       );
@@ -89,16 +97,21 @@ export default class Base {
     return this.state;
   }
 
+  defined(obj: any): boolean {
+    return obj !== undefined && obj !== null;
+  }
+
   /**
    * Bind a global click event that responds differently based on the state. When in the drawing state,
    * a click will add points for geometric shapes. During editing, selecting a drawn shape puts it in an
    *  editable state. Clicking on empty space sets it to a static state.
    */
   onClick() {
-    this.eventHandler = new this.cesium.ScreenSpaceEventHandler(this.viewer.canvas);
-    this.eventHandler.setInputAction((evt: any) => {
-      const pickedObject = this.viewer.scene.pick(evt.position);
-      const hitEntities = this.cesium.defined(pickedObject) && pickedObject.id instanceof this.cesium.Entity;
+    this.eventHandler = new Listener(this.viewer.baseMap.canvas);
+    this.eventHandler.on("mouse-click", (mx:number, my: number) => {
+      let pos = new Vector2(mx, my);
+      const pickedObject = this.viewer.getModel(mx, my);
+      const hitEntities = this.defined(pickedObject) && pickedObject instanceof Mesh;
       let activeEntity = this.polygonEntity;
       if (this.type === 'line') {
         activeEntity = this.lineEntity;
@@ -106,7 +119,7 @@ export default class Base {
 
       if (this.state === 'drawing') {
         // In the drawing state, the points clicked are key nodes of the shape, and they are saved in this.points.
-        const cartesian = this.pixelToCartesian(evt.position);
+        const cartesian = this.pixelToCartesian(pos);
         const points = this.getPoints();
         // If the click is outside the sphere, position information cannot be obtained.
         if (!cartesian) {
@@ -126,7 +139,7 @@ export default class Base {
         this.eventDispatcher.dispatchEvent('drawUpdate', cartesian);
       } else if (this.state === 'edit') {
         //In edit mode, exit the editing state and delete control points when clicking outside the currently edited shape.
-        if (!hitEntities || activeEntity.id !== pickedObject.id.id) {
+        if (!hitEntities || activeEntity.id !== pickedObject.id) {
           this.setState('static');
           this.removeControlPoints();
           this.disableDrag();
@@ -135,9 +148,10 @@ export default class Base {
         }
       } else if (this.state === 'static') {
         //When drawing multiple shapes, the click events for all shapes are triggered. Only when hitting a completed shape should it enter editing mode.
-        if (hitEntities && activeEntity.id === pickedObject.id.id) {
-          const pickedGraphics = this.type === 'line' ? pickedObject.id.polyline : pickedObject.id.polygon;
-          if (this.cesium.defined(pickedGraphics)) {
+        if (hitEntities && activeEntity.id === pickedObject.id) {
+          // TODO 这里留待存疑，说明：这里可能只有是线型的几何体点击的时候才会有polyline和polygon，具体可以debug源代码看
+          const pickedGraphics = this.type === 'line' ? pickedObject.id : pickedObject.id;
+          if (this.defined(pickedGraphics)) {
             // Hit Geometry Shape.
             this.setState('edit');
             this.addControlPoints();
@@ -146,13 +160,14 @@ export default class Base {
           }
         }
       }
-    }, this.cesium.ScreenSpaceEventType.LEFT_CLICK);
+    });
   }
 
   onMouseMove() {
-    this.eventHandler.setInputAction((evt: any) => {
+    this.eventHandler.on("mouse-move",(mx: number, my: number) => {
+      let pos = new Vector2(mx, my);
       const points = this.getPoints();
-      const cartesian = this.pixelToCartesian(evt.endPosition);
+      const cartesian = this.pixelToCartesian(pos);
       if (!cartesian) {
         return;
       }
@@ -160,29 +175,29 @@ export default class Base {
         // Synchronize data to subclasses.If the distance is less than 10 meters, do not proceed
         this.updateMovingPoint(cartesian, points.length);
       }
-    }, this.cesium.ScreenSpaceEventType.MOUSE_MOVE);
+    });
   }
 
   onDoubleClick() {
-    this.eventHandler.setInputAction((evt: any) => {
+    this.eventHandler.on("mouse-double-click-left",(mx: number, my: number) => {
       if (this.state === 'drawing') {
         this.finishDrawing();
       }
-    }, this.cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
+    });
   }
 
   /**
    * Check if the distance between two points is greater than 10 meters.
    */
-  checkDistance(cartesian1: CesiumTypeOnly.Cartesian3, cartesian2: CesiumTypeOnly.Cartesian3) {
-    const distance = this.cesium.Cartesian3.distance(cartesian1, cartesian2);
+  checkDistance(cartesian1:Vector3, cartesian2: Vector3) {
+    const distance = cartesian1.distanceTo(cartesian2);
     return distance > 10;
   }
 
   finishDrawing() {
     // Some polygons draw a separate line between the first two points before drawing the complete shape;
     // this line should be removed after drawing is complete.
-    this.type === 'polygon' && this.lineEntity && this.viewer.entities.remove(this.lineEntity);
+    this.type === 'polygon' && this.lineEntity && this.viewer.baseMap.remove(this.lineEntity);
 
     this.removeMoveListener();
     // Editable upon initial drawing completion.
@@ -213,56 +228,55 @@ export default class Base {
   }
 
   removeClickListener() {
-    this.eventHandler.removeInputAction(this.cesium.ScreenSpaceEventType.LEFT_CLICK);
+    this.eventHandler.off("mouse-click");
   }
 
   removeMoveListener() {
-    this.eventHandler.removeInputAction(this.cesium.ScreenSpaceEventType.MOUSE_MOVE);
+    this.eventHandler.off("mouse-move");
   }
 
   removeDoubleClickListener() {
-    this.eventHandler.removeInputAction(this.cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
+    this.eventHandler.off("mouse-double-click-left");
   }
 
-  setGeometryPoints(geometryPoints: CesiumTypeOnly.Cartesian3[]) {
+  setGeometryPoints(geometryPoints: Vector3[]) {
     this.geometryPoints = geometryPoints;
   }
 
-  getGeometryPoints(): CesiumTypeOnly.Cartesian3[] {
+  getGeometryPoints(): Vector3[] {
     return this.geometryPoints;
   }
 
   drawPolygon() {
     const callback = () => {
-      return new this.cesium.PolygonHierarchy(this.geometryPoints);
+      let list=[];
+      for (let i = 0; i < this.geometryPoints.length; i++) {
+        list.push(new Vector2(this.geometryPoints[i].x,this.geometryPoints[i].z));
+      }
+      let geometry = new ShapeGeometry( new Shape( list ) );
+      for (let i = 0; i < this.geometryPoints.length; i++) {
+        geometry.attributes.position.array[i * 3 + 1]=this.geometryPoints[i].y;
+      }
+      return geometry;
     };
     if (!this.polygonEntity) {
-      const style = this.style as PolygonStyle;
-      this.polygonEntity = this.viewer.entities.add({
-        polygon: new this.cesium.PolygonGraphics({
-          hierarchy: new this.cesium.CallbackProperty(callback, false),
-          show: true,
-          material: style.material,
-        }),
-      });
-
+      const style = this.style.PolygonStyle;
+      this.polygonEntity = this.viewer.baseMap.add(new Mesh(
+        callback(),
+        style
+      ));
+      let lineStyle = this.style.LineStyle;
       // Due to limitations in PolygonGraphics outlining, a separate line style is drawn.
-      this.outlineEntity = this.viewer.entities.add({
-        polyline: {
-          positions: new this.cesium.CallbackProperty(() => {
-            return [...this.geometryPoints, this.geometryPoints[0]];
-          }, false),
-          width: style.outlineWidth,
-          material: style.outlineMaterial,
-          clampToGround: true,
-        },
-      });
+      this.outlineEntity = this.viewer.baseMap.add(new Line(
+        new BufferGeometry().setFromPoints(this.geometryPoints),
+        lineStyle,
+      ));
     }
   }
 
   drawLine() {
     if (!this.lineEntity) {
-      const style = this.style as LineStyle;
+      const style = this.style.LineStyle;
       this.lineEntity = this.addLineEntity(style);
     }
   }
@@ -270,12 +284,8 @@ export default class Base {
   addTempLine() {
     if (!this.tempLineEntity) {
       // The line style between the first two points matches the outline style.
-      const style = this.style as PolygonStyle;
-      const lineStyle = {
-        material: style.outlineMaterial,
-        lineWidth: style.outlineWidth,
-      };
-      this.tempLineEntity = this.addLineEntity(lineStyle);
+      const style = this.style.LineStyle;
+      this.tempLineEntity = this.addLineEntity(style);
     }
   }
 
@@ -285,28 +295,25 @@ export default class Base {
     }
   }
 
-  addLineEntity(style: LineStyle) {
-    const entity = this.viewer.entities.add({
-      polyline: {
-        positions: new this.cesium.CallbackProperty(() => this.geometryPoints, false),
-        width: style.lineWidth,
-        material: style.material,
-        clampToGround: true,
-      },
-    });
+  addLineEntity(style: LineBasicMaterial) {
+    const entity = this.viewer.baseMap.add(new Line(
+      new BufferGeometry().setFromPoints(this.geometryPoints),
+      style
+    ));
     return entity;
   }
 
-  cartesianToLnglat(cartesian: CesiumTypeOnly.Cartesian3): [number, number] {
-    const lnglat = this.viewer.scene.globe.ellipsoid.cartesianToCartographic(cartesian);
-    const lat = this.cesium.Math.toDegrees(lnglat.latitude);
-    const lng = this.cesium.Math.toDegrees(lnglat.longitude);
+  cartesianToLnglat(position: Vector3): [number, number] {
+    const lnglat = UnitUtils.vectorToDatums(position);
+    const lat = lnglat.latitude;
+    const lng = lnglat.longitude;
+    // const lat = this.cesium.Math.toDegrees(lnglat.latitude);
+    // const lng = this.cesium.Math.toDegrees(lnglat.longitude);
     return [lng, lat];
   }
 
-  pixelToCartesian(position: CesiumTypeOnly.Cartesian2): CesiumTypeOnly.Cartesian3 | undefined {
-    const ray = this.viewer.camera.getPickRay(position);
-    const cartesian = this.viewer.scene.globe.pick(ray, this.viewer.scene);
+  pixelToCartesian(position: Vector2): Vector3 | undefined {
+    const cartesian = this.viewer.getXYZ(position.x, position.y);
     return cartesian;
   }
 
@@ -315,81 +322,74 @@ export default class Base {
    */
   addControlPoints() {
     const points = this.getPoints();
+    let ctl_point_size = 100;
     this.controlPoints = points.map((position) => {
-      // return this.viewer.entities.add({
-      //   position,
-      //   billboard: {
-      //     image: './src/assets/circle_red.png',
-      //   },
-      // });
-
-      return this.viewer.entities.add({
-        position,
-        point: {
-          pixelSize: 10,
-          heightReference: this.cesium.HeightReference.CLAMP_TO_GROUND,
-          color: this.cesium.Color.RED,
-        },
-      });
+      let ctl = new Mesh(new SphereGeometry(ctl_point_size, 32, 32), new MeshBasicMaterial({ color: 0xff0000 }));
+      ctl.position.copy(position);
+      this.viewer.baseMap.add(ctl);
+      return ctl;
     });
 
     let isDragging = false;
-    let draggedIcon: CesiumTypeOnly.Entity = null;
-    let dragStartPosition: CesiumTypeOnly.Cartesian3;
+    let draggedIcon: Mesh | undefined;
+    let dragStartPosition: Vector3 | undefined;
 
-    this.controlPointsEventHandler = new this.cesium.ScreenSpaceEventHandler(this.viewer.canvas);
+    this.controlPointsEventHandler = new Listener(this.viewer.baseMap.canvas);
 
     // Listen for left mouse button press events
-    this.controlPointsEventHandler.setInputAction((clickEvent: any) => {
-      const pickedObject = this.viewer.scene.pick(clickEvent.position);
+    this.controlPointsEventHandler.on("mouse-down-left",(mx: number, my: number) => {
+      let pos = new Vector2(mx, my);
+      const pickedObject = this.viewer.getModel(mx,my);
 
-      if (this.cesium.defined(pickedObject)) {
+      if (this.defined(pickedObject)) {
         for (let i = 0; i < this.controlPoints.length; i++) {
-          if (pickedObject.id === this.controlPoints[i]) {
+          if (pickedObject.id === this.controlPoints[i].id) {
             isDragging = true;
             draggedIcon = this.controlPoints[i];
-            dragStartPosition = draggedIcon.position._value;
+            dragStartPosition = draggedIcon.position;
             //Save the index of dragged points for dynamic updates during movement
             draggedIcon.index = i;
             break;
           }
         }
         // Disable default camera interaction.
-        this.viewer.scene.screenSpaceCameraController.enableRotate = false;
+        this.viewer.baseMap.controls.enableRotate = false;
       }
-    }, this.cesium.ScreenSpaceEventType.LEFT_DOWN);
+    });
 
     // Listen for mouse movement events
-    this.controlPointsEventHandler.setInputAction((moveEvent: any) => {
+    this.controlPointsEventHandler.on("mouse-move", (mx: number, my: number) => {
       if (isDragging && draggedIcon) {
-        const cartesian = this.viewer.camera.pickEllipsoid(moveEvent.endPosition, this.viewer.scene.globe.ellipsoid);
+        // const cartesian = this.viewer.camera.pickEllipsoid(moveEvent.endPosition, this.viewer.scene.globe.ellipsoid);
+        let pos = new Vector2(mx, my);
+        const cartesian = this.viewer.getXYZ(pos.x, pos.y);
         if (cartesian) {
-          draggedIcon.position.setValue(cartesian);
+          draggedIcon.position.copy(cartesian);
           this.updateDraggingPoint(cartesian, draggedIcon.index);
         }
       }
-    }, this.cesium.ScreenSpaceEventType.MOUSE_MOVE);
+    });
 
     // Listen for left mouse button release events
-    this.controlPointsEventHandler.setInputAction(() => {
+    this.controlPointsEventHandler.on("mouse-up",(mx: number, my: number) => {
       // Trigger 'drawUpdate' when there is a change in coordinates before and after dragging.
-      if (draggedIcon && !this.cesium.Cartesian3.equals(dragStartPosition, draggedIcon.position._value)) {
-        this.eventDispatcher.dispatchEvent('drawUpdate', draggedIcon.position._value);
+      if (draggedIcon && !dragStartPosition.equals(draggedIcon.position)) {
+        this.eventDispatcher.dispatchEvent('drawUpdate', draggedIcon.position);
       }
       isDragging = false;
       draggedIcon = null;
-      this.viewer.scene.screenSpaceCameraController.enableRotate = true;
-    }, this.cesium.ScreenSpaceEventType.LEFT_UP);
+      this.viewer.baseMap.controls.enableRotate = true;
+    });
   }
 
   removeControlPoints() {
     if (this.controlPoints.length > 0) {
-      this.controlPoints.forEach((entity: CesiumTypeOnly.Entity) => {
-        this.viewer.entities.remove(entity);
+      this.controlPoints.forEach((entity: Mesh) => {
+        this.viewer.baseMap.remove(entity);
       });
-      this.controlPointsEventHandler.removeInputAction(this.cesium.ScreenSpaceEventType.LEFT_DOWN);
-      this.controlPointsEventHandler.removeInputAction(this.cesium.ScreenSpaceEventType.MOUSE_MOVE);
-      this.controlPointsEventHandler.removeInputAction(this.cesium.ScreenSpaceEventType.LEFT_UP);
+      this.controlPointsEventHandler.off("mouse-down-left");
+      this.controlPointsEventHandler.off("mouse-move");
+      this.controlPointsEventHandler.off("mouse-up");
     }
   }
 
@@ -398,88 +398,86 @@ export default class Base {
    */
   draggable() {
     let dragging = false;
-    let startPosition: CesiumTypeOnly.Cartesian3 | undefined;
-    this.dragEventHandler = new this.cesium.ScreenSpaceEventHandler(this.viewer.canvas);
-    this.dragEventHandler.setInputAction((event: any) => {
-      const pickRay = this.viewer.scene.camera.getPickRay(event.position);
-      if (pickRay) {
-        const cartesian = this.viewer.scene.globe.pick(pickRay, this.viewer.scene);
-        const pickedObject = this.viewer.scene.pick(event.position);
-        if (this.cesium.defined(pickedObject) && pickedObject.id instanceof this.cesium.Entity) {
-          const clickedEntity = pickedObject.id;
-          if (this.isCurrentEntity(clickedEntity.id)) {
+    let startPosition: Vector3 | undefined;
+    this.dragEventHandler = new Listener(this.viewer.baseMap.canvas);
+    this.dragEventHandler.on("mouse-down-left",(mx: number, my: number) => {
+      
+        const cartesian = this.viewer.getXYZ(mx, my);
+        const pickedObject = this.viewer.getModel(mx, my);
+        if (this.defined(pickedObject) && pickedObject instanceof Mesh) {
+          const clickedEntityID = pickedObject.id;
+          if (this.isCurrentEntity(clickedEntityID)) {
             //Clicking on the current instance's entity initiates drag logic.
             dragging = true;
             startPosition = cartesian;
-            this.viewer.scene.screenSpaceCameraController.enableRotate = false;
+            this.viewer.baseMap.controls.enableRotate = false;
           }
         }
-      }
-    }, this.cesium.ScreenSpaceEventType.LEFT_DOWN);
+    });
 
-    this.dragEventHandler.setInputAction((event: any) => {
+    this.dragEventHandler.on("mouse-move",(mx: number, my: number) => {
       if (dragging && startPosition) {
+        let pos = new Vector2(mx, my);
         // Retrieve the world coordinates of the current mouse position.
-        const newPosition = this.pixelToCartesian(event.endPosition);
+        const newPosition = this.pixelToCartesian(pos);
         if (newPosition) {
           // Calculate the displacement vector.
-          const translation = this.cesium.Cartesian3.subtract(newPosition, startPosition, new this.cesium.Cartesian3());
+          const translation = newPosition.sub(startPosition);
           const newPoints = this.geometryPoints.map((p) => {
-            return this.cesium.Cartesian3.add(p, translation, new this.cesium.Cartesian3());
+            return p.add(p, translation);
           });
 
           //Move all key points according to a vector.
           this.points = this.points.map((p) => {
-            return this.cesium.Cartesian3.add(p, translation, new this.cesium.Cartesian3());
+            return p.add(p, translation);
           });
 
           // Move control points in the same manner.
-          this.controlPoints.map((p: CesiumTypeOnly.Entity) => {
-            const position = p.position?.getValue(this.cesium.JulianDate.now());
-            const newPosition = this.cesium.Cartesian3.add(position, translation, new this.cesium.Cartesian3());
-            p.position?.setValue(newPosition);
+          this.controlPoints.map((p: Mesh) => {
+            const position = p.position;
+            const newPosition = position.add(position, translation);
+            p.position.copy(newPosition);
           });
 
           this.setGeometryPoints(newPoints);
           if (this.minPointsForShape === 4) {
             // 双箭头在整体被拖拽时，需要同步更新生长动画的插值点
-            this.curveControlPointLeft = this.cesium.Cartesian3.add(this.curveControlPointLeft, translation, new this.cesium.Cartesian3());
-            this.curveControlPointRight = this.cesium.Cartesian3.add(this.curveControlPointRight, translation, new this.cesium.Cartesian3());
+            this.curveControlPointLeft = this.curveControlPointLeft.add(this.curveControlPointLeft, translation);
+            this.curveControlPointRight = this.curveControlPointRight.add(this.curveControlPointRight, translation);
           }
           startPosition = newPosition;
         }
       } else {
-        const pickRay = this.viewer.scene.camera.getPickRay(event.endPosition);
-        if (pickRay) {
-          const pickedObject = this.viewer.scene.pick(event.endPosition);
-          if (this.cesium.defined(pickedObject) && pickedObject.id instanceof this.cesium.Entity) {
+        
+          const pickedObject = this.viewer.getModel(mx, my);
+          if (this.defined(pickedObject) && pickedObject instanceof Mesh) {
             const clickedEntity = pickedObject.id;
             // TODO 绘制的图形，需要特殊id标识，可在创建entity时指定id
-            if (this.isCurrentEntity(clickedEntity.id)) {
-              this.viewer.scene.canvas.style.cursor = 'move';
+            if (this.isCurrentEntity(clickedEntity)) {
+              this.viewer.baseMap.canvas.style.cursor = 'move';
             } else {
-              this.viewer.scene.canvas.style.cursor = 'default';
+              this.viewer.baseMap.canvas.style.cursor = 'default';
             }
           } else {
-            this.viewer.scene.canvas.style.cursor = 'default';
+            this.viewer.baseMap.canvas.style.cursor = 'default';
           }
-        }
+        
       }
-    }, this.cesium.ScreenSpaceEventType.MOUSE_MOVE);
+    });
 
     // Listen for the mouse release event to end dragging.
-    this.dragEventHandler.setInputAction(() => {
+    this.dragEventHandler.on("mouse-up", () => {
       dragging = false;
       startPosition = undefined;
       this.viewer.scene.screenSpaceCameraController.enableRotate = true;
-    }, this.cesium.ScreenSpaceEventType.LEFT_UP);
+    });
   }
 
   // Finish editing, disable dragging."
   disableDrag() {
-    this.dragEventHandler.removeInputAction(this.cesium.ScreenSpaceEventType.LEFT_DOWN);
-    this.dragEventHandler.removeInputAction(this.cesium.ScreenSpaceEventType.MOUSE_MOVE);
-    this.dragEventHandler.removeInputAction(this.cesium.ScreenSpaceEventType.LEFT_UP);
+    this.dragEventHandler.off("mouse-down-left");
+    this.dragEventHandler.off("mouse-move");
+    this.dragEventHandler.off("mouse-up");
   }
 
   show(opts: VisibleAnimationOpts) {
@@ -510,31 +508,33 @@ export default class Base {
     this.setState('static');
     if (this.type === 'polygon') {
       let alpha = 0.3;
-      const material = this.styleCache.material;
-      if (material.image) {
-        // With Texture
-        alpha = material.color.getValue().alpha;
-      } else {
-        alpha = material.alpha;
-      }
+      const material = this.styleCache.PolygonStyle.material;
+      // if (material.image) {
+      //   // With Texture
+      //   alpha = material.color.getValue().alpha;
+      // } else {
+      //   alpha = material.capcity;
+      // }
+      alpha = material.opacity;
 
       this.animateOpacity(this.polygonEntity, alpha, duration, delay, callback, this.state);
       const outlineAlpha = this.styleCache?.outlineMaterial?.alpha;
       this.animateOpacity(this.outlineEntity, outlineAlpha || 1.0, duration, delay, undefined, this.state);
     } else if (this.type === 'line') {
-      const material = this.styleCache.material;
+      const material = this.styleCache.LineStyle.material;
       let alpha = 1.0;
-      if (material.image) {
-        // With Texture
-        alpha = material.color.alpha;
-      } else if (material.dashLength) {
-        // Dashed Line
-        const color = material.color.getValue();
-        alpha = color.alpha;
-      } else {
-        // Solid Color
-        alpha = this.styleCache?.material?.alpha;
-      }
+      // if (material.image) {
+      //   // With Texture
+      //   alpha = material.color.alpha;
+      // } else if (material.dashLength) {
+      //   // Dashed Line
+      //   const color = material.color.getValue();
+      //   alpha = color.alpha;
+      // } else {
+      //   // Solid Color
+      //   alpha = this.styleCache?.material?.alpha;
+      // }
+      alpha = material.opacity;
       this.animateOpacity(this.lineEntity, alpha, duration, delay, callback, this.state);
     }
     if (duration != 0) {
@@ -564,7 +564,7 @@ export default class Base {
   }
 
   animateOpacity(
-    entity: CesiumTypeOnly.Entity,
+    entity: Mesh| Line,
     targetAlpha: number,
     duration: number,
     delay: number,
@@ -572,21 +572,22 @@ export default class Base {
     state?: State,
   ): void {
     setTimeout(() => {
-      const graphics = entity.polygon || entity.polyline || entity.billboard;
+      const graphics = entity;
       let startAlpha: number;
       let material = graphics.material;
-      if (material) {
-        if (material.image && material.color.alpha !== undefined) {
-          // Texture material, setting the alpha channel in the color of the custom ImageFlowMaterialProperty.
-          startAlpha = material.color.alpha;
-        } else {
-          startAlpha = material.color.getValue().alpha;
-        }
-      } else {
-        // billbord
-        const color = graphics.color.getValue();
-        startAlpha = color.alpha;
-      }
+      // if (material) {
+      //   if (material.image && material.color.alpha !== undefined) {
+      //     // Texture material, setting the alpha channel in the color of the custom ImageFlowMaterialProperty.
+      //     startAlpha = material.color.alpha;
+      //   } else {
+      //     startAlpha = material.color.getValue().alpha;
+      //   }
+      // } else {
+      //   // billbord
+      //   const color = graphics.color.getValue();
+      //   startAlpha = color.alpha;
+      // }
+      startAlpha = material.opacity;
 
       let startTime = 0;
 
@@ -600,21 +601,22 @@ export default class Base {
           const deltalpha = (elapsedTime / duration) * (targetAlpha - startAlpha);
           const newAlpha = startAlpha + deltalpha;
 
-          if (material) {
-            if (material.image && material.color.alpha !== undefined) {
-              // Texture Material
-              material.color.alpha = newAlpha;
-            } else {
-              // Solid Color
-              const newColor = material.color.getValue().withAlpha(newAlpha);
-              material.color.setValue(newColor);
-            }
-          } else {
-            // billbord
-            const color = graphics.color.getValue();
-            const newColor = color.withAlpha(newAlpha);
-            graphics.color.setValue(newColor);
-          }
+          // if (material) {
+          //   if (material.image && material.color.alpha !== undefined) {
+          //     // Texture Material
+          //     material.color.alpha = newAlpha;
+          //   } else {
+          //     // Solid Color
+          //     const newColor = material.color.getValue().withAlpha(newAlpha);
+          //     material.color.setValue(newColor);
+          //   }
+          // } else {
+          //   // billbord
+          //   const color = graphics.color.getValue();
+          //   const newColor = color.withAlpha(newAlpha);
+          //   graphics.color.setValue(newColor);
+          // }
+          material.opacity = newAlpha;
 
           requestAnimationFrame(animate);
         } else {
@@ -628,21 +630,22 @@ export default class Base {
 
           // if (duration == 0) {
           // this.setState('drawing');
-          if (material) {
-            if (material.image && material.color.alpha !== undefined) {
-              // Texture Material
-              material.color.alpha = targetAlpha;
-            } else {
-              // Solid Color
-              const newColor = material.color.getValue().withAlpha(targetAlpha);
-              material.color.setValue(newColor);
-            }
-          } else {
-            // billbord
-            const color = graphics.color.getValue();
-            const newColor = color.withAlpha(targetAlpha);
-            graphics.color.setValue(newColor);
-          }
+          // if (material) {
+          //   if (material.image && material.color.alpha !== undefined) {
+          //     // Texture Material
+          //     material.color.alpha = targetAlpha;
+          //   } else {
+          //     // Solid Color
+          //     const newColor = material.color.getValue().withAlpha(targetAlpha);
+          //     material.color.setValue(newColor);
+          //   }
+          // } else {
+          //   // billbord
+          //   const color = graphics.color.getValue();
+          //   const newColor = color.withAlpha(targetAlpha);
+          //   graphics.color.setValue(newColor);
+          // }
+          material.opacity = targetAlpha;
           requestAnimationFrame(() => {
             this.setState(restoredState);
           });
@@ -685,16 +688,22 @@ export default class Base {
       let startTime = Date.now();
       let movingPointIndex = 0;
       this.viewer.clock.shouldAnimate = true;
-
-      const frameListener = (clock) => {
-        const currentTime = Date.now();
+      let fpsStartTime = startTime;
+      const frameListener = (currentTime:number) => {
+        // const currentTime = Date.now();
         const elapsedTime = currentTime - startTime;
+        const fpsElapsedTime = currentTime - fpsStartTime;
+        if (fpsElapsedTime >= 16.7) {
+          // 60fps
+          fpsStartTime = currentTime;
+        } else {
+          // 限定到一定帧率以内
+          requestAnimationFrame(frameListener);
+        }
         if (elapsedTime >= duration) {
           // Animation ends
           callback && callback();
           startTime = 0;
-          this.viewer.clock.shouldAnimate = false;
-          this.viewer.clock.onTick.removeEventListener(frameListener);
           this.setState('static');
           return;
         }
@@ -710,21 +719,22 @@ export default class Base {
         startPoint = points[movingPointIndex - 1];
         if (currentSegment == 0 && this.minPointsForShape === 3) {
           // The face-arrow determined by three points, with the animation starting from the midpoint of the line connecting the first two points.
-          startPoint = this.cesium.Cartesian3.midpoint(points[0], points[1], new this.cesium.Cartesian3());
+          startPoint = new Vector3().lerpVectors(points[0], points[1], 0.5);
         }
         let endPoint = points[movingPointIndex];
         // To dynamically add points between the startPoint and endPoint, consistent with the initial drawing logic,
         // update the point at index movingPointIndex in the points array with the newPosition,
         // generate the arrow, and execute the animation.
         const t = (elapsedTime - currentSegment * segmentDuration) / segmentDuration;
-        const newPosition = this.cesium.Cartesian3.lerp(startPoint, endPoint, t, new this.cesium.Cartesian3());
+        const newPosition = startPoint.lerp(endPoint, t);
         const tempPoints = points.slice(0, movingPointIndex + 1);
         tempPoints[tempPoints.length - 1] = newPosition;
         const geometryPoints = this.createGraphic(tempPoints);
         this.setGeometryPoints(geometryPoints);
         this.showWithAnimation(0, 0, undefined);
+        requestAnimationFrame(frameListener);
       };
-      this.viewer.clock.onTick.addEventListener(frameListener);
+      requestAnimationFrame(frameListener);
     }, delay);
   }
 
@@ -734,26 +744,32 @@ export default class Base {
       const points = this.getPoints();
       let startTime = Date.now();
       this.viewer.clock.shouldAnimate = true;
+      let fpsStartTime = startTime;
 
-      const frameListener = (clock) => {
-        const currentTime = Date.now();
+      const frameListener = (currentTime:number) => {
         const elapsedTime = currentTime - startTime;
+        const fpsElapsedTime = currentTime - fpsStartTime;
+        if (fpsElapsedTime >= 16.7) {
+          // 60fps
+          fpsStartTime = currentTime;
+        } else {
+          // 限定到一定帧率以内
+          requestAnimationFrame(frameListener);
+        }
         if (elapsedTime >= duration) {
           // Animation ends
           callback && callback();
           startTime = 0;
-          this.viewer.clock.shouldAnimate = false;
-          this.viewer.clock.onTick.removeEventListener(frameListener);
           this.setState('static');
           return;
         }
 
         // Utils.isClockWise(pnt1, pnt2, pnt3)
-        const midPoint = this.cesium.Cartesian3.midpoint(points[0], points[1], new this.cesium.Cartesian3());
+        const midPoint = new Vector3().lerpVectors(points[0], points[1], 0.5);
 
-        const startPointLeft = this.cesium.Cartesian3.midpoint(points[0], midPoint, new this.cesium.Cartesian3());
+        const startPointLeft = new Vector3().lerpVectors(points[0], midPoint, 0.5);
 
-        const startPointRight = this.cesium.Cartesian3.midpoint(midPoint, points[1], new this.cesium.Cartesian3());
+        const startPointRight = new Vector3().lerpVectors(midPoint, points[1], 0.5);
         let endPointLeft = points[3];
         let endPointRight = points[2];
         const t = elapsedTime / duration;
@@ -763,31 +779,15 @@ export default class Base {
         const newPositionLeft = this.getNewPosition(curveControlPointsLeft, t);
         const newPositionRight = this.getNewPosition(curveControlPointsRight, t);
 
-        // Assist in viewing exercise routes
-        // this.viewer.entities.add({
-        // 	position: newPositionLeft,
-        // 	point: {
-        // 		pixelSize: 4,
-        // 		heightReference: this.cesium.HeightReference.CLAMP_TO_GROUND,
-        // 		color: this.cesium.Color.RED,
-        // 	},
-        // });
-        // this.viewer.entities.add({
-        // 	position: newPositionRight,
-        // 	point: {
-        // 		pixelSize: 4,
-        // 		heightReference: this.cesium.HeightReference.CLAMP_TO_GROUND,
-        // 		color: this.cesium.Color.RED,
-        // 	},
-        // });
         const tempPoints = [...points];
         tempPoints[2] = newPositionRight;
         tempPoints[3] = newPositionLeft;
         const geometryPoints = this.createGraphic(tempPoints);
         this.setGeometryPoints(geometryPoints);
         this.showWithAnimation(0, 0, undefined);
+        requestAnimationFrame(frameListener);
       };
-      this.viewer.clock.onTick.addEventListener(frameListener);
+      requestAnimationFrame(frameListener);
     }, delay);
   }
 
@@ -797,7 +797,7 @@ export default class Base {
     });
     let curvePoints = Utils.getCurvePoints(0.3, curveControlPoints);
     curvePoints = curvePoints.map((p) => {
-      return this.cesium.Cartesian3.fromDegrees(p[0], p[1]);
+      return UnitUtils.fromDegrees(p[0], p[1]);
     });
 
     let newPosition = this.interpolateAlongCurve(curvePoints, t);
@@ -814,18 +814,18 @@ export default class Base {
     const y = startPoint.y + (endPoint.y - startPoint.y) * tSegment;
     const z = startPoint.z + (endPoint.z - startPoint.z) * tSegment;
 
-    return new this.cesium.Cartesian3(x, y, z);
+    return new Vector3(x, y, z);
   }
 
   remove() {
     if (this.type === 'polygon') {
-      this.viewer.entities.remove(this.polygonEntity);
-      this.viewer.entities.remove(this.outlineEntity);
+      this.viewer.baseMap.remove(this.polygonEntity);
+      this.viewer.baseMap.remove(this.outlineEntity);
       this.polygonEntity = null;
       this.outlineEntity = null;
       this.lineEntity = null;
     } else if (this.type === 'line') {
-      this.viewer.entities.remove(this.lineEntity);
+      this.viewer.baseMap.remove(this.lineEntity);
     }
     this.removeClickListener();
     this.removeMoveListener();
@@ -841,25 +841,25 @@ export default class Base {
     this.eventDispatcher.off(eventType, listener);
   }
 
-  isCurrentEntity(id: string) {
+  isCurrentEntity(id: number) {
     // return this.entityId === `CesiumPlot-${id}`;
     return this.entityId === id;
   }
 
-  addPoint(cartesian: CesiumTypeOnly.Cartesian3) {
+  addPoint(cartesian: Vector3) {
     //Abstract method that must be implemented by subclasses.
   }
 
-  getPoints(): CesiumTypeOnly.Cartesian3[] {
+  getPoints(): Vector3[] {
     //Abstract method that must be implemented by subclasses.
-    return [new this.cesium.Cartesian3()];
+    return [new Vector3()];
   }
 
-  updateMovingPoint(cartesian: CesiumTypeOnly.Cartesian3, index?: number) {
+  updateMovingPoint(cartesian: Vector3, index?: number) {
     //Abstract method that must be implemented by subclasses.
   }
 
-  updateDraggingPoint(cartesian: CesiumTypeOnly.Cartesian3, index: number) {
+  updateDraggingPoint(cartesian: Vector3, index: number) {
     //Abstract method that must be implemented by subclasses.
   }
 
@@ -868,7 +868,7 @@ export default class Base {
     //Abstract method that must be implemented by subclasses.
   }
 
-  createGraphic(points: CesiumTypeOnly.Cartesian3[]): CesiumTypeOnly.Cartesian3[] {
+  createGraphic(points: Vector3[]): Vector3[] {
     //Abstract method that must be implemented by subclasses.
     return points;
   }
