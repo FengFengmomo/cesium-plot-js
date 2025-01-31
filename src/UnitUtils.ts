@@ -14,16 +14,23 @@ export default class UnitUtils {
 		return new Vector3(-Math.cos(rotX + Math.PI) * cos, Math.sin(rotY), Math.sin(rotX + Math.PI) * cos);
 	}
 
+    static vectorScale(position:Vector3, scale:number = 10){
+        let normal = position.clone().normalize();
+		normal.multiplyScalar(scale)
+		position.add(normal);
+        return position;
+    }
+
     static fromDegrees(latitude:number, longitude:number):Vector3{
 		let drector = UnitUtils.datumsToVector(latitude, longitude);
-		drector.multiplyScalar(UnitUtils.EARTH_RADIUS_A);
+		drector.multiplyScalar(UnitUtils.EARTH_RADIUS_A+10);
 		return drector;
 	}
 
     static fromDegreesArray(points: number[]) :Vector3[]{
         let cartesian_point = [];
         for(let i = 0; i < points.length; i+=2){
-            let point = UnitUtils.fromDegrees(points[i], points[i+1]);
+            let point = UnitUtils.fromDegrees(points[i+1], points[i]);
             cartesian_point.push(point);
         }
         return cartesian_point;

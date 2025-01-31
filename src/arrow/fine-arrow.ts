@@ -18,9 +18,8 @@ export default class FineArrow extends Base {
   neckAngle: number;
   minPointsForShape: number;
 
-  constructor(cesium: any, viewer: any, style?: PolygonStyle) {
-    super(cesium, viewer, style);
-    this.cesium = cesium;
+  constructor(viewer: any, style?: PolygonStyle) {
+    super(viewer, style);
     this.tailWidthFactor = 0.1;
     this.neckWidthFactor = 0.2;
     this.headWidthFactor = 0.25;

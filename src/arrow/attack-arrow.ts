@@ -15,9 +15,8 @@ export default class AttackArrow extends Base {
   headTailFactor: number;
   minPointsForShape: number;
 
-  constructor(cesium: any, viewer: any, style?: PolygonStyle) {
-    super(cesium, viewer, style);
-    this.cesium = cesium;
+  constructor(viewer: any, style?: PolygonStyle) {
+    super(viewer, style);
     this.headHeightFactor = 0.18;
     this.headWidthFactor = 0.3;
     this.neckHeightFactor = 0.85;

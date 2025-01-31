@@ -12,9 +12,8 @@ export default class Curve extends Base {
 	maxArrowLength: number = 3000000;
 	t: number;
 
-	constructor(cesium: any, viewer: any, style?: LineStyle) {
-		super(cesium, viewer, style);
-		this.cesium = cesium;
+	constructor(viewer: any, style?: LineStyle) {
+		super(viewer, style);
 		this.t = 0.3;
 		this.setState('drawing');
 		this.onDoubleClick();

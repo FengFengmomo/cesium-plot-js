@@ -10,9 +10,8 @@ export default class Lune extends Base {
   points: Vector3[] = [];
   freehand: boolean;
 
-  constructor(cesium: any, viewer: any, style?: PolygonStyle) {
-    super(cesium, viewer, style);
-    this.cesium = cesium;
+  constructor(viewer: any, style?: PolygonStyle) {
+    super(viewer, style);
     this.freehand = true;
     this.setState('drawing');
   }

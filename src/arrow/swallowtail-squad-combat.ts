@@ -15,10 +15,9 @@ export default class SwallowtailSquadCombat extends SquadCombat {
   tailWidthFactor: number;
   swallowTailFactor: number;
 
-  constructor(cesium: any, viewer: any, style?: PolygonStyle) {
-    super(cesium, viewer, style);
+  constructor(viewer: any, style?: PolygonStyle) {
+    super(viewer, style);
 
-    this.cesium = cesium;
     this.headHeightFactor = 0.18;
     this.headWidthFactor = 0.3;
     this.neckHeightFactor = 0.85;

@@ -18,7 +18,9 @@ export default defineConfig(({ mode }) => {
     };
   } else if (mode === 'prod') {
     config = {
+      external: ['cesium', 'three'],
       build: {
+        sourcemap: true,
         lib: {
           entry: path.resolve(__dirname, 'src/index.ts'),
           name: 'CesiumPlot',
@@ -26,8 +28,9 @@ export default defineConfig(({ mode }) => {
           formats: ['es', 'umd'],
         },
         rollupOptions: {
-          external: ['cesium'],
+          external: ['cesium', 'three', 'THREE'],
         },
+        CompressionStream: false,
       },
     };
   }

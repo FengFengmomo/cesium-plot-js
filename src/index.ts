@@ -19,7 +19,7 @@ import Circle from './polygon/circle';
 import Sector from './polygon/sector';
 
 import { GeometryStyle } from './interface';
-import * as CesiumTypeOnly from 'cesium';
+import { Vector3 } from 'three';
 
 const CesiumPlot: any = {
   FineArrow,
@@ -45,16 +45,16 @@ const CesiumPlot: any = {
 
 type CreateGeometryFromDataOpts = {
   type: string;
-  cartesianPoints: CesiumTypeOnly.Cartesian3[];
+  cartesianPoints: Vector3[];
   style: GeometryStyle;
 };
 /**
  * 根据点位数据生成几何图形
  * @param points
  */
-CesiumPlot.createGeometryFromData = (cesium: any, viewer: any, opts: CreateGeometryFromDataOpts) => {
+CesiumPlot.createGeometryFromData = (viewer: any, opts: CreateGeometryFromDataOpts) => {
   const { type, style, cartesianPoints } = opts;
-  const geometry = new CesiumPlot[type](cesium, viewer, style);
+  const geometry = new CesiumPlot[type](viewer, style);
 
   geometry.points = cartesianPoints;
   const geometryPoints = geometry.createGraphic(cartesianPoints);

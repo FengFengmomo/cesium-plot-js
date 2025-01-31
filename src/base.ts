@@ -31,7 +31,7 @@ export default class Base {
   type!: 'polygon' | 'line';
   freehand!: boolean;
   style: GeometryStyle | undefined;
-  outlineEntity: Mesh|undefined;
+  outlineEntity: Line|undefined;
   eventDispatcher: EventDispatcher;
   dragEventHandler: Listener;
   entityId: number | undefined;
@@ -39,7 +39,7 @@ export default class Base {
   points: Vector3[] = [];
   styleCache: GeometryStyle | undefined;
   minPointsForShape: number = 0;
-  tempLineEntity: Mesh|undefined;
+  tempLineEntity: Line|undefined;
 
   constructor(viewer: any, style?: GeometryStyle) {
     this.viewer = viewer;
@@ -57,21 +57,15 @@ export default class Base {
   }
 
   mergeStyle(style: GeometryStyle | undefined) {
-    if (this.type === 'polygon') {
+    
       this.style = Object.assign(
         {
           PolygonStyle: new MeshBasicMaterial({
             color: 0x0000ff,
             side: DoubleSide,
             transparent: true,
-            opacity: 1.0,
+            opacity: 0.8,
           }),
-        },
-        style,
-      );
-    } else if (this.type === 'line') {
-      this.style = Object.assign(
-        {
           LineStyle: new LineBasicMaterial({
             color: 0xffffff,
             linewidth: 2,
@@ -79,7 +73,6 @@ export default class Base {
         },
         style,
       );
-    }
     //Cache the initial settings to avoid modification of properties due to reference type assignment.
     this.styleCache = cloneDeep(this.style);
   }
@@ -110,11 +103,12 @@ export default class Base {
     this.eventHandler = new Listener(this.viewer.baseMap.canvas);
     this.eventHandler.on("mouse-click", (mx:number, my: number) => {
       let pos = new Vector2(mx, my);
-      const pickedObject = this.viewer.getModel(mx, my);
+      let pickedObject = this.viewer.getModel(mx, my)[0].object;
       const hitEntities = this.defined(pickedObject) && pickedObject instanceof Mesh;
-      let activeEntity = this.polygonEntity;
+      // this.drawPolygon(); // 先预先画一下空的几何体mesh，激活activeEntity，否则会导致其undefined
+      this.activeEntity = this.polygonEntity;
       if (this.type === 'line') {
-        activeEntity = this.lineEntity;
+        this.activeEntity = this.lineEntity;
       }
 
       if (this.state === 'drawing') {
@@ -139,18 +133,20 @@ export default class Base {
         this.eventDispatcher.dispatchEvent('drawUpdate', cartesian);
       } else if (this.state === 'edit') {
         //In edit mode, exit the editing state and delete control points when clicking outside the currently edited shape.
-        if (!hitEntities || activeEntity.id !== pickedObject.id) {
+        if (!hitEntities || this.activeEntity.id !== pickedObject.id) {
           this.setState('static');
           this.removeControlPoints();
           this.disableDrag();
           // Trigger 'drawEnd' and return the geometry shape points when exiting the edit mode.
           this.eventDispatcher.dispatchEvent('editEnd', this.getPoints());
+          return;
         }
       } else if (this.state === 'static') {
         //When drawing multiple shapes, the click events for all shapes are triggered. Only when hitting a completed shape should it enter editing mode.
-        if (hitEntities && activeEntity.id === pickedObject.id) {
+        if (hitEntities && this.activeEntity.id === pickedObject.id) {
           // TODO 这里留待存疑，说明：这里可能只有是线型的几何体点击的时候才会有polyline和polygon，具体可以debug源代码看
-          const pickedGraphics = this.type === 'line' ? pickedObject.id : pickedObject.id;
+          // const pickedGraphics = this.type === 'line' ? pickedObject.id : pickedObject.id;
+          const pickedGraphics = true;
           if (this.defined(pickedGraphics)) {
             // Hit Geometry Shape.
             this.setState('edit');
@@ -191,7 +187,7 @@ export default class Base {
    */
   checkDistance(cartesian1:Vector3, cartesian2: Vector3) {
     const distance = cartesian1.distanceTo(cartesian2);
-    return distance > 10;
+    return distance > 100;
   }
 
   finishDrawing() {
@@ -251,26 +247,41 @@ export default class Base {
     const callback = () => {
       let list=[];
       for (let i = 0; i < this.geometryPoints.length; i++) {
-        list.push(new Vector2(this.geometryPoints[i].x,this.geometryPoints[i].z));
+        list.push(new Vector2(this.geometryPoints[i].x,this.geometryPoints[i].y));
       }
-      let geometry = new ShapeGeometry( new Shape( list ) );
+      let geometry = new ShapeGeometry( new Shape( list ));
       for (let i = 0; i < this.geometryPoints.length; i++) {
+        geometry.attributes.position.array[i * 3 + 0]=this.geometryPoints[i].x;
         geometry.attributes.position.array[i * 3 + 1]=this.geometryPoints[i].y;
+        geometry.attributes.position.array[i * 3 + 2]=this.geometryPoints[i].z;
       }
       return geometry;
     };
     if (!this.polygonEntity) {
       const style = this.style.PolygonStyle;
-      this.polygonEntity = this.viewer.baseMap.add(new Mesh(
+      this.polygonEntity = new Mesh(
         callback(),
         style
-      ));
+      );
+      
+      this.polygonEntity.drawed = true;
+      this.viewer.baseMap.add(this.polygonEntity);
       let lineStyle = this.style.LineStyle;
       // Due to limitations in PolygonGraphics outlining, a separate line style is drawn.
-      this.outlineEntity = this.viewer.baseMap.add(new Line(
+      this.outlineEntity = new Line(
         new BufferGeometry().setFromPoints(this.geometryPoints),
         lineStyle,
-      ));
+      );
+      this.viewer.baseMap.add(this.outlineEntity);
+      this.activeEntity = this.polygonEntity;
+      if (this.type === 'line') {
+        this.activeEntity = this.lineEntity;
+      }
+    } else {
+      this.polygonEntity.geometry = callback();
+      if (this.outlineEntity) {
+        this.outlineEntity.geometry = new BufferGeometry().setFromPoints(this.geometryPoints);
+      }
     }
   }
 
@@ -291,15 +302,16 @@ export default class Base {
 
   removeTempLine() {
     if (this.tempLineEntity) {
-      this.viewer.entities.remove(this.tempLineEntity);
+      this.viewer.baseMap.remove(this.tempLineEntity);
     }
   }
 
   addLineEntity(style: LineBasicMaterial) {
-    const entity = this.viewer.baseMap.add(new Line(
+    const entity = new Line(
       new BufferGeometry().setFromPoints(this.geometryPoints),
       style
-    ));
+    );
+    this.viewer.baseMap.add(entity);
     return entity;
   }
 
@@ -312,8 +324,11 @@ export default class Base {
     return [lng, lat];
   }
 
+  // 将像素坐标转换为笛卡尔坐标
   pixelToCartesian(position: Vector2): Vector3 | undefined {
+    // 获取像素坐标对应的笛卡尔坐标
     const cartesian = this.viewer.getXYZ(position.x, position.y);
+    // 返回笛卡尔坐标
     return cartesian;
   }
 
@@ -339,9 +354,9 @@ export default class Base {
     // Listen for left mouse button press events
     this.controlPointsEventHandler.on("mouse-down-left",(mx: number, my: number) => {
       let pos = new Vector2(mx, my);
-      const pickedObject = this.viewer.getModel(mx,my);
+      const pickedObject = this.viewer.getModel(mx,my)[0].object;
 
-      if (this.defined(pickedObject)) {
+      if (this.defined(pickedObject) && pickedObject.drawed) {
         for (let i = 0; i < this.controlPoints.length; i++) {
           if (pickedObject.id === this.controlPoints[i].id) {
             isDragging = true;
@@ -403,8 +418,8 @@ export default class Base {
     this.dragEventHandler.on("mouse-down-left",(mx: number, my: number) => {
       
         const cartesian = this.viewer.getXYZ(mx, my);
-        const pickedObject = this.viewer.getModel(mx, my);
-        if (this.defined(pickedObject) && pickedObject instanceof Mesh) {
+        const pickedObject = this.viewer.getModel(mx, my)[0].object;
+        if (this.defined(pickedObject) && pickedObject instanceof Mesh && pickedObject.drawed) {
           const clickedEntityID = pickedObject.id;
           if (this.isCurrentEntity(clickedEntityID)) {
             //Clicking on the current instance's entity initiates drag logic.
@@ -449,8 +464,8 @@ export default class Base {
         }
       } else {
         
-          const pickedObject = this.viewer.getModel(mx, my);
-          if (this.defined(pickedObject) && pickedObject instanceof Mesh) {
+          const pickedObject = this.viewer.getModel(mx, my)[0].object;
+          if (this.defined(pickedObject) && pickedObject instanceof Mesh && pickedObject.drawed) {
             const clickedEntity = pickedObject.id;
             // TODO 绘制的图形，需要特殊id标识，可在创建entity时指定id
             if (this.isCurrentEntity(clickedEntity)) {
@@ -469,7 +484,7 @@ export default class Base {
     this.dragEventHandler.on("mouse-up", () => {
       dragging = false;
       startPosition = undefined;
-      this.viewer.scene.screenSpaceCameraController.enableRotate = true;
+      this.viewer.baseMap.controls.enableRotate = true;
     });
   }
 

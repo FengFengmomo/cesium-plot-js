@@ -24,9 +24,8 @@ export default class DoubleArrow extends Base {
   curveControlPointRight: Vector3;
   isClockWise: boolean;
 
-  constructor(cesium: any, viewer: any, style?: PolygonStyle) {
-    super(cesium, viewer, style);
-    this.cesium = cesium;
+  constructor(viewer: any, style?: PolygonStyle) {
+    super(viewer, style);
     this.headHeightFactor = 0.25;
     this.headWidthFactor = 0.3;
     this.neckHeightFactor = 0.85;

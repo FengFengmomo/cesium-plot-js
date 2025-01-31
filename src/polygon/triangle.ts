@@ -4,13 +4,13 @@ import { Cartesian3 } from 'cesium';
 
 import { PolygonStyle } from '../interface';
 import { Vector3 } from 'three';
+import UnitUtils from '../UnitUtils';
 
 export default class Triangle extends Base {
   points: Vector3[] = [];
 
-  constructor(cesium: any, viewer: any, style?: PolygonStyle) {
-    super(cesium, viewer, style);
-    this.cesium = cesium;
+  constructor(viewer: any, style?: PolygonStyle) {
+    super(viewer, style);
     this.setState('drawing');
   }
 
@@ -34,6 +34,7 @@ export default class Triangle extends Base {
    * Draw a shape based on mouse movement points during the initial drawing.
    */
   updateMovingPoint(cartesian: Vector3) {
+    UnitUtils.vectorScale(cartesian,30);
     const tempPoints = [...this.points, cartesian];
     this.setGeometryPoints(tempPoints);
     if (tempPoints.length === 2) {

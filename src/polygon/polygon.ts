@@ -1,6 +1,6 @@
+import UnitUtils from '../UnitUtils';
 import Base from '../base';
 // @ts-ignore
-import { Cartesian3 } from 'cesium';
 
 import { PolygonStyle } from '../interface';
 import { Vector3 } from 'three';
@@ -8,9 +8,8 @@ import { Vector3 } from 'three';
 export default class Polygon extends Base {
   points: Vector3[] = [];
 
-  constructor(cesium: any, viewer: any, style?: PolygonStyle) {
-    super(cesium, viewer, style);
-    this.cesium = cesium;
+  constructor(viewer: any, style?: PolygonStyle) {
+    super(viewer, style);
     this.setState('drawing');
     this.onDoubleClick();
   }
@@ -33,6 +32,7 @@ export default class Polygon extends Base {
    * Draw a shape based on mouse movement points during the initial drawing.
    */
   updateMovingPoint(cartesian: Vector3) {
+    UnitUtils.vectorScale(cartesian,30); //与地面增加一定的距离，仅仅考虑到无高程地球，其它未考虑
     const tempPoints = [...this.points, cartesian];
     this.setGeometryPoints(tempPoints);
     if (tempPoints.length === 2) {

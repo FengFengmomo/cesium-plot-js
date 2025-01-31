@@ -12,9 +12,8 @@ export default class CurvedArrow extends Base {
   t: number;
   minPointsForShape: number;
 
-  constructor(cesium: any, viewer: any, style?: LineStyle) {
-    super(cesium, viewer, style);
-    this.cesium = cesium;
+  constructor(viewer: any, style?: LineStyle) {
+    super(viewer, style);
     this.t = 0.3;
     this.minPointsForShape = 2;
     this.setState('drawing');

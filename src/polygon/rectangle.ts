@@ -9,9 +9,8 @@ import UnitUtils from '../UnitUtils';
 export default class Rectangle extends Base {
   points: Vector3[] = [];
 
-  constructor(cesium: any, viewer: any, style?: PolygonStyle) {
-    super(cesium, viewer, style);
-    this.cesium = cesium;
+  constructor(viewer: any, style?: PolygonStyle) {
+    super(viewer, style);
     this.setState('drawing');
   }
 
