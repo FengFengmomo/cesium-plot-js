@@ -32,7 +32,7 @@ export default class SquadCombat extends AttackArrow {
     if (this.points.length < 2) {
       this.onMouseMove();
     } else if (this.points.length > 2) {
-      this.lineEntity && this.viewer.entities.remove(this.lineEntity);
+      this.lineEntity && this.viewer.baseMap.remove(this.lineEntity);
     }
   }
 

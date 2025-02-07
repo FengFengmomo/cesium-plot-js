@@ -1,6 +1,5 @@
 # cesium-plot-js
-
-cesium 军事标绘插件,支持绘制多边形、曲线、箭头等图形
+基于threejs的军事标绘插件,支持绘制多边形、曲线、箭头等图形
 
 ![image](https://ethan-zf.github.io/cesium-plot-js/examples/banner.png)
 
@@ -190,3 +189,6 @@ geometry.on('drawEnd', (data) => {
 - **editEnd**
 
 编辑结束，回调事件返回图形的关键点位
+
+主要参考：
+克隆于cesium-plot-js：https://github.com/ethan-zf/cesium-plot-js

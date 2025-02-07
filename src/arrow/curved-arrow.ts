@@ -4,6 +4,7 @@ import Base from '../base';
 import { Cartesian3 } from 'cesium';
 import { LineStyle } from '../interface';
 import { Vector3 } from 'three';
+import UnitUtils from '../UnitUtils';
 
 export default class CurvedArrow extends Base {
   points: Vector3[] = [];
@@ -52,7 +53,7 @@ export default class CurvedArrow extends Base {
     const leftPnt = Utils.getThirdPoint(pnt1, pnt2, Math.PI / 6, len / 2, false);
     const rightPnt = Utils.getThirdPoint(pnt1, pnt2, Math.PI / 6, len / 2, true);
     const points = [...pnt1, ...pnt2, ...leftPnt, ...pnt2, ...rightPnt];
-    const cartesianPoints = this.cesium.Cartesian3.fromDegreesArray(points);
+    const cartesianPoints = UnitUtils.fromDegreesArray(points);
     return cartesianPoints;
   }
 
@@ -90,7 +91,7 @@ export default class CurvedArrow extends Base {
     const rightPnt = Utils.getThirdPoint(curvePoints[curvePoints.length - 2], curvePoints[curvePoints.length - 1], Math.PI / 6, len / 2, true);
     const temp = [].concat(...curvePoints);
     const points = [...temp, ...leftPnt, ...pnt2, ...rightPnt];
-    const cartesianPoints = this.cesium.Cartesian3.fromDegreesArray(points);
+    const cartesianPoints = UnitUtils.fromDegreesArray(points);
     return cartesianPoints;
   }
 
