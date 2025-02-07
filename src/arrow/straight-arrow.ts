@@ -1,7 +1,6 @@
 import * as Utils from '../utils';
 import Base from '../base';
 // @ts-ignore
-import { Cartesian3 } from 'cesium';
 import { LineStyle } from '../interface';
 import { Vector3 } from 'three';
 import UnitUtils from '../UnitUtils';

@@ -1,6 +1,5 @@
 import Base from '../base';
 // @ts-ignore
-import { Cartesian3 } from 'cesium';
 
 import { PolygonStyle } from '../interface';
 import { Vector3 } from 'three';

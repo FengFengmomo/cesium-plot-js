@@ -1,5 +1,4 @@
 // @ts-ignore
-import * as CesiumTypeOnly from 'cesium';
 import {
   State,
   GeometryStyle,
@@ -19,7 +18,6 @@ import UnitUtils from './UnitUtils';
 import Listener from './lsitener';
 
 export default class Base {
-  cesium: typeof CesiumTypeOnly;
   viewer: any; // 这里的viewer是wegeo对象
   eventHandler: Listener;
   polygonEntity: Mesh| undefined;
@@ -35,7 +33,6 @@ export default class Base {
   eventDispatcher: EventDispatcher;
   dragEventHandler: Listener;
   entityId: number | undefined;
-  // points: CesiumTypeOnly.Cartesian3[] = [];
   points: Vector3[] = [];
   styleCache: GeometryStyle | undefined;
   minPointsForShape: number = 0;
@@ -51,7 +48,6 @@ export default class Base {
     this.eventDispatcher = new EventDispatcher();
     // Disable default behavior for double-clicking on entities.
     viewer.trackedEntity = undefined;
-    // viewer.cesiumWidget.screenSpaceEventHandler.removeInputAction(this.cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
 
     this.onClick();
   }
@@ -319,8 +315,6 @@ export default class Base {
     const lnglat = UnitUtils.vectorToDatums(position);
     const lat = lnglat.latitude;
     const lng = lnglat.longitude;
-    // const lat = this.cesium.Math.toDegrees(lnglat.latitude);
-    // const lng = this.cesium.Math.toDegrees(lnglat.longitude);
     return [lng, lat];
   }
 
@@ -857,7 +851,6 @@ export default class Base {
   }
 
   isCurrentEntity(id: number) {
-    // return this.entityId === `CesiumPlot-${id}`;
     return this.entityId === id;
   }
 
