@@ -692,9 +692,18 @@ export default class Base {
     }
     setTimeout(() => {
       this.hideWithAnimation(0, 0, undefined);
+      // return;
+      // const hideDuration = 0;
+      // const hideDeay = 0;
+      // if (this.type === 'polygon') {
+      //   this.animateOpacity(this.polygonEntity, 0.0, hideDuration, hideDeay, callback, this.state);
+      //   this.animateOpacity(this.outlineEntity, 0.0, hideDuration, hideDeay, undefined, this.state);
+      // } else if (this.type === 'line') {
+      //   this.animateOpacity(this.lineEntity, 0.0, hideDuration, hideDeay, callback, this.state);
+      // }
       const points = this.getPoints();
 
-      let segmentDuration = 0;
+      let segmentDuration = 0; // 每个点的动画时长，平均结果
       if (this.minPointsForShape === 2) {
         segmentDuration = duration / (points.length - 1);
       } else {
@@ -703,10 +712,10 @@ export default class Base {
 
       let startTime = Date.now();
       let movingPointIndex = 0;
-      this.viewer.clock.shouldAnimate = true;
+      // this.viewer.clock.shouldAnimate = true;
       let fpsStartTime = startTime;
-      const frameListener = (currentTime:number) => {
-        // const currentTime = Date.now();
+      const frameListener = () => {
+        const currentTime = Date.now();
         const elapsedTime = currentTime - startTime;
         const fpsElapsedTime = currentTime - fpsStartTime;
         if (fpsElapsedTime >= 16.7) {
@@ -715,6 +724,7 @@ export default class Base {
         } else {
           // 限定到一定帧率以内
           requestAnimationFrame(frameListener);
+          return;
         }
         if (elapsedTime >= duration) {
           // Animation ends
@@ -742,11 +752,13 @@ export default class Base {
         // update the point at index movingPointIndex in the points array with the newPosition,
         // generate the arrow, and execute the animation.
         const t = (elapsedTime - currentSegment * segmentDuration) / segmentDuration;
-        const newPosition = startPoint.lerp(endPoint, t);
+        // const newPosition = startPoint.lerp(endPoint, t);
+        const newPosition = new Vector3().lerpVectors(startPoint, endPoint, t);
         const tempPoints = points.slice(0, movingPointIndex + 1);
         tempPoints[tempPoints.length - 1] = newPosition;
         const geometryPoints = this.createGraphic(tempPoints);
         this.setGeometryPoints(geometryPoints);
+        this.drawPolygon();
         this.showWithAnimation(0, 0, undefined);
         requestAnimationFrame(frameListener);
       };
@@ -759,10 +771,10 @@ export default class Base {
       this.hideWithAnimation(0, 0, undefined);
       const points = this.getPoints();
       let startTime = Date.now();
-      this.viewer.clock.shouldAnimate = true;
       let fpsStartTime = startTime;
 
-      const frameListener = (currentTime:number) => {
+      const frameListener = () => {
+        const currentTime = Date.now();
         const elapsedTime = currentTime - startTime;
         const fpsElapsedTime = currentTime - fpsStartTime;
         if (fpsElapsedTime >= 16.7) {
@@ -771,6 +783,7 @@ export default class Base {
         } else {
           // 限定到一定帧率以内
           requestAnimationFrame(frameListener);
+          return;
         }
         if (elapsedTime >= duration) {
           // Animation ends
@@ -800,6 +813,7 @@ export default class Base {
         tempPoints[3] = newPositionLeft;
         const geometryPoints = this.createGraphic(tempPoints);
         this.setGeometryPoints(geometryPoints);
+        this.drawPolygon();
         this.showWithAnimation(0, 0, undefined);
         requestAnimationFrame(frameListener);
       };
