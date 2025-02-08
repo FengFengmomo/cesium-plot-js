@@ -1,16 +1,16 @@
 # cesium-plot-js
 基于threejs的军事标绘插件,支持绘制多边形、曲线、箭头等图形
 
-![image](https://ethan-zf.github.io/cesium-plot-js/examples/banner.png)
+![image](https://fegnfengmomo.github.io/cesium-plot-js/examples/banner.png)
 
 淡入淡出效果：
 
-![image](https://ethan-zf.github.io/cesium-plot-js/examples/show-hide-animation.gif)
+![image](https://fegnfengmomo.github.io/cesium-plot-js/examples/show-hide-animation.gif)
 
 生长动画：
-![image](https://ethan-zf.github.io/cesium-plot-js/examples/attack-arrow-growth.gif)
+![image](https://fegnfengmomo.github.io/cesium-plot-js/examples/attack-arrow-growth.gif)
 
-在线示例： [demo](https://ethan-zf.github.io/cesium-plot-js/examples/index.html)
+在线示例： [demo](https://fegnfengmomo.github.io/cesium-plot-js/examples/index.html)
 
 ### CDN
 
@@ -23,7 +23,7 @@
 2. 调用绘制 api
 
 ```
-  new CesiumPlot.FineArrow(Cesium, viewer);
+  new ThreePlot.FineArrow(viewer);
 ```
 
 ### NPM
@@ -31,19 +31,19 @@
 1. install
 
 ```
-npm i cesium-plot-js
+npm i three-plot-js
 ```
 
 2. import
 
 ```
-import CesiumPlot from 'cesium-plot-js';
+import ThreePlot from 'three-plot-js';
 ```
 
 3. 调用绘制 api
 
 ```
-  new CesiumPlot.FineArrow(Cesium, viewer);
+  new ThreePlot.FineArrow(viewer);
 ```
 
 ### Classes
@@ -76,7 +76,7 @@ import CesiumPlot from 'cesium-plot-js';
 
 所有图形的构造函数：
 
-<类名>(cesium: Cesium, viewer: Cesium.Viewer, style?: [PolygonStyle](#PolygonStyle) | [LineStyle](#LineStyle))
+<类名>(viewer:Any, style?: [PolygonStyle](#PolygonStyle) | [LineStyle](#LineStyle))
 
 <h5 id='PolygonStyle'>PolygonStyle类型</h5>
 
@@ -101,11 +101,14 @@ import CesiumPlot from 'cesium-plot-js';
 
 ```
 // 初始化viewer
-const viewer = new Cesium.Viewer('cesiumContainer');
-// 抗锯齿
-viewer.scene.postProcessStages.fxaa.enabled = true;
+const map = new WegeoMap(); 
+map.addBaseSphereMap({
+  providers: [provider]
+});
+let viewer = map;
+
 // 设置自定义样式
-const geometry = new CesiumPlot.FineArrow(Cesium, viewer, {
+const geometry = new ThreePlot.FineArrow(Cesium, viewer, {
   material: Cesium.Color.fromCssColorString('rgba(59, 178, 208, 0.5)'),
   outlineMaterial: Cesium.Color.fromCssColorString('rgba(59, 178, 208, 1)'),
   outlineWidth: 3,
@@ -134,13 +137,13 @@ const geometry = new CesiumPlot.FineArrow(Cesium, viewer, {
 
 ```
 // 隐藏图形
-const geometry = new CesiumPlot.Reactangle(Cesium, viewer);
+const geometry = new ThreePlot.Reactangle(viewer);
 geometry.hide();
 ```
 
 ```
 // 绑定事件
-const geometry = new CesiumPlot.Reactangle(Cesium, viewer);
+const geometry = new ThreePlot.Reactangle(viewer);
 geometry.on('drawEnd', (data)=>{
   console.log(data)
 });
@@ -148,7 +151,7 @@ geometry.on('drawEnd', (data)=>{
 
 ### 静态方法
 
-**CesiumPlot.createGeometryFromData(cesium: Cesium, viewer: Cesium.Viewer, options:[CreateGeometryFromDataOpts](#CreateGeometryFromDataOpts))**
+**ThreePlot.createGeometryFromData(viewer: Any, options:[CreateGeometryFromDataOpts](#CreateGeometryFromDataOpts))**
 
 根据图形的关键点位重新生成图形
 
