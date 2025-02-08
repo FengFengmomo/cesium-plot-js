@@ -81,9 +81,9 @@ export default class AttackArrow extends Base {
     const bodyPnts = this.getArrowBodyPoints(bonePnts, neckLeft, neckRight, tailWidthFactor);
     const count = bodyPnts.length;
     let leftPnts = [tailLeft].concat(bodyPnts.slice(0, count / 2));
-    leftPnts.push(neckLeft);
+    // leftPnts.push(neckLeft);
     let rightPnts = [tailRight].concat(bodyPnts.slice(count / 2, count));
-    rightPnts.push(neckRight);
+    // rightPnts.push(neckRight);
     leftPnts = Utils.getQBSplinePoints(leftPnts);
     rightPnts = Utils.getQBSplinePoints(rightPnts);
     const points = leftPnts.concat(headPnts, rightPnts.reverse());

@@ -100,7 +100,7 @@ export default class Base {
     this.eventHandler.on("mouse-click", (mx:number, my: number) => {
       let pos = new Vector2(mx, my);
       let pickedObject = this.viewer.getModel(mx, my)[0].object;
-      const hitEntities = this.defined(pickedObject) && pickedObject instanceof Mesh;
+      const hitEntities = this.defined(pickedObject) && pickedObject instanceof Mesh && pickedObject.drawed;
       // this.drawPolygon(); // 先预先画一下空的几何体mesh，激活activeEntity，否则会导致其undefined
       this.activeEntity = this.polygonEntity;
       if (this.type === 'line') {
@@ -142,14 +142,14 @@ export default class Base {
         if (hitEntities && this.activeEntity.id === pickedObject.id) {
           // TODO 这里留待存疑，说明：这里可能只有是线型的几何体点击的时候才会有polyline和polygon，具体可以debug源代码看
           // const pickedGraphics = this.type === 'line' ? pickedObject.id : pickedObject.id;
-          const pickedGraphics = true;
-          if (this.defined(pickedGraphics)) {
-            // Hit Geometry Shape.
-            this.setState('edit');
-            this.addControlPoints();
-            this.draggable();
-            this.eventDispatcher.dispatchEvent('editStart');
-          }
+          
+          // Hit Geometry Shape.
+          this.entityId = this.activeEntity.id;
+          this.setState('edit');
+          this.addControlPoints();
+          this.draggable();
+          this.eventDispatcher.dispatchEvent('editStart');
+          
         }
       }
     });
@@ -183,7 +183,7 @@ export default class Base {
    */
   checkDistance(cartesian1:Vector3, cartesian2: Vector3) {
     const distance = cartesian1.distanceTo(cartesian2);
-    return distance > 100;
+    return distance > 10;
   }
 
   finishDrawing() {
@@ -289,16 +289,21 @@ export default class Base {
   }
 
   addTempLine() {
+    // 如果还没有临时线实体，则创建一个新的线实体
+    // 如果已经存在临时线实体，则更新其几何形状
     if (!this.tempLineEntity) {
       // The line style between the first two points matches the outline style.
       const style = this.style.LineStyle;
       this.tempLineEntity = this.addLineEntity(style);
+    } else{
+      this.tempLineEntity.geometry = new BufferGeometry().setFromPoints(this.geometryPoints);
     }
   }
 
   removeTempLine() {
     if (this.tempLineEntity) {
       this.viewer.baseMap.remove(this.tempLineEntity);
+      this.tempLineEntity = undefined;
     }
   }
 
@@ -335,6 +340,7 @@ export default class Base {
     this.controlPoints = points.map((position) => {
       let ctl = new Mesh(new SphereGeometry(ctl_point_size, 32, 32), new MeshBasicMaterial({ color: 0xff0000 }));
       ctl.position.copy(position);
+      ctl.controlPoint = true;
       this.viewer.baseMap.add(ctl);
       return ctl;
     });
@@ -350,7 +356,7 @@ export default class Base {
       let pos = new Vector2(mx, my);
       const pickedObject = this.viewer.getModel(mx,my)[0].object;
 
-      if (this.defined(pickedObject) && pickedObject.drawed) {
+      if (this.defined(pickedObject) && pickedObject.controlPoint) {
         for (let i = 0; i < this.controlPoints.length; i++) {
           if (pickedObject.id === this.controlPoints[i].id) {
             isDragging = true;
@@ -426,35 +432,36 @@ export default class Base {
 
     this.dragEventHandler.on("mouse-move",(mx: number, my: number) => {
       if (dragging && startPosition) {
-        let pos = new Vector2(mx, my);
+        // let pos = new Vector2(mx, my);
         // Retrieve the world coordinates of the current mouse position.
-        const newPosition = this.pixelToCartesian(pos);
+        const newPosition = this.viewer.getXYZ(mx, my);
         if (newPosition) {
           // Calculate the displacement vector.
-          const translation = newPosition.sub(startPosition);
+          const translation = newPosition.clone().sub(startPosition);
           const newPoints = this.geometryPoints.map((p) => {
-            return p.add(p, translation);
+            return p.add(translation);
           });
 
           //Move all key points according to a vector.
           this.points = this.points.map((p) => {
-            return p.add(p, translation);
+            return p.add(translation);
           });
 
           // Move control points in the same manner.
           this.controlPoints.map((p: Mesh) => {
-            const position = p.position;
-            const newPosition = position.add(position, translation);
+            const position = p.position.clone();
+            const newPosition = position.add(translation);
             p.position.copy(newPosition);
           });
 
           this.setGeometryPoints(newPoints);
           if (this.minPointsForShape === 4) {
             // 双箭头在整体被拖拽时，需要同步更新生长动画的插值点
-            this.curveControlPointLeft = this.curveControlPointLeft.add(this.curveControlPointLeft, translation);
-            this.curveControlPointRight = this.curveControlPointRight.add(this.curveControlPointRight, translation);
+            this.curveControlPointLeft = this.curveControlPointLeft.add(translation);
+            this.curveControlPointRight = this.curveControlPointRight.add(translation);
           }
           startPosition = newPosition;
+          this.drawPolygon();
         }
       } else {
         
@@ -517,7 +524,7 @@ export default class Base {
     this.setState('static');
     if (this.type === 'polygon') {
       let alpha = 0.3;
-      const material = this.styleCache.PolygonStyle.material;
+      const material = this.styleCache.PolygonStyle;
       // if (material.image) {
       //   // With Texture
       //   alpha = material.color.getValue().alpha;

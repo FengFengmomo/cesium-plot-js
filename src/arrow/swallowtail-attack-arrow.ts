@@ -53,9 +53,9 @@ export default class SwallowtailAttackArrow extends AttackArrow {
     const bodyPnts = this.getArrowBodyPoints(bonePnts, neckLeft, neckRight, factor);
     const count = bodyPnts.length;
     let leftPnts = [tailLeft].concat(bodyPnts.slice(0, count / 2));
-    leftPnts.push(neckLeft);
+    // leftPnts.push(neckLeft);
     let rightPnts = [tailRight].concat(bodyPnts.slice(count / 2, count));
-    rightPnts.push(neckRight);
+    // rightPnts.push(neckRight);
     leftPnts = Utils.getQBSplinePoints(leftPnts);
     rightPnts = Utils.getQBSplinePoints(rightPnts);
     const points = leftPnts.concat(headPnts, rightPnts.reverse(), [this.swallowTailPnt, leftPnts[0]]);

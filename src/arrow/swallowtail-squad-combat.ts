@@ -41,9 +41,9 @@ export default class SwallowtailSquadCombat extends SquadCombat {
     const bodyPnts = this.getArrowBodyPoints(lnglatPoints, neckLeft, neckRight, this.tailWidthFactor);
     const count = bodyPnts.length;
     let leftPnts = [tailPnts[0]].concat(bodyPnts.slice(0, count / 2));
-    leftPnts.push(neckLeft);
+    // leftPnts.push(neckLeft);
     let rightPnts = [tailPnts[2]].concat(bodyPnts.slice(count / 2, count));
-    rightPnts.push(neckRight);
+    // rightPnts.push(neckRight);
     leftPnts = Utils.getQBSplinePoints(leftPnts);
     rightPnts = Utils.getQBSplinePoints(rightPnts);
 
