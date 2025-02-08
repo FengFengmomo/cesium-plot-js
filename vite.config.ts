@@ -18,17 +18,17 @@ export default defineConfig(({ mode }) => {
     };
   } else if (mode === 'prod') {
     config = {
-      external: ['cesium', 'three'],
+      external: ['three'],
       build: {
         sourcemap: true,
         lib: {
           entry: path.resolve(__dirname, 'src/index.ts'),
-          name: 'CesiumPlot',
-          fileName: 'CesiumPlot',
+          name: 'ThreePlot',
+          fileName: 'ThreePlot',
           formats: ['es', 'umd'],
         },
         rollupOptions: {
-          external: ['cesium', 'three', 'THREE'],
+          external: [ 'three', 'THREE'],
         },
         CompressionStream: false,
       },

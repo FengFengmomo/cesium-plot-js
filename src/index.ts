@@ -21,7 +21,7 @@ import Sector from './polygon/sector';
 import { GeometryStyle } from './interface';
 import { Vector3 } from 'three';
 
-const CesiumPlot: any = {
+const ThreePlot: any = {
   FineArrow,
   AttackArrow,
   SwallowtailAttackArrow,
@@ -52,9 +52,9 @@ type CreateGeometryFromDataOpts = {
  * 根据点位数据生成几何图形
  * @param points
  */
-CesiumPlot.createGeometryFromData = (viewer: any, opts: CreateGeometryFromDataOpts) => {
+ThreePlot.createGeometryFromData = (viewer: any, opts: CreateGeometryFromDataOpts) => {
   const { type, style, cartesianPoints } = opts;
-  const geometry = new CesiumPlot[type](viewer, style);
+  const geometry = new ThreePlot[type](viewer, style);
 
   geometry.points = cartesianPoints;
   const geometryPoints = geometry.createGraphic(cartesianPoints);
@@ -69,4 +69,4 @@ CesiumPlot.createGeometryFromData = (viewer: any, opts: CreateGeometryFromDataOp
   return geometry;
 };
 
-export default CesiumPlot;
+export default ThreePlot;

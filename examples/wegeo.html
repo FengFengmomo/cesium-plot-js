@@ -82,7 +82,7 @@
 			"imports": {
 				"three": "../build/three.module.js",
 				"Geo": "../build/wegeo.module.js",
-				"CesiumPlot": "../dist/CesiumPlot.js"
+				"ThreePlot": "../dist/ThreePlot.js"
 			}
 		}
 	</script>
@@ -91,7 +91,7 @@
 		// 需要全量构建geo，目前不能把threejs排除在外
 		import {WegeoMap,MapView, TianDiTuProvider, Config, BingMapsProvider, AngleUtils,  UnitsUtils} from 'Geo';
 		import * as THREE from 'three';
-		import CesiumPlot from 'CesiumPlot';
+		import ThreePlot from 'ThreePlot';
 		let provider = new BingMapsProvider();
 		// 地名服务
 		// let provider = new TianDiTuProvider({
@@ -117,7 +117,7 @@
 
 		let viewer = map;
 		let geometry;
-    // geometry = new CesiumPlot.Reactangle(viewer);
+    // geometry = new ThreePlot.Reactangle(viewer);
     // let Vector1 = UnitsUtils.fromDegrees(43.905036,88.09167,10); 
     // let Vector2 = UnitsUtils.fromDegrees(43.8905036,88.109167,10); 
     // geometry.points = [Vector1];
@@ -125,7 +125,7 @@
     // console.log(geometry.polygonEntity);
 
     //测试多边形
-    // geometry = new CesiumPlot.Polygon(viewer);
+    // geometry = new ThreePlot.Polygon(viewer);
     // let Vector3 = UnitsUtils.fromDegrees(43.905036,88.109167,10); 
     // let Vector4 = UnitsUtils.fromDegrees(43.8905036,88.119167,10);
     // let Vector5 = UnitsUtils.fromDegrees(43.905036,88.119167,10);
@@ -157,36 +157,36 @@
     const targetElement = evt.target;
     switch (targetElement.id) {
       case 'drawCircle':
-        geometry = new CesiumPlot.Circle(viewer);
+        geometry = new ThreePlot.Circle(viewer);
         break;
       case 'drawPolygon':
-        geometry = new CesiumPlot.Polygon( viewer);
+        geometry = new ThreePlot.Polygon( viewer);
         break;
       case 'drawReactangle':
-        geometry = new CesiumPlot.Reactangle(viewer);
+        geometry = new ThreePlot.Reactangle(viewer);
         break;
       case 'drawTriangle':
-        geometry = new CesiumPlot.Triangle(viewer);
+        geometry = new ThreePlot.Triangle(viewer);
         break;
       case 'drawFineArrow':
-        geometry = new CesiumPlot.FineArrow(viewer, {
+        geometry = new ThreePlot.FineArrow(viewer, {
           // material: Cesium.Color.fromCssColorString('rgba(59, 178, 208, 0.5)'),
           // outlineMaterial: Cesium.Color.fromCssColorString('rgba(59, 178, 208, 1)'),
           // outlineWidth: 3,
         });
         break;
       case 'drawAttackArrow':
-        geometry = new CesiumPlot.AttackArrow(viewer, {
+        geometry = new ThreePlot.AttackArrow(viewer, {
           // outlineMaterial: Cesium.Color.RED,
         });
         break;
       case 'drawSwallowtailAttackArrow':
-        geometry = new CesiumPlot.SwallowtailAttackArrow(viewer, {
+        geometry = new ThreePlot.SwallowtailAttackArrow(viewer, {
           // outlineMaterial: Cesium.Color.BLUE,
         });
         break;
       case 'drawSquadCombat':
-        geometry = new CesiumPlot.SquadCombat( viewer, {
+        geometry = new ThreePlot.SquadCombat( viewer, {
           // outlineMaterial: new Cesium.PolylineDashMaterialProperty({
           //   color: Cesium.Color.RED,
           //   dashLength: 16.0,
@@ -194,40 +194,40 @@
         });
         break;
       case 'drawSwallowtailSquadCombat':
-        geometry = new CesiumPlot.SwallowtailSquadCombat( viewer);
+        geometry = new ThreePlot.SwallowtailSquadCombat( viewer);
         break;
       case 'drawStraightArrow':
-        geometry = new CesiumPlot.StraightArrow(viewer, {
+        geometry = new ThreePlot.StraightArrow(viewer, {
           // material: Cesium.Color.RED,
         });
         break;
       case 'drawAssaultDirection':
-        geometry = new CesiumPlot.AssaultDirection(viewer);
+        geometry = new ThreePlot.AssaultDirection(viewer);
         break;
       case 'drawCurvedArrow':
-        geometry = new CesiumPlot.CurvedArrow( viewer, {
+        geometry = new ThreePlot.CurvedArrow( viewer, {
           // material: Cesium.Color.BLUE,
         });
         break;
       case 'drawDoubleArrow':
-        geometry = new CesiumPlot.DoubleArrow(viewer, {
+        geometry = new ThreePlot.DoubleArrow(viewer, {
           // outlineMaterial: Cesium.Color.GREEN,
         });
         break;
       case 'drawFreehandLine':
-        geometry = new CesiumPlot.FreehandLine(viewer);
+        geometry = new ThreePlot.FreehandLine(viewer);
         break;
       case 'drawCurve':
-        geometry = new CesiumPlot.Curve( viewer);
+        geometry = new ThreePlot.Curve( viewer);
         break;
       case 'drawEllipse':
-        geometry = new CesiumPlot.Ellipse(viewer);
+        geometry = new ThreePlot.Ellipse(viewer);
         break;
       case 'drawLune':
-        geometry = new CesiumPlot.Lune(viewer);
+        geometry = new ThreePlot.Lune(viewer);
         break;
       case 'drawFreehandPolygon':
-        geometry = new CesiumPlot.FreehandPolygon(viewer, {
+        geometry = new ThreePlot.FreehandPolygon(viewer, {
           // material: Cesium.Color.GREEN,
           // outlineMaterial: Cesium.Color.fromCssColorString('rgba(59, 178, 208, 1)'),
           // outlineWidth: 2,
