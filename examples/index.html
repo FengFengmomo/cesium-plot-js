@@ -1,79 +1,284 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CesiumPlot</title>
-  <script src="https://cesium.com/downloads/cesiumjs/releases/1.99/Build/Cesium/Cesium.js"></script>
-  <link href="https://cesium.com/downloads/cesiumjs/releases/1.99/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
-  <style>
-    html,
-    body,
-    #cesiumContainer {
-      width: 100%;
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-    }
+	<title>军事标绘</title>
+	<style>
+		.button-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        background-color: rgba(255, 255, 255, 0.8);
+        padding: 50px;
+		    z-index: 10;
+      }
 
-    .button-container {
-      position: absolute;
-      top: 0;
-      left: 0;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      background-color: rgba(255, 255, 255, 0.8);
-      padding: 10px;
-    }
+      .button-container button {
+        flex: 1 0 auto;
+        max-width: 100%;
+        box-sizing: border-box;
+        padding: 4px 10px;
+        background-color: #3498db;
+        color: #ffffff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.2s;
 
-    .button-container button {
-      flex: 1 0 auto;
-      max-width: 100%;
-      box-sizing: border-box;
-      padding: 4px 10px;
-      background-color: #3498db;
-      color: #ffffff;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background-color 0.3s, transform 0.2s;
-    }
-  </style>
+      }
+	</style>
 </head>
-
 <body>
-  <div id="root"></div>
-  <div id="cesiumContainer"></div>
-  <div class="button-container" id="button-group">
-    <button id="drawPolygon">多边形</button>
-    <button id="drawReactangle">矩形</button>
-    <button id="drawTriangle">三角形</button>
-    <button id="drawCircle">圆形</button>
-    <button id="drawStraightArrow">细直箭头</button>
-    <button id="drawCurvedArrow">曲线箭头</button>
-    <button id="drawFineArrow">直箭头</button>
-    <button id="drawAttackArrow">进攻方向箭头</button>
-    <button id="drawSwallowtailAttackArrow">进攻方向箭头(燕尾)</button>
-    <button id="drawSquadCombat">分队战斗方向</button>
-    <button id="drawSwallowtailSquadCombat">分队战斗方向(燕尾)</button>
-    <button id="drawAssaultDirection">突击方向</button>
-    <button id="drawDoubleArrow">双箭头</button>
-    <button id="drawFreehandLine">自由线</button>
-    <button id="drawFreehandPolygon">自由面</button>
-    <button id="drawCurve">曲线</button>
-    <button id="drawEllipse">椭圆</button>
-    <button id="drawLune">半月面</button>
-    <button id="hide">隐藏</button>
-    <button id="show">显示</button>
-    <button id="startGrowthAnimation">生长动画</button>
-  </div>
-  <!-- <script src="https://unpkg.com/cesium-plot-js"></script> -->
-  <script type="text/javascript" src="../dist/CesiumPlot.umd.js"></script>
-  <!-- <script src="../dist/CesiumPlot.umd.js"></script> -->
-  <script type="text/javascript" src="./index.js"></script>
-</body>
+	<div id="mapContainer">
 
+	</div>
+	<div class="button-container" id="button-group">
+		<button id="drawPolygon">多边形</button>
+		<button id="drawReactangle">矩形</button>
+		<button id="drawTriangle">三角形</button>
+		<button id="drawCircle">圆形</button>
+		<button id="drawStraightArrow">细直箭头</button>
+		<button id="drawCurvedArrow">曲线箭头</button>
+		<button id="drawFineArrow">直箭头</button>
+		<button id="drawAttackArrow">进攻方向箭头</button>
+		<button id="drawSwallowtailAttackArrow">进攻方向箭头(燕尾)</button>
+		<button id="drawSquadCombat">分队战斗方向</button>
+		<button id="drawSwallowtailSquadCombat">分队战斗方向(燕尾)</button>
+		<button id="drawAssaultDirection">突击方向</button>
+		<button id="drawDoubleArrow">双箭头</button>
+		<button id="drawFreehandLine">自由线</button>
+		<button id="drawFreehandPolygon">自由面</button>
+		<button id="drawCurve">曲线</button>
+		<button id="drawEllipse">椭圆</button>
+		<button id="drawLune">半月面</button>
+		<button id="hide">隐藏</button>
+		<button id="show">显示</button>
+		<button id="startGrowthAnimation">生长动画</button>
+	</div>
+	<!-- GUI -->
+	<!-- <div id="mapContainer">
+		<div id="map">
+			<canvas id="canvas" style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%;"></canvas>
+		</div>
+		<div id="layers">
+			<div>
+				<canvas id="canvas1" style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%;"></canvas>
+			</div>
+			<div>
+				<canvas id="canvas2" style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%;"></canvas>
+			</div>
+		</div>
+	</div> -->
+	
+	<!-- Code -->
+	<!-- <script  src="./js/wegeo.js"></script> -->
+	<!-- "three": "../build/three.module.js", -->
+	<!-- "three/addons/": "../build/jsm/", -->
+	 <!-- <script src="./js/THREEi_ONLY_SphereWithSomeHoles.js"></script> -->
+	<script type="importmap">
+		{
+			"imports": {
+				"three": "../build/three.module.js",
+				"Geo": "../build/wegeo.module.js",
+				"ThreePlot": "../dist/ThreePlot.js"
+			}
+		}
+	</script>
+
+	<script type="module">
+		// 需要全量构建geo，目前不能把threejs排除在外
+		import {WegeoMap,MapView, TianDiTuProvider, Config, BingMapsProvider, AngleUtils,  UnitsUtils} from 'Geo';
+		import * as THREE from 'three';
+		import ThreePlot from 'ThreePlot';
+		let provider = new BingMapsProvider();
+		// 地名服务
+		// let provider = new TianDiTuProvider({
+		// 	service:'img_w',
+		// 	token: '588e61bc464868465169f209fe694dd0'
+		// });
+
+		// let edgeprovider = new TianDiTuProvider({
+		// 	service:'ibo_w',
+		// 	token: '588e61bc464868465169f209fe694dd0'
+		// });
+		// Config.outLine.on = true;
+		const map = new WegeoMap(); 
+		map.addBaseSphereMap({
+			providers: [provider]
+		});
+    map.fromDegrees(43.905036,88.109167,10000);
+		window.onresize = () => { map.resize(); }
+		map.resize();
+		map.animate();
+		// 解析geojson
+		// const geojson = await fetch('./examples/data/xinjiang.json').then( res => res.json() );
+
+		let viewer = map;
+		let geometry;
+    // geometry = new ThreePlot.Reactangle(viewer);
+    // let Vector1 = UnitsUtils.fromDegrees(43.905036,88.09167,10); 
+    // let Vector2 = UnitsUtils.fromDegrees(43.8905036,88.109167,10); 
+    // geometry.points = [Vector1];
+    // geometry.updateMovingPoint(Vector2);
+    // console.log(geometry.polygonEntity);
+
+    //测试多边形
+    // geometry = new ThreePlot.Polygon(viewer);
+    // let Vector3 = UnitsUtils.fromDegrees(43.905036,88.109167,10); 
+    // let Vector4 = UnitsUtils.fromDegrees(43.8905036,88.119167,10);
+    // let Vector5 = UnitsUtils.fromDegrees(43.905036,88.119167,10);
+    // let Vector6 = UnitsUtils.fromDegrees(43.925036,88.109167,10); 
+    // geometry.points = [Vector3,Vector4,Vector5];
+    // geometry.updateMovingPoint(Vector6);
+    // console.log(geometry.polygonEntity);
+   
+  const dragStartHandler = () => {
+    console.error('start');
+  };
+  const drawUpdateHandler = (cartesian) => {
+    console.error('update', cartesian);
+  };
+
+  const drawEndHandler = (geometryPoints) => {
+    console.error('drawEnd', geometryPoints);
+  };
+
+  const editStartHandler = () => {
+    console.error('editStart');
+  };
+
+  const editEndHandler = (geometryPoints) => {
+    console.error('editEnd', geometryPoints);
+  };
+  const buttonGroup = document.getElementById('button-group');
+  buttonGroup.onclick = (evt) => {
+    const targetElement = evt.target;
+    switch (targetElement.id) {
+      case 'drawCircle':
+        geometry = new ThreePlot.Circle(viewer);
+        break;
+      case 'drawPolygon':
+        geometry = new ThreePlot.Polygon( viewer);
+        break;
+      case 'drawReactangle':
+        geometry = new ThreePlot.Reactangle(viewer);
+        break;
+      case 'drawTriangle':
+        geometry = new ThreePlot.Triangle(viewer);
+        break;
+      case 'drawFineArrow':
+        geometry = new ThreePlot.FineArrow(viewer, {
+          // material: Cesium.Color.fromCssColorString('rgba(59, 178, 208, 0.5)'),
+          // outlineMaterial: Cesium.Color.fromCssColorString('rgba(59, 178, 208, 1)'),
+          // outlineWidth: 3,
+        });
+        break;
+      case 'drawAttackArrow':
+        geometry = new ThreePlot.AttackArrow(viewer, {
+          // outlineMaterial: Cesium.Color.RED,
+        });
+        break;
+      case 'drawSwallowtailAttackArrow':
+        geometry = new ThreePlot.SwallowtailAttackArrow(viewer, {
+          // outlineMaterial: Cesium.Color.BLUE,
+        });
+        break;
+      case 'drawSquadCombat':
+        geometry = new ThreePlot.SquadCombat( viewer, {
+          // outlineMaterial: new Cesium.PolylineDashMaterialProperty({
+          //   color: Cesium.Color.RED,
+          //   dashLength: 16.0,
+          // }),
+        });
+        break;
+      case 'drawSwallowtailSquadCombat':
+        geometry = new ThreePlot.SwallowtailSquadCombat( viewer);
+        break;
+      case 'drawStraightArrow':
+        geometry = new ThreePlot.StraightArrow(viewer, {
+          // material: Cesium.Color.RED,
+        });
+        break;
+      case 'drawAssaultDirection':
+        geometry = new ThreePlot.AssaultDirection(viewer);
+        break;
+      case 'drawCurvedArrow':
+        geometry = new ThreePlot.CurvedArrow( viewer, {
+          // material: Cesium.Color.BLUE,
+        });
+        break;
+      case 'drawDoubleArrow':
+        geometry = new ThreePlot.DoubleArrow(viewer, {
+          // outlineMaterial: Cesium.Color.GREEN,
+        });
+        break;
+      case 'drawFreehandLine':
+        geometry = new ThreePlot.FreehandLine(viewer);
+        break;
+      case 'drawCurve':
+        geometry = new ThreePlot.Curve( viewer);
+        break;
+      case 'drawEllipse':
+        geometry = new ThreePlot.Ellipse(viewer);
+        break;
+      case 'drawLune':
+        geometry = new ThreePlot.Lune(viewer);
+        break;
+      case 'drawFreehandPolygon':
+        geometry = new ThreePlot.FreehandPolygon(viewer, {
+          // material: Cesium.Color.GREEN,
+          // outlineMaterial: Cesium.Color.fromCssColorString('rgba(59, 178, 208, 1)'),
+          // outlineWidth: 2,
+        });
+        break;
+      case 'hide':
+        geometry &&
+          geometry.hide({
+            deration: 2000,
+          });
+        break;
+      case 'show':
+        geometry &&
+          geometry.show({
+            deration: 2000,
+          });
+        break;
+      case 'remove':
+        geometry && geometry.remove();
+        geometry = null;
+        break;
+      case 'addEvent':
+        if (geometry) {
+          geometry.on('drawStart', dragStartHandler);
+          geometry.on('drawUpdate', drawUpdateHandler);
+          geometry.on('drawEnd', drawEndHandler);
+          geometry.on('editStart', editStartHandler);
+          geometry.on('editEnd', editEndHandler);
+        }
+        break;
+      case 'removeEvent':
+        if (geometry) {
+          geometry.off('drawStart', dragStartHandler);
+          geometry.off('drawUpdate', drawUpdateHandler);
+          geometry.off('drawEnd', drawEndHandler);
+          geometry.off('editStart', editStartHandler);
+          geometry.off('editEnd', editEndHandler);
+        }
+        break;
+      case 'startGrowthAnimation':
+        if (geometry) {
+          geometry.startGrowthAnimation({
+            duration: 2000,
+          });
+        }
+        break;
+      default:
+        break;
+    }
+  };
+		
+	</script>
+</body>
 </html>
