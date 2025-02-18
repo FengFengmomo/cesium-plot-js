@@ -1,3 +1,4 @@
+import UnitUtils from '../UnitUtils';
 import Base from '../base';
 // @ts-ignore
 import { PolygonStyle } from '../interface';
@@ -21,6 +22,7 @@ export default class FreehandLine extends Base {
    * Add points only on click events
    */
   addPoint(cartesian: Vector3) {
+    UnitUtils.vectorScale(cartesian,10);
     this.points.push(cartesian);
     if (this.points.length < 2) {
       this.onMouseMove();
@@ -33,6 +35,7 @@ export default class FreehandLine extends Base {
    * Draw a shape based on mouse movement points during the initial drawing.
    */
   updateMovingPoint(cartesian: Vector3) {
+    UnitUtils.vectorScale(cartesian,10);
     this.points.push(cartesian);
     this.setGeometryPoints(this.points);
     this.drawLine();

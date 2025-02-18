@@ -7,7 +7,7 @@ import { Vector3 } from 'three';
 
 export default class Polygon extends Base {
   points: Vector3[] = [];
-
+  height = 30;
   constructor(viewer: any, style?: PolygonStyle) {
     super(viewer, style);
     this.setState('drawing');
@@ -22,6 +22,7 @@ export default class Polygon extends Base {
    * Add points only on click events
    */
   addPoint(cartesian: Vector3) {
+    UnitUtils.vectorScale(cartesian,30);
     this.points.push(cartesian);
     if (this.points.length === 1) {
       this.onMouseMove();

@@ -285,6 +285,8 @@ export default class Base {
     if (!this.lineEntity) {
       const style = this.style.LineStyle;
       this.lineEntity = this.addLineEntity(style);
+    } else{
+      this.lineEntity.geometry = new BufferGeometry().setFromPoints(this.geometryPoints);
     }
   }
 

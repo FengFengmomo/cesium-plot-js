@@ -83,7 +83,8 @@ export default class FineArrow extends Base {
     const headRight = Utils.getThirdPoint(p1, p2, this.headAngle, headWidth, true);
     const neckLeft = Utils.getThirdPoint(p1, p2, this.neckAngle, neckWidth, false);
     const neckRight = Utils.getThirdPoint(p1, p2, this.neckAngle, neckWidth, true);
-    const points = [...tailLeft, ...neckLeft, ...headLeft, ...p2, ...headRight, ...neckRight, ...tailRight, ...p1];
+    // const points = [...tailLeft, ...neckLeft, ...headLeft, ...p2, ...headRight, ...neckRight, ...tailRight, ...p1];
+    const points = [...tailLeft, ...neckLeft, ...headLeft, ...p2, ...headRight, ...neckRight, ...tailRight];
     const cartesianPoints =  UnitUtils.fromDegreesArray(points);
     return cartesianPoints;
   }
