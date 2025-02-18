@@ -1,23 +1,23 @@
 # cesium-plot-js
 基于threejs的军事标绘插件,支持绘制多边形、曲线、箭头等图形
 
-![image](https://fegnfengmomo.github.io/cesium-plot-js/examples/banner.png)
+![image](https://fegnfengmomo.github.io/threejs-plot-js/examples/banner.png)
 
 淡入淡出效果：
 
-![image](https://fegnfengmomo.github.io/cesium-plot-js/examples/show-hide-animation.gif)
+![image](https://fegnfengmomo.github.io/threejs-plot-js/examples/show-hide-animation.gif)
 
 生长动画：
-![image](https://fegnfengmomo.github.io/cesium-plot-js/examples/attack-arrow-growth.gif)
+![image](https://fegnfengmomo.github.io/threejs-plot-js/examples/attack-arrow-growth.gif)
 
-在线示例： [demo](https://fegnfengmomo.github.io/cesium-plot-js/examples/index.html)
+在线示例： [demo](https://fegnfengmomo.github.io/threejs-plot-js/examples/index.html)
 
 ### CDN
 
 1. 引入文件
 
 ```
-<script src="https://unpkg.com/cesium-plot-js"></script>
+<script src="https://unpkg.com/threejs-plot-js"></script>
 ```
 
 2. 调用绘制 api
