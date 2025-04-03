@@ -1,10 +1,10 @@
-var zn = Object.defineProperty;
-var Un = (h, i, t) => i in h ? zn(h, i, { enumerable: !0, configurable: !0, writable: !0, value: t }) : h[i] = t;
-var g = (h, i, t) => (Un(h, typeof i != "symbol" ? i + "" : i, t), t);
-import { Vector3 as X, MeshBasicMaterial as fe, DoubleSide as Vn, LineBasicMaterial as Kn, Vector2 as it, Mesh as st, Line as pe, BufferGeometry as ot, SphereGeometry as Zn, ShapeGeometry as Qn, Shape as Jn } from "three";
-class Nn {
+var Qn = Object.defineProperty;
+var Jn = (c, i, t) => i in c ? Qn(c, i, { enumerable: !0, configurable: !0, writable: !0, value: t }) : c[i] = t;
+var u = (c, i, t) => (Jn(c, typeof i != "symbol" ? i + "" : i, t), t);
+import { Vector3 as q, MeshBasicMaterial as st, AlwaysStencilFunc as Pe, FrontSide as Nn, KeepStencilOp as ft, IncrementWrapStencilOp as me, BackSide as ti, DecrementWrapStencilOp as ye, NotEqualStencilFunc as ei, ReplaceStencilOp as ni, DoubleSide as ii, LineBasicMaterial as si, Vector2 as ot, Mesh as tt, Line as we, BufferGeometry as rt, Group as ve, SphereGeometry as oi, ExtrudeGeometry as ri, Shape as ai } from "three";
+class ci {
   constructor() {
-    g(this, "listeners");
+    u(this, "listeners");
     this.listeners = /* @__PURE__ */ new Map([
       ["drawStart", /* @__PURE__ */ new Set()],
       ["drawUpdate", /* @__PURE__ */ new Set()],
@@ -29,47 +29,47 @@ class Nn {
     });
   }
 }
-var ut = typeof globalThis < "u" ? globalThis : typeof window < "u" ? window : typeof global < "u" ? global : typeof self < "u" ? self : {};
-function ti(h) {
-  return h && h.__esModule && Object.prototype.hasOwnProperty.call(h, "default") ? h.default : h;
+var pt = typeof globalThis < "u" ? globalThis : typeof window < "u" ? window : typeof global < "u" ? global : typeof self < "u" ? self : {};
+function hi(c) {
+  return c && c.__esModule && Object.prototype.hasOwnProperty.call(c, "default") ? c.default : c;
 }
-var ft = { exports: {} };
-ft.exports;
-(function(h, i) {
-  var t = 200, e = "__lodash_hash_undefined__", n = 9007199254740991, o = "[object Arguments]", r = "[object Array]", a = "[object Boolean]", c = "[object Date]", l = "[object Error]", f = "[object Function]", p = "[object GeneratorFunction]", m = "[object Map]", v = "[object Number]", P = "[object Object]", M = "[object Promise]", T = "[object RegExp]", b = "[object Set]", L = "[object String]", F = "[object Symbol]", k = "[object WeakMap]", W = "[object ArrayBuffer]", _ = "[object DataView]", q = "[object Float32Array]", xt = "[object Float64Array]", Wt = "[object Int8Array]", Ht = "[object Int16Array]", Rt = "[object Int32Array]", Ot = "[object Uint8Array]", jt = "[object Uint8ClampedArray]", Bt = "[object Uint16Array]", $t = "[object Uint32Array]", Me = /[\\^$.*+?()[\]{}|]/g, be = /\w*$/, Te = /^\[object .+?Constructor\]$/, Le = /^(?:0|[1-9]\d*)$/, S = {};
-  S[o] = S[r] = S[W] = S[_] = S[a] = S[c] = S[q] = S[xt] = S[Wt] = S[Ht] = S[Rt] = S[m] = S[v] = S[P] = S[T] = S[b] = S[L] = S[F] = S[Ot] = S[jt] = S[Bt] = S[$t] = !0, S[l] = S[f] = S[k] = !1;
-  var Ae = typeof ut == "object" && ut && ut.Object === Object && ut, Se = typeof self == "object" && self && self.Object === Object && self, j = Ae || Se || Function("return this")(), Xt = i && !i.nodeType && i, Yt = Xt && !0 && h && !h.nodeType && h, Ee = Yt && Yt.exports === Xt;
-  function Fe(s, d) {
+var Pt = { exports: {} };
+Pt.exports;
+(function(c, i) {
+  var t = 200, e = "__lodash_hash_undefined__", n = 9007199254740991, o = "[object Arguments]", r = "[object Array]", a = "[object Boolean]", h = "[object Date]", l = "[object Error]", f = "[object Function]", p = "[object GeneratorFunction]", m = "[object Map]", v = "[object Number]", P = "[object Object]", M = "[object Promise]", T = "[object RegExp]", b = "[object Set]", S = "[object String]", E = "[object Symbol]", D = "[object WeakMap]", W = "[object ArrayBuffer]", _ = "[object DataView]", Y = "[object Float32Array]", Ht = "[object Float64Array]", Rt = "[object Int8Array]", Ot = "[object Int16Array]", jt = "[object Int32Array]", Bt = "[object Uint8Array]", $t = "[object Uint8ClampedArray]", qt = "[object Uint16Array]", Xt = "[object Uint32Array]", Ae = /[\\^$.*+?()[\]{}|]/g, Fe = /\w*$/, Ee = /^\[object .+?Constructor\]$/, _e = /^(?:0|[1-9]\d*)$/, A = {};
+  A[o] = A[r] = A[W] = A[_] = A[a] = A[h] = A[Y] = A[Ht] = A[Rt] = A[Ot] = A[jt] = A[m] = A[v] = A[P] = A[T] = A[b] = A[S] = A[E] = A[Bt] = A[$t] = A[qt] = A[Xt] = !0, A[l] = A[f] = A[D] = !1;
+  var ke = typeof pt == "object" && pt && pt.Object === Object && pt, De = typeof self == "object" && self && self.Object === Object && self, j = ke || De || Function("return this")(), Yt = i && !i.nodeType && i, zt = Yt && !0 && c && !c.nodeType && c, Ie = zt && zt.exports === Yt;
+  function Ge(s, d) {
     return s.set(d[0], d[1]), s;
   }
-  function _e(s, d) {
+  function xe(s, d) {
     return s.add(d), s;
   }
-  function Ie(s, d) {
-    for (var u = -1, y = s ? s.length : 0; ++u < y && d(s[u], u, s) !== !1; )
+  function Ce(s, d) {
+    for (var g = -1, y = s ? s.length : 0; ++g < y && d(s[g], g, s) !== !1; )
       ;
     return s;
   }
-  function ke(s, d) {
-    for (var u = -1, y = d.length, I = s.length; ++u < y; )
-      s[I + u] = d[u];
+  function We(s, d) {
+    for (var g = -1, y = d.length, k = s.length; ++g < y; )
+      s[k + g] = d[g];
     return s;
   }
-  function qt(s, d, u, y) {
-    var I = -1, D = s ? s.length : 0;
-    for (y && D && (u = s[++I]); ++I < D; )
-      u = d(u, s[I], I, s);
-    return u;
+  function Ut(s, d, g, y) {
+    var k = -1, I = s ? s.length : 0;
+    for (y && I && (g = s[++k]); ++k < I; )
+      g = d(g, s[k], k, s);
+    return g;
   }
-  function De(s, d) {
-    for (var u = -1, y = Array(s); ++u < s; )
-      y[u] = d(u);
+  function He(s, d) {
+    for (var g = -1, y = Array(s); ++g < s; )
+      y[g] = d(g);
     return y;
   }
-  function Ge(s, d) {
+  function Re(s, d) {
     return s == null ? void 0 : s[d];
   }
-  function zt(s) {
+  function Vt(s) {
     var d = !1;
     if (s != null && typeof s.toString != "function")
       try {
@@ -78,356 +78,356 @@ ft.exports;
       }
     return d;
   }
-  function Ut(s) {
-    var d = -1, u = Array(s.size);
-    return s.forEach(function(y, I) {
-      u[++d] = [I, y];
-    }), u;
+  function Zt(s) {
+    var d = -1, g = Array(s.size);
+    return s.forEach(function(y, k) {
+      g[++d] = [k, y];
+    }), g;
   }
-  function Pt(s, d) {
-    return function(u) {
-      return s(d(u));
+  function yt(s, d) {
+    return function(g) {
+      return s(d(g));
     };
   }
-  function Vt(s) {
-    var d = -1, u = Array(s.size);
+  function Kt(s) {
+    var d = -1, g = Array(s.size);
     return s.forEach(function(y) {
-      u[++d] = y;
-    }), u;
+      g[++d] = y;
+    }), g;
   }
-  var Ce = Array.prototype, xe = Function.prototype, at = Object.prototype, mt = j["__core-js_shared__"], Kt = function() {
-    var s = /[^.]+$/.exec(mt && mt.keys && mt.keys.IE_PROTO || "");
+  var Oe = Array.prototype, je = Function.prototype, ct = Object.prototype, wt = j["__core-js_shared__"], Qt = function() {
+    var s = /[^.]+$/.exec(wt && wt.keys && wt.keys.IE_PROTO || "");
     return s ? "Symbol(src)_1." + s : "";
-  }(), Zt = xe.toString, $ = at.hasOwnProperty, ht = at.toString, We = RegExp(
-    "^" + Zt.call($).replace(Me, "\\$&").replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, "$1.*?") + "$"
-  ), Qt = Ee ? j.Buffer : void 0, Jt = j.Symbol, Nt = j.Uint8Array, He = Pt(Object.getPrototypeOf, Object), Re = Object.create, Oe = at.propertyIsEnumerable, je = Ce.splice, te = Object.getOwnPropertySymbols, Be = Qt ? Qt.isBuffer : void 0, $e = Pt(Object.keys, Object), yt = J(j, "DataView"), et = J(j, "Map"), wt = J(j, "Promise"), vt = J(j, "Set"), Mt = J(j, "WeakMap"), nt = J(Object, "create"), Xe = V(yt), Ye = V(et), qe = V(wt), ze = V(vt), Ue = V(Mt), ee = Jt ? Jt.prototype : void 0, ne = ee ? ee.valueOf : void 0;
+  }(), Jt = je.toString, $ = ct.hasOwnProperty, ht = ct.toString, Be = RegExp(
+    "^" + Jt.call($).replace(Ae, "\\$&").replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, "$1.*?") + "$"
+  ), Nt = Ie ? j.Buffer : void 0, te = j.Symbol, ee = j.Uint8Array, $e = yt(Object.getPrototypeOf, Object), qe = Object.create, Xe = ct.propertyIsEnumerable, Ye = Oe.splice, ne = Object.getOwnPropertySymbols, ze = Nt ? Nt.isBuffer : void 0, Ue = yt(Object.keys, Object), vt = J(j, "DataView"), nt = J(j, "Map"), Mt = J(j, "Promise"), bt = J(j, "Set"), Tt = J(j, "WeakMap"), it = J(Object, "create"), Ve = V(vt), Ze = V(nt), Ke = V(Mt), Qe = V(bt), Je = V(Tt), ie = te ? te.prototype : void 0, se = ie ? ie.valueOf : void 0;
   function z(s) {
-    var d = -1, u = s ? s.length : 0;
-    for (this.clear(); ++d < u; ) {
-      var y = s[d];
-      this.set(y[0], y[1]);
-    }
-  }
-  function Ve() {
-    this.__data__ = nt ? nt(null) : {};
-  }
-  function Ke(s) {
-    return this.has(s) && delete this.__data__[s];
-  }
-  function Ze(s) {
-    var d = this.__data__;
-    if (nt) {
-      var u = d[s];
-      return u === e ? void 0 : u;
-    }
-    return $.call(d, s) ? d[s] : void 0;
-  }
-  function Qe(s) {
-    var d = this.__data__;
-    return nt ? d[s] !== void 0 : $.call(d, s);
-  }
-  function Je(s, d) {
-    var u = this.__data__;
-    return u[s] = nt && d === void 0 ? e : d, this;
-  }
-  z.prototype.clear = Ve, z.prototype.delete = Ke, z.prototype.get = Ze, z.prototype.has = Qe, z.prototype.set = Je;
-  function B(s) {
-    var d = -1, u = s ? s.length : 0;
-    for (this.clear(); ++d < u; ) {
+    var d = -1, g = s ? s.length : 0;
+    for (this.clear(); ++d < g; ) {
       var y = s[d];
       this.set(y[0], y[1]);
     }
   }
   function Ne() {
-    this.__data__ = [];
+    this.__data__ = it ? it(null) : {};
   }
   function tn(s) {
-    var d = this.__data__, u = ct(d, s);
-    if (u < 0)
-      return !1;
-    var y = d.length - 1;
-    return u == y ? d.pop() : je.call(d, u, 1), !0;
+    return this.has(s) && delete this.__data__[s];
   }
   function en(s) {
-    var d = this.__data__, u = ct(d, s);
-    return u < 0 ? void 0 : d[u][1];
+    var d = this.__data__;
+    if (it) {
+      var g = d[s];
+      return g === e ? void 0 : g;
+    }
+    return $.call(d, s) ? d[s] : void 0;
   }
   function nn(s) {
-    return ct(this.__data__, s) > -1;
+    var d = this.__data__;
+    return it ? d[s] !== void 0 : $.call(d, s);
   }
   function sn(s, d) {
-    var u = this.__data__, y = ct(u, s);
-    return y < 0 ? u.push([s, d]) : u[y][1] = d, this;
+    var g = this.__data__;
+    return g[s] = it && d === void 0 ? e : d, this;
   }
-  B.prototype.clear = Ne, B.prototype.delete = tn, B.prototype.get = en, B.prototype.has = nn, B.prototype.set = sn;
-  function Z(s) {
-    var d = -1, u = s ? s.length : 0;
-    for (this.clear(); ++d < u; ) {
+  z.prototype.clear = Ne, z.prototype.delete = tn, z.prototype.get = en, z.prototype.has = nn, z.prototype.set = sn;
+  function B(s) {
+    var d = -1, g = s ? s.length : 0;
+    for (this.clear(); ++d < g; ) {
       var y = s[d];
       this.set(y[0], y[1]);
     }
   }
   function on() {
+    this.__data__ = [];
+  }
+  function rn(s) {
+    var d = this.__data__, g = lt(d, s);
+    if (g < 0)
+      return !1;
+    var y = d.length - 1;
+    return g == y ? d.pop() : Ye.call(d, g, 1), !0;
+  }
+  function an(s) {
+    var d = this.__data__, g = lt(d, s);
+    return g < 0 ? void 0 : d[g][1];
+  }
+  function cn(s) {
+    return lt(this.__data__, s) > -1;
+  }
+  function hn(s, d) {
+    var g = this.__data__, y = lt(g, s);
+    return y < 0 ? g.push([s, d]) : g[y][1] = d, this;
+  }
+  B.prototype.clear = on, B.prototype.delete = rn, B.prototype.get = an, B.prototype.has = cn, B.prototype.set = hn;
+  function K(s) {
+    var d = -1, g = s ? s.length : 0;
+    for (this.clear(); ++d < g; ) {
+      var y = s[d];
+      this.set(y[0], y[1]);
+    }
+  }
+  function ln() {
     this.__data__ = {
       hash: new z(),
-      map: new (et || B)(),
+      map: new (nt || B)(),
       string: new z()
     };
   }
-  function rn(s) {
-    return lt(this, s).delete(s);
+  function dn(s) {
+    return dt(this, s).delete(s);
   }
-  function an(s) {
-    return lt(this, s).get(s);
+  function un(s) {
+    return dt(this, s).get(s);
   }
-  function hn(s) {
-    return lt(this, s).has(s);
+  function gn(s) {
+    return dt(this, s).has(s);
   }
-  function cn(s, d) {
-    return lt(this, s).set(s, d), this;
+  function fn(s, d) {
+    return dt(this, s).set(s, d), this;
   }
-  Z.prototype.clear = on, Z.prototype.delete = rn, Z.prototype.get = an, Z.prototype.has = hn, Z.prototype.set = cn;
+  K.prototype.clear = ln, K.prototype.delete = dn, K.prototype.get = un, K.prototype.has = gn, K.prototype.set = fn;
   function Q(s) {
     this.__data__ = new B(s);
   }
-  function ln() {
+  function pn() {
     this.__data__ = new B();
   }
-  function dn(s) {
+  function Pn(s) {
     return this.__data__.delete(s);
   }
-  function gn(s) {
+  function mn(s) {
     return this.__data__.get(s);
   }
-  function un(s) {
+  function yn(s) {
     return this.__data__.has(s);
   }
-  function fn(s, d) {
-    var u = this.__data__;
-    if (u instanceof B) {
-      var y = u.__data__;
-      if (!et || y.length < t - 1)
+  function wn(s, d) {
+    var g = this.__data__;
+    if (g instanceof B) {
+      var y = g.__data__;
+      if (!nt || y.length < t - 1)
         return y.push([s, d]), this;
-      u = this.__data__ = new Z(y);
+      g = this.__data__ = new K(y);
     }
-    return u.set(s, d), this;
+    return g.set(s, d), this;
   }
-  Q.prototype.clear = ln, Q.prototype.delete = dn, Q.prototype.get = gn, Q.prototype.has = un, Q.prototype.set = fn;
-  function pn(s, d) {
-    var u = Lt(s) || On(s) ? De(s.length, String) : [], y = u.length, I = !!y;
-    for (var D in s)
-      (d || $.call(s, D)) && !(I && (D == "length" || xn(D, y))) && u.push(D);
-    return u;
+  Q.prototype.clear = pn, Q.prototype.delete = Pn, Q.prototype.get = mn, Q.prototype.has = yn, Q.prototype.set = wn;
+  function vn(s, d) {
+    var g = At(s) || Xn(s) ? He(s.length, String) : [], y = g.length, k = !!y;
+    for (var I in s)
+      (d || $.call(s, I)) && !(k && (I == "length" || jn(I, y))) && g.push(I);
+    return g;
   }
-  function ie(s, d, u) {
+  function oe(s, d, g) {
     var y = s[d];
-    (!($.call(s, d) && ae(y, u)) || u === void 0 && !(d in s)) && (s[d] = u);
-  }
-  function ct(s, d) {
-    for (var u = s.length; u--; )
-      if (ae(s[u][0], d))
-        return u;
-    return -1;
-  }
-  function Pn(s, d) {
-    return s && se(d, At(d), s);
-  }
-  function bt(s, d, u, y, I, D, x) {
-    var C;
-    if (y && (C = D ? y(s, I, D, x) : y(s)), C !== void 0)
-      return C;
-    if (!dt(s))
-      return s;
-    var le = Lt(s);
-    if (le) {
-      if (C = Dn(s), !d)
-        return _n(s, C);
-    } else {
-      var N = U(s), de = N == f || N == p;
-      if (Bn(s))
-        return bn(s, d);
-      if (N == P || N == o || de && !D) {
-        if (zt(s))
-          return D ? s : {};
-        if (C = Gn(de ? {} : s), !d)
-          return In(s, Pn(C, s));
-      } else {
-        if (!S[N])
-          return D ? s : {};
-        C = Cn(s, N, bt, d);
-      }
-    }
-    x || (x = new Q());
-    var ge = x.get(s);
-    if (ge)
-      return ge;
-    if (x.set(s, C), !le)
-      var ue = u ? kn(s) : At(s);
-    return Ie(ue || s, function(St, gt) {
-      ue && (gt = St, St = s[gt]), ie(C, gt, bt(St, d, u, y, gt, s, x));
-    }), C;
-  }
-  function mn(s) {
-    return dt(s) ? Re(s) : {};
-  }
-  function yn(s, d, u) {
-    var y = d(s);
-    return Lt(s) ? y : ke(y, u(s));
-  }
-  function wn(s) {
-    return ht.call(s);
-  }
-  function vn(s) {
-    if (!dt(s) || Hn(s))
-      return !1;
-    var d = ce(s) || zt(s) ? We : Te;
-    return d.test(V(s));
-  }
-  function Mn(s) {
-    if (!re(s))
-      return $e(s);
-    var d = [];
-    for (var u in Object(s))
-      $.call(s, u) && u != "constructor" && d.push(u);
-    return d;
-  }
-  function bn(s, d) {
-    if (d)
-      return s.slice();
-    var u = new s.constructor(s.length);
-    return s.copy(u), u;
-  }
-  function Tt(s) {
-    var d = new s.constructor(s.byteLength);
-    return new Nt(d).set(new Nt(s)), d;
-  }
-  function Tn(s, d) {
-    var u = d ? Tt(s.buffer) : s.buffer;
-    return new s.constructor(u, s.byteOffset, s.byteLength);
-  }
-  function Ln(s, d, u) {
-    var y = d ? u(Ut(s), !0) : Ut(s);
-    return qt(y, Fe, new s.constructor());
-  }
-  function An(s) {
-    var d = new s.constructor(s.source, be.exec(s));
-    return d.lastIndex = s.lastIndex, d;
-  }
-  function Sn(s, d, u) {
-    var y = d ? u(Vt(s), !0) : Vt(s);
-    return qt(y, _e, new s.constructor());
-  }
-  function En(s) {
-    return ne ? Object(ne.call(s)) : {};
-  }
-  function Fn(s, d) {
-    var u = d ? Tt(s.buffer) : s.buffer;
-    return new s.constructor(u, s.byteOffset, s.length);
-  }
-  function _n(s, d) {
-    var u = -1, y = s.length;
-    for (d || (d = Array(y)); ++u < y; )
-      d[u] = s[u];
-    return d;
-  }
-  function se(s, d, u, y) {
-    u || (u = {});
-    for (var I = -1, D = d.length; ++I < D; ) {
-      var x = d[I], C = y ? y(u[x], s[x], x, u, s) : void 0;
-      ie(u, x, C === void 0 ? s[x] : C);
-    }
-    return u;
-  }
-  function In(s, d) {
-    return se(s, oe(s), d);
-  }
-  function kn(s) {
-    return yn(s, At, oe);
+    (!($.call(s, d) && he(y, g)) || g === void 0 && !(d in s)) && (s[d] = g);
   }
   function lt(s, d) {
-    var u = s.__data__;
-    return Wn(d) ? u[typeof d == "string" ? "string" : "hash"] : u.map;
+    for (var g = s.length; g--; )
+      if (he(s[g][0], d))
+        return g;
+    return -1;
+  }
+  function Mn(s, d) {
+    return s && re(d, Ft(d), s);
+  }
+  function St(s, d, g, y, k, I, C) {
+    var x;
+    if (y && (x = I ? y(s, k, I, C) : y(s)), x !== void 0)
+      return x;
+    if (!ut(s))
+      return s;
+    var ue = At(s);
+    if (ue) {
+      if (x = Hn(s), !d)
+        return xn(s, x);
+    } else {
+      var N = U(s), ge = N == f || N == p;
+      if (zn(s))
+        return Fn(s, d);
+      if (N == P || N == o || ge && !I) {
+        if (Vt(s))
+          return I ? s : {};
+        if (x = Rn(ge ? {} : s), !d)
+          return Cn(s, Mn(x, s));
+      } else {
+        if (!A[N])
+          return I ? s : {};
+        x = On(s, N, St, d);
+      }
+    }
+    C || (C = new Q());
+    var fe = C.get(s);
+    if (fe)
+      return fe;
+    if (C.set(s, x), !ue)
+      var pe = g ? Wn(s) : Ft(s);
+    return Ce(pe || s, function(Et, gt) {
+      pe && (gt = Et, Et = s[gt]), oe(x, gt, St(Et, d, g, y, gt, s, C));
+    }), x;
+  }
+  function bn(s) {
+    return ut(s) ? qe(s) : {};
+  }
+  function Tn(s, d, g) {
+    var y = d(s);
+    return At(s) ? y : We(y, g(s));
+  }
+  function Sn(s) {
+    return ht.call(s);
+  }
+  function Ln(s) {
+    if (!ut(s) || $n(s))
+      return !1;
+    var d = de(s) || Vt(s) ? Be : Ee;
+    return d.test(V(s));
+  }
+  function An(s) {
+    if (!ce(s))
+      return Ue(s);
+    var d = [];
+    for (var g in Object(s))
+      $.call(s, g) && g != "constructor" && d.push(g);
+    return d;
+  }
+  function Fn(s, d) {
+    if (d)
+      return s.slice();
+    var g = new s.constructor(s.length);
+    return s.copy(g), g;
+  }
+  function Lt(s) {
+    var d = new s.constructor(s.byteLength);
+    return new ee(d).set(new ee(s)), d;
+  }
+  function En(s, d) {
+    var g = d ? Lt(s.buffer) : s.buffer;
+    return new s.constructor(g, s.byteOffset, s.byteLength);
+  }
+  function _n(s, d, g) {
+    var y = d ? g(Zt(s), !0) : Zt(s);
+    return Ut(y, Ge, new s.constructor());
+  }
+  function kn(s) {
+    var d = new s.constructor(s.source, Fe.exec(s));
+    return d.lastIndex = s.lastIndex, d;
+  }
+  function Dn(s, d, g) {
+    var y = d ? g(Kt(s), !0) : Kt(s);
+    return Ut(y, xe, new s.constructor());
+  }
+  function In(s) {
+    return se ? Object(se.call(s)) : {};
+  }
+  function Gn(s, d) {
+    var g = d ? Lt(s.buffer) : s.buffer;
+    return new s.constructor(g, s.byteOffset, s.length);
+  }
+  function xn(s, d) {
+    var g = -1, y = s.length;
+    for (d || (d = Array(y)); ++g < y; )
+      d[g] = s[g];
+    return d;
+  }
+  function re(s, d, g, y) {
+    g || (g = {});
+    for (var k = -1, I = d.length; ++k < I; ) {
+      var C = d[k], x = y ? y(g[C], s[C], C, g, s) : void 0;
+      oe(g, C, x === void 0 ? s[C] : x);
+    }
+    return g;
+  }
+  function Cn(s, d) {
+    return re(s, ae(s), d);
+  }
+  function Wn(s) {
+    return Tn(s, Ft, ae);
+  }
+  function dt(s, d) {
+    var g = s.__data__;
+    return Bn(d) ? g[typeof d == "string" ? "string" : "hash"] : g.map;
   }
   function J(s, d) {
-    var u = Ge(s, d);
-    return vn(u) ? u : void 0;
+    var g = Re(s, d);
+    return Ln(g) ? g : void 0;
   }
-  var oe = te ? Pt(te, Object) : Yn, U = wn;
-  (yt && U(new yt(new ArrayBuffer(1))) != _ || et && U(new et()) != m || wt && U(wt.resolve()) != M || vt && U(new vt()) != b || Mt && U(new Mt()) != k) && (U = function(s) {
-    var d = ht.call(s), u = d == P ? s.constructor : void 0, y = u ? V(u) : void 0;
+  var ae = ne ? yt(ne, Object) : Zn, U = Sn;
+  (vt && U(new vt(new ArrayBuffer(1))) != _ || nt && U(new nt()) != m || Mt && U(Mt.resolve()) != M || bt && U(new bt()) != b || Tt && U(new Tt()) != D) && (U = function(s) {
+    var d = ht.call(s), g = d == P ? s.constructor : void 0, y = g ? V(g) : void 0;
     if (y)
       switch (y) {
-        case Xe:
+        case Ve:
           return _;
-        case Ye:
+        case Ze:
           return m;
-        case qe:
+        case Ke:
           return M;
-        case ze:
+        case Qe:
           return b;
-        case Ue:
-          return k;
+        case Je:
+          return D;
       }
     return d;
   });
-  function Dn(s) {
-    var d = s.length, u = s.constructor(d);
-    return d && typeof s[0] == "string" && $.call(s, "index") && (u.index = s.index, u.input = s.input), u;
+  function Hn(s) {
+    var d = s.length, g = s.constructor(d);
+    return d && typeof s[0] == "string" && $.call(s, "index") && (g.index = s.index, g.input = s.input), g;
   }
-  function Gn(s) {
-    return typeof s.constructor == "function" && !re(s) ? mn(He(s)) : {};
+  function Rn(s) {
+    return typeof s.constructor == "function" && !ce(s) ? bn($e(s)) : {};
   }
-  function Cn(s, d, u, y) {
-    var I = s.constructor;
+  function On(s, d, g, y) {
+    var k = s.constructor;
     switch (d) {
       case W:
-        return Tt(s);
+        return Lt(s);
       case a:
-      case c:
-        return new I(+s);
+      case h:
+        return new k(+s);
       case _:
-        return Tn(s, y);
-      case q:
-      case xt:
-      case Wt:
+        return En(s, y);
+      case Y:
       case Ht:
       case Rt:
       case Ot:
       case jt:
       case Bt:
       case $t:
-        return Fn(s, y);
+      case qt:
+      case Xt:
+        return Gn(s, y);
       case m:
-        return Ln(s, y, u);
+        return _n(s, y, g);
       case v:
-      case L:
-        return new I(s);
+      case S:
+        return new k(s);
       case T:
-        return An(s);
+        return kn(s);
       case b:
-        return Sn(s, y, u);
-      case F:
-        return En(s);
+        return Dn(s, y, g);
+      case E:
+        return In(s);
     }
   }
-  function xn(s, d) {
-    return d = d ?? n, !!d && (typeof s == "number" || Le.test(s)) && s > -1 && s % 1 == 0 && s < d;
+  function jn(s, d) {
+    return d = d ?? n, !!d && (typeof s == "number" || _e.test(s)) && s > -1 && s % 1 == 0 && s < d;
   }
-  function Wn(s) {
+  function Bn(s) {
     var d = typeof s;
     return d == "string" || d == "number" || d == "symbol" || d == "boolean" ? s !== "__proto__" : s === null;
   }
-  function Hn(s) {
-    return !!Kt && Kt in s;
+  function $n(s) {
+    return !!Qt && Qt in s;
   }
-  function re(s) {
-    var d = s && s.constructor, u = typeof d == "function" && d.prototype || at;
-    return s === u;
+  function ce(s) {
+    var d = s && s.constructor, g = typeof d == "function" && d.prototype || ct;
+    return s === g;
   }
   function V(s) {
     if (s != null) {
       try {
-        return Zt.call(s);
+        return Jt.call(s);
       } catch {
       }
       try {
@@ -437,214 +437,214 @@ ft.exports;
     }
     return "";
   }
-  function Rn(s) {
-    return bt(s, !0, !0);
+  function qn(s) {
+    return St(s, !0, !0);
   }
-  function ae(s, d) {
+  function he(s, d) {
     return s === d || s !== s && d !== d;
   }
-  function On(s) {
-    return jn(s) && $.call(s, "callee") && (!Oe.call(s, "callee") || ht.call(s) == o);
+  function Xn(s) {
+    return Yn(s) && $.call(s, "callee") && (!Xe.call(s, "callee") || ht.call(s) == o);
   }
-  var Lt = Array.isArray;
-  function he(s) {
-    return s != null && $n(s.length) && !ce(s);
+  var At = Array.isArray;
+  function le(s) {
+    return s != null && Un(s.length) && !de(s);
   }
-  function jn(s) {
-    return Xn(s) && he(s);
+  function Yn(s) {
+    return Vn(s) && le(s);
   }
-  var Bn = Be || qn;
-  function ce(s) {
-    var d = dt(s) ? ht.call(s) : "";
+  var zn = ze || Kn;
+  function de(s) {
+    var d = ut(s) ? ht.call(s) : "";
     return d == f || d == p;
   }
-  function $n(s) {
+  function Un(s) {
     return typeof s == "number" && s > -1 && s % 1 == 0 && s <= n;
   }
-  function dt(s) {
+  function ut(s) {
     var d = typeof s;
     return !!s && (d == "object" || d == "function");
   }
-  function Xn(s) {
+  function Vn(s) {
     return !!s && typeof s == "object";
   }
-  function At(s) {
-    return he(s) ? pn(s) : Mn(s);
+  function Ft(s) {
+    return le(s) ? vn(s) : An(s);
   }
-  function Yn() {
+  function Zn() {
     return [];
   }
-  function qn() {
+  function Kn() {
     return !1;
   }
-  h.exports = Rn;
-})(ft, ft.exports);
-var ei = ft.exports;
-const ni = /* @__PURE__ */ ti(ei), Pe = 100, It = 1e-4, E = (h, i) => Math.sqrt((h[0] - i[0]) ** 2 + (h[1] - i[1]) ** 2), pt = (h) => {
+  c.exports = qn;
+})(Pt, Pt.exports);
+var li = Pt.exports;
+const di = /* @__PURE__ */ hi(li), Me = 100, It = 1e-4, F = (c, i) => Math.sqrt((c[0] - i[0]) ** 2 + (c[1] - i[1]) ** 2), mt = (c) => {
   let i = 0;
-  return h && Array.isArray(h) && h.length > 0 && h.forEach((t, e) => {
-    e < h.length - 1 && (i += E(t, h[e + 1]));
+  return c && Array.isArray(c) && c.length > 0 && c.forEach((t, e) => {
+    e < c.length - 1 && (i += F(t, c[e + 1]));
   }), i;
-}, R = (h) => pt(h) ** 0.99, O = (h, i) => [(h[0] + i[0]) / 2, (h[1] + i[1]) / 2], ii = (h, i, t) => {
-  const e = [(h[0] + i[0]) / 2, (h[1] + i[1]) / 2], n = [e[0] - h[1] + i[1], e[1] + h[0] - i[0]], o = [(h[0] + t[0]) / 2, (h[1] + t[1]) / 2], r = [o[0] - h[1] + t[1], o[1] + h[0] - t[0]];
-  return si(e, n, o, r);
-}, si = (h, i, t, e) => {
-  if (h[1] === i[1]) {
-    const l = (e[0] - t[0]) / (e[1] - t[1]) * (h[1] - t[1]) + t[0], f = h[1];
+}, R = (c) => mt(c) ** 0.99, O = (c, i) => [(c[0] + i[0]) / 2, (c[1] + i[1]) / 2], ui = (c, i, t) => {
+  const e = [(c[0] + i[0]) / 2, (c[1] + i[1]) / 2], n = [e[0] - c[1] + i[1], e[1] + c[0] - i[0]], o = [(c[0] + t[0]) / 2, (c[1] + t[1]) / 2], r = [o[0] - c[1] + t[1], o[1] + c[0] - t[0]];
+  return gi(e, n, o, r);
+}, gi = (c, i, t, e) => {
+  if (c[1] === i[1]) {
+    const l = (e[0] - t[0]) / (e[1] - t[1]) * (c[1] - t[1]) + t[0], f = c[1];
     return [l, f];
   }
   if (t[1] === e[1]) {
-    const l = (i[0] - h[0]) / (i[1] - h[1]) * (t[1] - h[1]) + h[0], f = t[1];
+    const l = (i[0] - c[0]) / (i[1] - c[1]) * (t[1] - c[1]) + c[0], f = t[1];
     return [l, f];
   }
-  const n = (i[0] - h[0]) / (i[1] - h[1]), o = (e[0] - t[0]) / (e[1] - t[1]), r = (n * h[1] - h[0] - o * t[1] + t[0]) / (n - o);
-  return [n * r - n * h[1] + h[0], r];
-}, K = (h, i) => {
+  const n = (i[0] - c[0]) / (i[1] - c[1]), o = (e[0] - t[0]) / (e[1] - t[1]), r = (n * c[1] - c[0] - o * t[1] + t[0]) / (n - o);
+  return [n * r - n * c[1] + c[0], r];
+}, Z = (c, i) => {
   let t;
-  const e = Math.asin(Math.abs(i[1] - h[1]) / E(h, i));
-  return i[1] >= h[1] && i[0] >= h[0] ? t = e + Math.PI : i[1] >= h[1] && i[0] < h[0] ? t = Math.PI * 2 - e : i[1] < h[1] && i[0] < h[0] ? t = e : i[1] < h[1] && i[0] >= h[0] && (t = Math.PI - e), t;
-}, _t = (h, i, t) => {
-  const e = K(i, h) - K(i, t);
+  const e = Math.asin(Math.abs(i[1] - c[1]) / F(c, i));
+  return i[1] >= c[1] && i[0] >= c[0] ? t = e + Math.PI : i[1] >= c[1] && i[0] < c[0] ? t = Math.PI * 2 - e : i[1] < c[1] && i[0] < c[0] ? t = e : i[1] < c[1] && i[0] >= c[0] && (t = Math.PI - e), t;
+}, Dt = (c, i, t) => {
+  const e = Z(i, c) - Z(i, t);
   return e < 0 ? e + Math.PI * 2 : e;
-}, rt = (h, i, t) => (t[1] - h[1]) * (i[0] - h[0]) > (i[1] - h[1]) * (t[0] - h[0]), oi = (h, i, t, e, n) => {
-  h = Math.max(Math.min(h, 1), 0);
-  const [o, r] = [1 - h, h * h], a = r * h, c = o * o, l = c * o, f = l * i[0] + 3 * c * h * t[0] + 3 * o * r * e[0] + a * n[0], p = l * i[1] + 3 * c * h * t[1] + 3 * o * r * e[1] + a * n[1];
+}, at = (c, i, t) => (t[1] - c[1]) * (i[0] - c[0]) > (i[1] - c[1]) * (t[0] - c[0]), fi = (c, i, t, e, n) => {
+  c = Math.max(Math.min(c, 1), 0);
+  const [o, r] = [1 - c, c * c], a = r * c, h = o * o, l = h * o, f = l * i[0] + 3 * h * c * t[0] + 3 * o * r * e[0] + a * n[0], p = l * i[1] + 3 * h * c * t[1] + 3 * o * r * e[1] + a * n[1];
   return [f, p];
-}, w = (h, i, t, e, n) => {
-  const o = K(h, i), r = n ? o + t : o - t, a = e * Math.cos(r), c = e * Math.sin(r);
-  return [i[0] + a, i[1] + c];
-}, ye = (h, i, t, e) => {
+}, w = (c, i, t, e, n) => {
+  const o = Z(c, i), r = n ? o + t : o - t, a = e * Math.cos(r), h = e * Math.sin(r);
+  return [i[0] + a, i[1] + h];
+}, Te = (c, i, t, e) => {
   let [n, o, r, a] = [null, null, [], e - t];
   a = a < 0 ? a + Math.PI * 2 : a;
-  for (let c = 0; c <= 100; c++) {
-    const l = t + a * c / 100;
-    n = h[0] + i * Math.cos(l), o = h[1] + i * Math.sin(l), r.push([n, o]);
+  for (let h = 0; h <= 100; h++) {
+    const l = t + a * h / 100;
+    n = c[0] + i * Math.cos(l), o = c[1] + i * Math.sin(l), r.push([n, o]);
   }
   return r;
-}, kt = (h, i, t, e) => {
-  const n = Dt(i, t, e);
-  let [o, r, a, c, l] = [null, null, null, null, null];
-  const f = Math.sqrt(n[0] * n[0] + n[1] * n[1]), p = n[0] / f, m = n[1] / f, v = E(i, t), P = E(t, e);
-  return f > It ? rt(i, t, e) ? (a = h * v, c = t[0] - a * m, l = t[1] + a * p, o = [c, l], a = h * P, c = t[0] + a * m, l = t[1] - a * p, r = [c, l]) : (a = h * v, c = t[0] + a * m, l = t[1] - a * p, o = [c, l], a = h * P, c = t[0] - a * m, l = t[1] + a * p, r = [c, l]) : (c = t[0] + h * (i[0] - t[0]), l = t[1] + h * (i[1] - t[1]), o = [c, l], c = t[0] + h * (e[0] - t[0]), l = t[1] + h * (e[1] - t[1]), r = [c, l]), [o, r];
-}, Dt = (h, i, t) => {
-  let e = h[0] - i[0], n = h[1] - i[1];
+}, Gt = (c, i, t, e) => {
+  const n = xt(i, t, e);
+  let [o, r, a, h, l] = [null, null, null, null, null];
+  const f = Math.sqrt(n[0] * n[0] + n[1] * n[1]), p = n[0] / f, m = n[1] / f, v = F(i, t), P = F(t, e);
+  return f > It ? at(i, t, e) ? (a = c * v, h = t[0] - a * m, l = t[1] + a * p, o = [h, l], a = c * P, h = t[0] + a * m, l = t[1] - a * p, r = [h, l]) : (a = c * v, h = t[0] + a * m, l = t[1] - a * p, o = [h, l], a = c * P, h = t[0] - a * m, l = t[1] + a * p, r = [h, l]) : (h = t[0] + c * (i[0] - t[0]), l = t[1] + c * (i[1] - t[1]), o = [h, l], h = t[0] + c * (e[0] - t[0]), l = t[1] + c * (e[1] - t[1]), r = [h, l]), [o, r];
+}, xt = (c, i, t) => {
+  let e = c[0] - i[0], n = c[1] - i[1];
   const o = Math.sqrt(e * e + n * n);
   e /= o, n /= o;
   let r = t[0] - i[0], a = t[1] - i[1];
-  const c = Math.sqrt(r * r + a * a);
-  r /= c, a /= c;
+  const h = Math.sqrt(r * r + a * a);
+  r /= h, a /= h;
   const l = e + r, f = n + a;
   return [l, f];
-}, ri = (h, i) => {
-  let [t, e, n, o, r] = [h[0], h[1], h[2], null, null];
-  const c = kt(0, t, e, n)[0], l = Dt(t, e, n);
+}, pi = (c, i) => {
+  let [t, e, n, o, r] = [c[0], c[1], c[2], null, null];
+  const h = Gt(0, t, e, n)[0], l = xt(t, e, n);
   if (Math.sqrt(l[0] * l[0] + l[1] * l[1]) > It) {
-    const p = O(t, e), m = t[0] - p[0], v = t[1] - p[1], M = 2 / E(t, e), T = -M * v, b = M * m, L = T * T - b * b, F = 2 * T * b, k = b * b - T * T, W = c[0] - p[0], _ = c[1] - p[1];
-    o = p[0] + L * W + F * _, r = p[1] + F * W + k * _;
+    const p = O(t, e), m = t[0] - p[0], v = t[1] - p[1], M = 2 / F(t, e), T = -M * v, b = M * m, S = T * T - b * b, E = 2 * T * b, D = b * b - T * T, W = h[0] - p[0], _ = h[1] - p[1];
+    o = p[0] + S * W + E * _, r = p[1] + E * W + D * _;
   } else
     o = t[0] + i * (e[0] - t[0]), r = t[1] + i * (e[1] - t[1]);
   return [o, r];
-}, ai = (h, i) => {
-  const t = h.length, e = h[t - 3], n = h[t - 2], o = h[t - 1], a = kt(0, e, n, o)[1], c = Dt(e, n, o), l = Math.sqrt(c[0] * c[0] + c[1] * c[1]);
+}, Pi = (c, i) => {
+  const t = c.length, e = c[t - 3], n = c[t - 2], o = c[t - 1], a = Gt(0, e, n, o)[1], h = xt(e, n, o), l = Math.sqrt(h[0] * h[0] + h[1] * h[1]);
   let [f, p] = [null, null];
   if (l > It) {
-    const m = O(n, o), v = o[0] - m[0], P = o[1] - m[1], T = 2 / E(n, o), b = -T * P, L = T * v, F = b * b - L * L, k = 2 * b * L, W = L * L - b * b, _ = a[0] - m[0], q = a[1] - m[1];
-    f = m[0] + F * _ + k * q, p = m[1] + k * _ + W * q;
+    const m = O(n, o), v = o[0] - m[0], P = o[1] - m[1], T = 2 / F(n, o), b = -T * P, S = T * v, E = b * b - S * S, D = 2 * b * S, W = S * S - b * b, _ = a[0] - m[0], Y = a[1] - m[1];
+    f = m[0] + E * _ + D * Y, p = m[1] + D * _ + W * Y;
   } else
     f = o[0] + i * (n[0] - o[0]), p = o[1] + i * (n[1] - o[1]);
   return [f, p];
-}, Gt = (h, i) => {
-  const t = ri(i, h);
+}, Ct = (c, i) => {
+  const t = pi(i, c);
   let [e, n, o, r, a] = [null, null, null, [t], []];
   for (let l = 0; l < i.length - 2; l++) {
     [e, n, o] = [i[l], i[l + 1], i[l + 2]];
-    const f = kt(h, e, n, o);
+    const f = Gt(c, e, n, o);
     r = r.concat(f);
   }
-  const c = ai(i, h);
-  c && r.push(c);
+  const h = Pi(i, c);
+  h && r.push(h);
   for (let l = 0; l < i.length - 1; l++) {
     e = i[l], n = i[l + 1], a.push(e);
-    for (let f = 0; f < Pe; f++) {
-      const p = oi(f / Pe, e, r[l * 2], r[l * 2 + 1], n);
+    for (let f = 0; f < Me; f++) {
+      const p = fi(f / Me, e, r[l * 2], r[l * 2 + 1], n);
       a.push(p);
     }
     a.push(n);
   }
   return a;
-}, Et = function(h) {
-  if (h.length <= 2)
-    return h;
-  const i = [], t = h.length - 1;
+}, _t = function(c) {
+  if (c.length <= 2)
+    return c;
+  const i = [], t = c.length - 1;
   for (let e = 0; e <= 1; e += 0.01) {
     let [n, o] = [0, 0];
     for (let r = 0; r <= t; r++) {
-      const a = hi(t, r), c = e ** r, l = (1 - e) ** (t - r);
-      n += a * c * l * h[r][0], o += a * c * l * h[r][1];
+      const a = mi(t, r), h = e ** r, l = (1 - e) ** (t - r);
+      n += a * h * l * c[r][0], o += a * h * l * c[r][1];
     }
     i.push([n, o]);
   }
-  return i.push(h[t]), i;
-}, Ft = (h) => {
+  return i.push(c[t]), i;
+}, kt = (c) => {
   let i = 1;
-  switch (h) {
-    case h <= 1:
+  switch (c) {
+    case c <= 1:
       i = 1;
       break;
-    case h === 2:
+    case c === 2:
       i = 2;
       break;
-    case h === 3:
+    case c === 3:
       i = 6;
       break;
-    case h === 24:
+    case c === 24:
       i = 24;
       break;
-    case h === 5:
+    case c === 5:
       i = 120;
       break;
     default:
-      for (let t = 1; t <= h; t++)
+      for (let t = 1; t <= c; t++)
         i *= t;
       break;
   }
   return i;
-}, hi = (h, i) => Ft(h) / (Ft(i) * Ft(h - i)), Y = (h) => {
-  if (h.length <= 2)
-    return h;
-  const [i, t] = [2, []], e = h.length - i - 1;
-  t.push(h[0]);
+}, mi = (c, i) => kt(c) / (kt(i) * kt(c - i)), X = (c) => {
+  if (c.length <= 2)
+    return c;
+  const [i, t] = [2, []], e = c.length - i - 1;
+  t.push(c[0]);
   for (let n = 0; n <= e; n++)
     for (let o = 0; o <= 1; o += 0.05) {
       let [r, a] = [0, 0];
-      for (let c = 0; c <= i; c++) {
-        const l = ci(c, o);
-        r += l * h[n + c][0], a += l * h[n + c][1];
+      for (let h = 0; h <= i; h++) {
+        const l = yi(h, o);
+        r += l * c[n + h][0], a += l * c[n + h][1];
       }
       t.push([r, a]);
     }
-  return t.push(h[h.length - 1]), t;
-}, ci = (h, i) => {
+  return t.push(c[c.length - 1]), t;
+}, yi = (c, i) => {
   let t = 0;
-  return h === 0 ? t = (i - 1) ** 2 / 2 : h === 1 ? t = (-2 * i ** 2 + 2 * i + 1) / 2 : h === 2 && (t = i ** 2 / 2), t;
-}, tt = class tt {
+  return c === 0 ? t = (i - 1) ** 2 / 2 : c === 1 ? t = (-2 * i ** 2 + 2 * i + 1) / 2 : c === 2 && (t = i ** 2 / 2), t;
+}, et = class et {
   static datumsToVector(i, t) {
     const e = Math.PI / 180, n = t * e, o = i * e;
     var r = Math.cos(o);
-    return new X(-Math.cos(n + Math.PI) * r, Math.sin(o), Math.sin(n + Math.PI) * r);
+    return new q(-Math.cos(n + Math.PI) * r, Math.sin(o), Math.sin(n + Math.PI) * r);
   }
   static vectorScale(i, t = 10) {
     let e = i.clone().normalize();
     return e.multiplyScalar(t), i.add(e), i;
   }
-  static fromDegrees(i, t) {
-    let e = tt.datumsToVector(i, t);
-    return e.multiplyScalar(tt.EARTH_RADIUS_A + 10), e;
+  static fromDegrees(i, t, e = 10) {
+    let n = et.datumsToVector(i, t);
+    return n.multiplyScalar(et.EARTH_RADIUS_A + e), n;
   }
   static fromDegreesArray(i) {
     let t = [];
     for (let e = 0; e < i.length; e += 2) {
-      let n = tt.fromDegrees(i[e + 1], i[e]);
+      let n = et.fromDegrees(i[e + 1], i[e]);
       t.push(n);
     }
     return t;
@@ -670,13 +670,13 @@ const ni = /* @__PURE__ */ ti(ei), Pe = 100, It = 1e-4, E = (h, i) => Math.sqrt(
     return i * (Math.PI / 180);
   }
 };
-g(tt, "EARTH_RADIUS_A", 6378137);
-let A = tt;
+u(et, "EARTH_RADIUS_A", 6378137);
+let L = et;
 class H {
   constructor(i) {
-    g(this, "_eventListeners", {});
+    u(this, "_eventListeners", {});
     // events 事件
-    g(this, "_eventListenerNames", [
+    u(this, "_eventListenerNames", [
       // TODO add keyboard events
       "mouse-down",
       // alias of 'mouse-down-left'
@@ -791,8 +791,8 @@ class H {
   _setupInputInterface(i, t) {
     const { onClick: e, onDrag: n, onDragStart: o, onDragEnd: r } = t;
     let a = !1;
-    const c = `${i}-${i === "touch" ? "start" : "down"}`;
-    this.on(c, (l, f) => {
+    const h = `${i}-${i === "touch" ? "start" : "down"}`;
+    this.on(h, (l, f) => {
       a = !0, o && o(l, f);
     }), this.on(`${i}-move`, (l, f) => {
       n && a && n(l, f);
@@ -811,45 +811,54 @@ class H {
 }
 class G {
   constructor(i, t) {
-    g(this, "viewer");
+    u(this, "viewer");
     // 这里的viewer是wegeo对象
-    g(this, "eventHandler");
-    g(this, "polygonEntity");
-    g(this, "geometryPoints", []);
-    g(this, "state", "drawing");
-    g(this, "controlPoints", []);
+    u(this, "eventHandler");
+    u(this, "polygonEntity");
+    u(this, "geometryPoints", []);
+    u(this, "state", "drawing");
+    u(this, "controlPoints", []);
     // 控制点
-    g(this, "controlPointsEventHandler");
-    g(this, "lineEntity");
-    g(this, "type");
-    g(this, "freehand");
-    g(this, "style");
-    g(this, "outlineEntity");
-    g(this, "eventDispatcher");
-    g(this, "dragEventHandler");
-    g(this, "entityId");
-    g(this, "points", []);
-    g(this, "styleCache");
-    g(this, "minPointsForShape", 0);
-    g(this, "tempLineEntity");
-    this.viewer = i, this.type = this.getType(), this.mergeStyle(t), this.cartesianToLnglat = this.cartesianToLnglat.bind(this), this.pixelToCartesian = this.pixelToCartesian.bind(this), this.eventDispatcher = new Nn(), i.trackedEntity = void 0, this.onClick();
+    u(this, "controlPointsEventHandler");
+    u(this, "lineEntity");
+    u(this, "type");
+    u(this, "freehand");
+    u(this, "style");
+    u(this, "outlineEntity");
+    u(this, "eventDispatcher");
+    u(this, "dragEventHandler");
+    u(this, "entityId");
+    u(this, "points", []);
+    u(this, "styleCache");
+    u(this, "minPointsForShape", 0);
+    u(this, "tempLineEntity");
+    u(this, "extrudeSettings", { depth: 8e5, bevelEnabled: !1, bevelSegments: 2, steps: 2, bevelSize: 1, bevelThickness: 1 });
+    u(this, "minHeight", -65536);
+    u(this, "maxHeight", 65536);
+    this.viewer = i, this.type = this.getType(), this.mergeStyle(t), this.cartesianToLnglat = this.cartesianToLnglat.bind(this), this.pixelToCartesian = this.pixelToCartesian.bind(this), this.eventDispatcher = new ci(), i.trackedEntity = void 0, this.onClick();
   }
   mergeStyle(i) {
-    this.style = Object.assign(
+    var t = new st();
+    t.depthWrite = !1, t.depthTest = !0, t.colorWrite = !1, t.stencilWrite = !0, t.stencilFunc = Pe, t.side = Nn, t.stencilFail = ft, t.stencilZFail = ft, t.stencilZPass = me;
+    var e = new st();
+    e.depthWrite = !1, e.depthTest = !0, e.colorWrite = !1, e.stencilWrite = !0, e.stencilFunc = Pe, e.side = ti, e.stencilFail = ft, e.stencilZFail = ft, e.stencilZPass = ye;
+    var n = new st();
+    n.depthWrite = !1, n.depthTest = !1, n.colorWrite = !0, n.stencilWrite = !0, n.color.set(16746342), n.stencilFunc = ei, n.stencilFail = ni, n.stencilZFail = me, n.stencilZPass = ye, this.style = Object.assign(
       {
-        PolygonStyle: new fe({
+        PolygonStyle: new st({
           color: 255,
-          side: Vn,
+          side: ii,
           transparent: !0,
           opacity: 0.8
         }),
-        LineStyle: new Kn({
+        LineStyle: new si({
           color: 16777215,
           linewidth: 2
-        })
+        }),
+        materials: [t, e, n]
       },
       i
-    ), this.styleCache = ni(this.style);
+    ), this.styleCache = di(this.style);
   }
   /**
    * The base class provides a method to change the state, and different logic is implemented based on the state.
@@ -872,8 +881,8 @@ class G {
    */
   onClick() {
     this.eventHandler = new H(this.viewer.baseMap.canvas), this.eventHandler.on("mouse-click", (i, t) => {
-      let e = new it(i, t), n = this.viewer.getModel(i, t)[0].object;
-      const o = this.defined(n) && n instanceof st && n.drawed;
+      let e = new ot(i, t), n = this.viewer.getModel(i, t)[0].object;
+      const o = this.defined(n) && n instanceof tt && n.drawed;
       if (this.activeEntity = this.polygonEntity, this.type === "line" && (this.activeEntity = this.lineEntity), this.state === "drawing") {
         const r = this.pixelToCartesian(e), a = this.getPoints();
         if (!r || !this.freehand && a.length > 0 && !this.checkDistance(r, a[a.length - 1]))
@@ -890,7 +899,7 @@ class G {
   }
   onMouseMove() {
     this.eventHandler.on("mouse-move", (i, t) => {
-      let e = new it(i, t);
+      let e = new ot(i, t);
       const n = this.getPoints(), o = this.pixelToCartesian(e);
       o && this.checkDistance(o, n[n.length - 1]) && this.updateMovingPoint(o, n.length);
     });
@@ -927,33 +936,41 @@ class G {
     return this.geometryPoints;
   }
   drawPolygon() {
-    const i = () => {
-      let t = [];
-      for (let n = 0; n < this.geometryPoints.length; n++)
-        t.push(new it(this.geometryPoints[n].x, this.geometryPoints[n].y));
-      let e = new Qn(new Jn(t));
-      for (let n = 0; n < this.geometryPoints.length; n++)
-        e.attributes.position.array[n * 3 + 0] = this.geometryPoints[n].x, e.attributes.position.array[n * 3 + 1] = this.geometryPoints[n].y, e.attributes.position.array[n * 3 + 2] = this.geometryPoints[n].z;
-      return e;
+    let t = () => {
+      let e = [];
+      for (let r = 0; r < this.geometryPoints.length; r++) {
+        let a = this.cartesianToLnglat(this.geometryPoints[r]);
+        e.push(new ot(a[1], a[0]));
+      }
+      let n = new ri(new ai(e), this.extrudeSettings), o = n.attributes.position.array;
+      for (let r = 0; r < o.length; r += 3) {
+        let a = L.fromDegrees(o[r], o[r + 1], o[r + 2] - 4e5);
+        o[r] = a.x, o[r + 1] = a.y, o[r + 2] = a.z;
+      }
+      return n;
     };
     if (this.polygonEntity)
-      this.polygonEntity.geometry = i(), this.outlineEntity && (this.outlineEntity.geometry = new ot().setFromPoints(this.geometryPoints));
+      this.polygonEntity instanceof ve && this.polygonEntity.children.forEach((e) => {
+        e.geometry = t();
+      }), this.polygonEntity instanceof tt && (this.polygonEntity.geometry = t()), this.outlineEntity && (this.outlineEntity.geometry = new rt().setFromPoints(this.geometryPoints));
     else {
-      const t = this.style.PolygonStyle;
-      this.polygonEntity = new st(
-        i(),
-        t
-      ), this.polygonEntity.drawed = !0, this.viewer.baseMap.add(this.polygonEntity);
+      this.style.PolygonStyle, this.polygonEntity = this.createMultiMaterialObject(t(), this.style.materials), this.polygonEntity.drawed = !0, this.viewer.baseMap.add(this.polygonEntity);
       let e = this.style.LineStyle;
-      this.outlineEntity = new pe(
-        new ot().setFromPoints(this.geometryPoints),
+      this.outlineEntity = new we(
+        new rt().setFromPoints(this.geometryPoints),
         e
       ), this.viewer.baseMap.add(this.outlineEntity), this.activeEntity = this.polygonEntity, this.type === "line" && (this.activeEntity = this.lineEntity);
     }
   }
+  createMultiMaterialObject(i, t) {
+    const e = new ve();
+    for (let n = 0, o = t.length; n < o; n++)
+      e.add(new tt(i, t[n]));
+    return e;
+  }
   drawLine() {
     if (this.lineEntity)
-      this.lineEntity.geometry = new ot().setFromPoints(this.geometryPoints);
+      this.lineEntity.geometry = new rt().setFromPoints(this.geometryPoints);
     else {
       const i = this.style.LineStyle;
       this.lineEntity = this.addLineEntity(i);
@@ -961,7 +978,7 @@ class G {
   }
   addTempLine() {
     if (this.tempLineEntity)
-      this.tempLineEntity.geometry = new ot().setFromPoints(this.geometryPoints);
+      this.tempLineEntity.geometry = new rt().setFromPoints(this.geometryPoints);
     else {
       const i = this.style.LineStyle;
       this.tempLineEntity = this.addLineEntity(i);
@@ -971,14 +988,14 @@ class G {
     this.tempLineEntity && (this.viewer.baseMap.remove(this.tempLineEntity), this.tempLineEntity = void 0);
   }
   addLineEntity(i) {
-    const t = new pe(
-      new ot().setFromPoints(this.geometryPoints),
+    const t = new we(
+      new rt().setFromPoints(this.geometryPoints),
       i
     );
     return this.viewer.baseMap.add(t), t;
   }
   cartesianToLnglat(i) {
-    const t = A.vectorToDatums(i), e = t.latitude;
+    const t = L.vectorToDatums(i), e = t.latitude;
     return [t.longitude, e];
   }
   // 将像素坐标转换为笛卡尔坐标
@@ -992,16 +1009,16 @@ class G {
     const i = this.getPoints();
     let t = 100;
     this.controlPoints = i.map((r) => {
-      let a = new st(new Zn(t, 32, 32), new fe({ color: 16711680 }));
+      let a = new tt(new oi(t, 32, 32), new st({ color: 16711680 }));
       return a.position.copy(r), a.controlPoint = !0, this.viewer.baseMap.add(a), a;
     });
     let e = !1, n, o;
     this.controlPointsEventHandler = new H(this.viewer.baseMap.canvas), this.controlPointsEventHandler.on("mouse-down-left", (r, a) => {
-      new it(r, a);
-      const c = this.viewer.getModel(r, a)[0].object;
-      if (this.defined(c) && c.controlPoint) {
+      new ot(r, a);
+      const h = this.viewer.getModel(r, a)[0].object;
+      if (this.defined(h) && h.controlPoint) {
         for (let l = 0; l < this.controlPoints.length; l++)
-          if (c.id === this.controlPoints[l].id) {
+          if (h.id === this.controlPoints[l].id) {
             e = !0, n = this.controlPoints[l], o = n.position, n.index = l;
             break;
           }
@@ -1009,8 +1026,8 @@ class G {
       }
     }), this.controlPointsEventHandler.on("mouse-move", (r, a) => {
       if (e && n) {
-        let c = new it(r, a);
-        const l = this.viewer.getXYZ(c.x, c.y);
+        let h = new ot(r, a);
+        const l = this.viewer.getXYZ(h.x, h.y);
         l && (n.position.copy(l), this.updateDraggingPoint(l, n.index));
       }
     }), this.controlPointsEventHandler.on("mouse-up", (r, a) => {
@@ -1029,7 +1046,7 @@ class G {
     let i = !1, t;
     this.dragEventHandler = new H(this.viewer.baseMap.canvas), this.dragEventHandler.on("mouse-down-left", (e, n) => {
       const o = this.viewer.getXYZ(e, n), r = this.viewer.getModel(e, n)[0].object;
-      if (this.defined(r) && r instanceof st && r.drawed) {
+      if (this.defined(r) && r instanceof tt && r.drawed) {
         const a = r.id;
         this.isCurrentEntity(a) && (i = !0, t = o, this.viewer.baseMap.controls.enableRotate = !1);
       }
@@ -1037,15 +1054,15 @@ class G {
       if (i && t) {
         const o = this.viewer.getXYZ(e, n);
         if (o) {
-          const r = o.clone().sub(t), a = this.geometryPoints.map((c) => c.add(r));
-          this.points = this.points.map((c) => c.add(r)), this.controlPoints.map((c) => {
-            const f = c.position.clone().add(r);
-            c.position.copy(f);
+          const r = o.clone().sub(t), a = this.geometryPoints.map((h) => h.add(r));
+          this.points = this.points.map((h) => h.add(r)), this.controlPoints.map((h) => {
+            const f = h.position.clone().add(r);
+            h.position.copy(f);
           }), this.setGeometryPoints(a), this.minPointsForShape === 4 && (this.curveControlPointLeft = this.curveControlPointLeft.add(r), this.curveControlPointRight = this.curveControlPointRight.add(r)), t = o, this.drawPolygon();
         }
       } else {
         const o = this.viewer.getModel(e, n)[0].object;
-        if (this.defined(o) && o instanceof st && o.drawed) {
+        if (this.defined(o) && o instanceof tt && o.drawed) {
           const r = o.id;
           this.isCurrentEntity(r) ? this.viewer.baseMap.canvas.style.cursor = "move" : this.viewer.baseMap.canvas.style.cursor = "default";
         } else
@@ -1081,8 +1098,8 @@ class G {
       if (this.setState("static"), this.type === "polygon") {
         let r = 0.3;
         r = this.styleCache.PolygonStyle.opacity, this.animateOpacity(this.polygonEntity, r, i, t, e, this.state);
-        const c = (o = (n = this.styleCache) == null ? void 0 : n.outlineMaterial) == null ? void 0 : o.alpha;
-        this.animateOpacity(this.outlineEntity, c || 1, i, t, void 0, this.state);
+        const h = (o = (n = this.styleCache) == null ? void 0 : n.outlineMaterial) == null ? void 0 : o.alpha;
+        this.animateOpacity(this.outlineEntity, h || 1, i, t, void 0, this.state);
       } else if (this.type === "line") {
         const r = this.styleCache.LineStyle.material;
         let a = 1;
@@ -1097,14 +1114,14 @@ class G {
   animateOpacity(i, t, e, n, o, r) {
     setTimeout(() => {
       const a = i;
-      let c, l = a.material;
-      c = l.opacity;
+      let h, l = a.material;
+      h = l.opacity;
       let f = 0;
       const p = (m) => {
         f || (f = m);
         const v = m - f;
         if (v < e) {
-          const P = v / e * (t - c), M = c + P;
+          const P = v / e * (t - h), M = h + P;
           l.opacity = M, requestAnimationFrame(p);
         } else {
           o && o();
@@ -1133,7 +1150,7 @@ class G {
         const o = this.getPoints();
         let r = 0;
         this.minPointsForShape === 2 ? r = t / (o.length - 1) : r = t / (o.length - 2);
-        let a = Date.now(), c = 0, l = a;
+        let a = Date.now(), h = 0, l = a;
         const f = () => {
           const p = Date.now(), m = p - a;
           if (p - l >= 16.7)
@@ -1148,12 +1165,12 @@ class G {
           }
           const P = Math.floor(m / r);
           let M;
-          this.minPointsForShape === 2 ? c = P + 1 : c = P + 2, M = o[c - 1], P == 0 && this.minPointsForShape === 3 && (M = new X().lerpVectors(o[0], o[1], 0.5));
-          let T = o[c];
-          const b = (m - P * r) / r, L = new X().lerpVectors(M, T, b), F = o.slice(0, c + 1);
-          F[F.length - 1] = L;
-          const k = this.createGraphic(F);
-          this.setGeometryPoints(k), this.drawPolygon(), this.showWithAnimation(0, 0, void 0), requestAnimationFrame(f);
+          this.minPointsForShape === 2 ? h = P + 1 : h = P + 2, M = o[h - 1], P == 0 && this.minPointsForShape === 3 && (M = new q().lerpVectors(o[0], o[1], 0.5));
+          let T = o[h];
+          const b = (m - P * r) / r, S = new q().lerpVectors(M, T, b), E = o.slice(0, h + 1);
+          E[E.length - 1] = S;
+          const D = this.createGraphic(E);
+          this.setGeometryPoints(D), this.drawPolygon(), this.showWithAnimation(0, 0, void 0), requestAnimationFrame(f);
         };
         requestAnimationFrame(f);
       }, e);
@@ -1165,9 +1182,9 @@ class G {
       const n = this.getPoints();
       let o = Date.now(), r = o;
       const a = () => {
-        const c = Date.now(), l = c - o;
-        if (c - r >= 16.7)
-          r = c;
+        const h = Date.now(), l = h - o;
+        if (h - r >= 16.7)
+          r = h;
         else {
           requestAnimationFrame(a);
           return;
@@ -1176,26 +1193,26 @@ class G {
           e && e(), o = 0, this.setState("static");
           return;
         }
-        const p = new X().lerpVectors(n[0], n[1], 0.5), m = new X().lerpVectors(n[0], p, 0.5), v = new X().lerpVectors(p, n[1], 0.5);
+        const p = new q().lerpVectors(n[0], n[1], 0.5), m = new q().lerpVectors(n[0], p, 0.5), v = new q().lerpVectors(p, n[1], 0.5);
         let P = n[3], M = n[2];
         const T = l / i, b = this.getBezierControlPointforGrowthAnimation();
-        let L = [m, b.left, P], F = [v, b.right, M];
-        const k = this.getNewPosition(L, T), W = this.getNewPosition(F, T), _ = [...n];
-        _[2] = W, _[3] = k;
-        const q = this.createGraphic(_);
-        this.setGeometryPoints(q), this.drawPolygon(), this.showWithAnimation(0, 0, void 0), requestAnimationFrame(a);
+        let S = [m, b.left, P], E = [v, b.right, M];
+        const D = this.getNewPosition(S, T), W = this.getNewPosition(E, T), _ = [...n];
+        _[2] = W, _[3] = D;
+        const Y = this.createGraphic(_);
+        this.setGeometryPoints(Y), this.drawPolygon(), this.showWithAnimation(0, 0, void 0), requestAnimationFrame(a);
       };
       requestAnimationFrame(a);
     }, t);
   }
   getNewPosition(i, t) {
     i = i.map((o) => this.cartesianToLnglat(o));
-    let e = Gt(0.3, i);
-    return e = e.map((o) => A.fromDegrees(o[0], o[1])), this.interpolateAlongCurve(e, t);
+    let e = Ct(0.3, i);
+    return e = e.map((o) => L.fromDegrees(o[0], o[1])), this.interpolateAlongCurve(e, t);
   }
   interpolateAlongCurve(i, t) {
-    const e = i.length - 1, n = Math.floor(t * e), o = t * e - n, r = i[n], a = i[n + 1], c = r.x + (a.x - r.x) * o, l = r.y + (a.y - r.y) * o, f = r.z + (a.z - r.z) * o;
-    return new X(c, l, f);
+    const e = i.length - 1, n = Math.floor(t * e), o = t * e - n, r = i[n], a = i[n + 1], h = r.x + (a.x - r.x) * o, l = r.y + (a.y - r.y) * o, f = r.z + (a.z - r.z) * o;
+    return new q(h, l, f);
   }
   remove() {
     this.type === "polygon" ? (this.viewer.baseMap.remove(this.polygonEntity), this.viewer.baseMap.remove(this.outlineEntity), this.polygonEntity = null, this.outlineEntity = null, this.lineEntity = null) : this.type === "line" && this.viewer.baseMap.remove(this.lineEntity), this.removeClickListener(), this.removeMoveListener(), this.removeDoubleClickListener(), this.removeControlPoints();
@@ -1212,7 +1229,7 @@ class G {
   addPoint(i) {
   }
   getPoints() {
-    return [new X()];
+    return [new q()];
   }
   updateMovingPoint(i, t) {
   }
@@ -1225,19 +1242,19 @@ class G {
     return i;
   }
 }
-class we extends G {
+class Se extends G {
   constructor(t, e) {
     super(t, e);
     // points: Cartesian3[] = [];
-    g(this, "points", []);
-    g(this, "arrowLengthScale", 5);
-    g(this, "maxArrowLength", 2);
-    g(this, "tailWidthFactor");
-    g(this, "neckWidthFactor");
-    g(this, "headWidthFactor");
-    g(this, "headAngle");
-    g(this, "neckAngle");
-    g(this, "minPointsForShape");
+    u(this, "points", []);
+    u(this, "arrowLengthScale", 5);
+    u(this, "maxArrowLength", 2);
+    u(this, "tailWidthFactor");
+    u(this, "neckWidthFactor");
+    u(this, "headWidthFactor");
+    u(this, "headAngle");
+    u(this, "neckAngle");
+    u(this, "minPointsForShape");
     this.tailWidthFactor = 0.1, this.neckWidthFactor = 0.2, this.headWidthFactor = 0.25, this.headAngle = Math.PI / 8.5, this.neckAngle = Math.PI / 13, this.minPointsForShape = 2, this.setState("drawing");
   }
   getType() {
@@ -1271,23 +1288,23 @@ class we extends G {
    * Generate geometric shapes based on key points.
    */
   createGraphic(t) {
-    const [e, n] = t.map(this.cartesianToLnglat), o = R([e, n]), r = o * this.tailWidthFactor, a = o * this.neckWidthFactor, c = o * this.headWidthFactor, l = w(n, e, Math.PI / 2, r, !0), f = w(n, e, Math.PI / 2, r, !1), p = w(e, n, this.headAngle, c, !1), m = w(e, n, this.headAngle, c, !0), v = w(e, n, this.neckAngle, a, !1), P = w(e, n, this.neckAngle, a, !0), M = [...l, ...v, ...p, ...n, ...m, ...P, ...f];
-    return A.fromDegreesArray(M);
+    const [e, n] = t.map(this.cartesianToLnglat), o = R([e, n]), r = o * this.tailWidthFactor, a = o * this.neckWidthFactor, h = o * this.headWidthFactor, l = w(n, e, Math.PI / 2, r, !0), f = w(n, e, Math.PI / 2, r, !1), p = w(e, n, this.headAngle, h, !1), m = w(e, n, this.headAngle, h, !0), v = w(e, n, this.neckAngle, a, !1), P = w(e, n, this.neckAngle, a, !0), M = [...l, ...v, ...p, ...n, ...m, ...P, ...f];
+    return L.fromDegreesArray(M);
   }
   getPoints() {
     return this.points;
   }
 }
-class Ct extends G {
+class Wt extends G {
   constructor(t, e) {
     super(t, e);
-    g(this, "points", []);
-    g(this, "headHeightFactor");
-    g(this, "headWidthFactor");
-    g(this, "neckHeightFactor");
-    g(this, "neckWidthFactor");
-    g(this, "headTailFactor");
-    g(this, "minPointsForShape");
+    u(this, "points", []);
+    u(this, "headHeightFactor");
+    u(this, "headWidthFactor");
+    u(this, "neckHeightFactor");
+    u(this, "neckWidthFactor");
+    u(this, "headTailFactor");
+    u(this, "minPointsForShape");
     this.headHeightFactor = 0.18, this.headWidthFactor = 0.3, this.neckHeightFactor = 0.85, this.neckWidthFactor = 0.15, this.headTailFactor = 0.8, this.minPointsForShape = 3, this.setState("drawing"), this.onDoubleClick();
   }
   getType() {
@@ -1316,14 +1333,14 @@ class Ct extends G {
    * Generate geometric shapes based on key points.
    */
   createGraphic(t) {
-    const e = t.map((F) => this.cartesianToLnglat(F));
+    const e = t.map((E) => this.cartesianToLnglat(E));
     let [n, o] = [e[0], e[1]];
-    rt(e[0], e[1], e[2]) && (n = e[1], o = e[0]);
-    const a = [O(n, o)].concat(e.slice(2)), c = this.getArrowHeadPoints(a, n, o), [l, f] = [c[0], c[4]], p = E(n, o) / R(a), m = this.getArrowBodyPoints(a, l, f, p), v = m.length;
+    at(e[0], e[1], e[2]) && (n = e[1], o = e[0]);
+    const a = [O(n, o)].concat(e.slice(2)), h = this.getArrowHeadPoints(a, n, o), [l, f] = [h[0], h[4]], p = F(n, o) / R(a), m = this.getArrowBodyPoints(a, l, f, p), v = m.length;
     let P = [n].concat(m.slice(0, v / 2)), M = [o].concat(m.slice(v / 2, v));
-    P = Y(P), M = Y(M);
-    const T = P.concat(c, M.reverse()), b = [].concat(...T);
-    return A.fromDegreesArray(b);
+    P = X(P), M = X(M);
+    const T = P.concat(h, M.reverse()), b = [].concat(...T);
+    return L.fromDegreesArray(b);
   }
   getPoints() {
     return this.points;
@@ -1332,9 +1349,9 @@ class Ct extends G {
     try {
       let o = R(t), r = o * this.headHeightFactor;
       const a = t[t.length - 1];
-      o = E(a, t[t.length - 2]);
-      const c = E(e, n);
-      r > c * this.headTailFactor && (r = c * this.headTailFactor);
+      o = F(a, t[t.length - 2]);
+      const h = F(e, n);
+      r > h * this.headTailFactor && (r = h * this.headTailFactor);
       const l = r * this.headWidthFactor, f = r * this.neckWidthFactor;
       r = r > o ? o : r;
       const p = r * this.neckHeightFactor, m = w(t[t.length - 2], a, 0, r, !0), v = w(t[t.length - 2], a, 0, p, !0), P = w(a, m, Math.PI / 2, l, !1), M = w(a, m, Math.PI / 2, l, !0), T = w(a, v, Math.PI / 2, f, !1), b = w(a, v, Math.PI / 2, f, !0);
@@ -1344,13 +1361,13 @@ class Ct extends G {
     }
   }
   getArrowBodyPoints(t, e, n, o) {
-    const r = pt(t), c = R(t) * o, l = E(e, n), f = (c - l) / 2;
+    const r = mt(t), h = R(t) * o, l = F(e, n), f = (h - l) / 2;
     let [p, m, v] = [0, [], []];
     for (let P = 1; P < t.length - 1; P++) {
-      const M = _t(t[P - 1], t[P], t[P + 1]) / 2;
-      p += E(t[P - 1], t[P]);
-      const T = (c / 2 - p / r * f) / Math.sin(M), b = w(t[P - 1], t[P], Math.PI - M, T, !0), L = w(t[P - 1], t[P], M, T, !1);
-      m.push(b), v.push(L);
+      const M = Dt(t[P - 1], t[P], t[P + 1]) / 2;
+      p += F(t[P - 1], t[P]);
+      const T = (h / 2 - p / r * f) / Math.sin(M), b = w(t[P - 1], t[P], Math.PI - M, T, !0), S = w(t[P - 1], t[P], M, T, !1);
+      m.push(b), v.push(S);
     }
     return m.concat(v);
   }
@@ -1363,18 +1380,18 @@ class Ct extends G {
     this.setGeometryPoints(n), this.drawPolygon();
   }
 }
-class li extends Ct {
+class wi extends Wt {
   constructor(t, e) {
     super(t, e);
-    g(this, "points", []);
-    g(this, "headHeightFactor");
-    g(this, "headWidthFactor");
-    g(this, "neckHeightFactor");
-    g(this, "neckWidthFactor");
-    g(this, "headTailFactor");
-    g(this, "tailWidthFactor");
-    g(this, "swallowTailFactor");
-    g(this, "swallowTailPnt");
+    u(this, "points", []);
+    u(this, "headHeightFactor");
+    u(this, "headWidthFactor");
+    u(this, "neckHeightFactor");
+    u(this, "neckWidthFactor");
+    u(this, "headTailFactor");
+    u(this, "tailWidthFactor");
+    u(this, "swallowTailFactor");
+    u(this, "swallowTailPnt");
     this.headHeightFactor = 0.18, this.headWidthFactor = 0.3, this.neckHeightFactor = 0.85, this.neckWidthFactor = 0.15, this.tailWidthFactor = 0.1, this.headTailFactor = 0.8, this.swallowTailFactor = 1, this.swallowTailPnt = [0, 0], this.minPointsForShape = 3;
   }
   /**
@@ -1383,25 +1400,25 @@ class li extends Ct {
   createGraphic(t) {
     const e = t.map((_) => this.cartesianToLnglat(_));
     let [n, o] = [e[0], e[1]];
-    rt(e[0], e[1], e[2]) && (n = e[1], o = e[0]);
-    const a = [O(n, o)].concat(e.slice(2)), c = this.getArrowHeadPoints(a, n, o), [l, f] = [c[0], c[4]], p = E(n, o), m = R(a), v = m * this.tailWidthFactor * this.swallowTailFactor;
+    at(e[0], e[1], e[2]) && (n = e[1], o = e[0]);
+    const a = [O(n, o)].concat(e.slice(2)), h = this.getArrowHeadPoints(a, n, o), [l, f] = [h[0], h[4]], p = F(n, o), m = R(a), v = m * this.tailWidthFactor * this.swallowTailFactor;
     this.swallowTailPnt = w(a[1], a[0], 0, v, !0);
     const P = p / m, M = this.getArrowBodyPoints(a, l, f, P), T = M.length;
-    let b = [n].concat(M.slice(0, T / 2)), L = [o].concat(M.slice(T / 2, T));
-    b = Y(b), L = Y(L);
-    const F = b.concat(c, L.reverse(), [this.swallowTailPnt, b[0]]), k = [].concat(...F);
-    return A.fromDegreesArray(k);
+    let b = [n].concat(M.slice(0, T / 2)), S = [o].concat(M.slice(T / 2, T));
+    b = X(b), S = X(S);
+    const E = b.concat(h, S.reverse(), [this.swallowTailPnt, b[0]]), D = [].concat(...E);
+    return L.fromDegreesArray(D);
   }
 }
-class ve extends Ct {
+class Le extends Wt {
   constructor(t, e) {
     super(t, e);
-    g(this, "points", []);
-    g(this, "headHeightFactor");
-    g(this, "headWidthFactor");
-    g(this, "neckHeightFactor");
-    g(this, "neckWidthFactor");
-    g(this, "tailWidthFactor");
+    u(this, "points", []);
+    u(this, "headHeightFactor");
+    u(this, "headWidthFactor");
+    u(this, "neckHeightFactor");
+    u(this, "neckWidthFactor");
+    u(this, "tailWidthFactor");
     this.headHeightFactor = 0.18, this.headWidthFactor = 0.3, this.neckHeightFactor = 0.85, this.neckWidthFactor = 0.15, this.tailWidthFactor = 0.1, this.minPointsForShape = 2;
   }
   /**
@@ -1424,51 +1441,51 @@ class ve extends Ct {
    * Generate geometric shapes based on key points.
    */
   createGraphic(t) {
-    const e = t.map((M) => this.cartesianToLnglat(M)), n = this.getTailPoints(e), o = this.getArrowHeadPoints(e, n[0], n[1]), r = o[0], a = o[4], c = this.getArrowBodyPoints(e, r, a, this.tailWidthFactor), l = c.length;
-    let f = [n[0]].concat(c.slice(0, l / 2)), p = [n[1]].concat(c.slice(l / 2, l));
-    f = Y(f), p = Y(p);
+    const e = t.map((M) => this.cartesianToLnglat(M)), n = this.getTailPoints(e), o = this.getArrowHeadPoints(e, n[0], n[1]), r = o[0], a = o[4], h = this.getArrowBodyPoints(e, r, a, this.tailWidthFactor), l = h.length;
+    let f = [n[0]].concat(h.slice(0, l / 2)), p = [n[1]].concat(h.slice(l / 2, l));
+    f = X(f), p = X(p);
     const m = f.concat(o, p.reverse()), v = [].concat(...m);
-    return A.fromDegreesArray(v);
+    return L.fromDegreesArray(v);
   }
   getTailPoints(t) {
     const n = R(t) * this.tailWidthFactor, o = w(t[1], t[0], Math.PI / 2, n, !1), r = w(t[1], t[0], Math.PI / 2, n, !0);
     return [o, r];
   }
 }
-class di extends ve {
+class vi extends Le {
   constructor(t, e) {
     super(t, e);
-    g(this, "points", []);
-    g(this, "headHeightFactor");
-    g(this, "headWidthFactor");
-    g(this, "neckHeightFactor");
-    g(this, "neckWidthFactor");
-    g(this, "tailWidthFactor");
-    g(this, "swallowTailFactor");
+    u(this, "points", []);
+    u(this, "headHeightFactor");
+    u(this, "headWidthFactor");
+    u(this, "neckHeightFactor");
+    u(this, "neckWidthFactor");
+    u(this, "tailWidthFactor");
+    u(this, "swallowTailFactor");
     this.headHeightFactor = 0.18, this.headWidthFactor = 0.3, this.neckHeightFactor = 0.85, this.neckWidthFactor = 0.15, this.tailWidthFactor = 0.1, this.swallowTailFactor = 1, this.minPointsForShape = 2;
   }
   /**
    * Generate geometric shapes based on key points.
    */
   createGraphic(t) {
-    const e = t.map((M) => this.cartesianToLnglat(M)), n = this.getTailPoints(e), o = this.getArrowHeadPoints(e, n[0], n[2]), r = o[0], a = o[4], c = this.getArrowBodyPoints(e, r, a, this.tailWidthFactor), l = c.length;
-    let f = [n[0]].concat(c.slice(0, l / 2)), p = [n[2]].concat(c.slice(l / 2, l));
-    f = Y(f), p = Y(p);
+    const e = t.map((M) => this.cartesianToLnglat(M)), n = this.getTailPoints(e), o = this.getArrowHeadPoints(e, n[0], n[2]), r = o[0], a = o[4], h = this.getArrowBodyPoints(e, r, a, this.tailWidthFactor), l = h.length;
+    let f = [n[0]].concat(h.slice(0, l / 2)), p = [n[2]].concat(h.slice(l / 2, l));
+    f = X(f), p = X(p);
     const m = f.concat(o, p.reverse(), [n[1], f[0]]), v = [].concat(...m);
-    return A.fromDegreesArray(v);
+    return L.fromDegreesArray(v);
   }
   getTailPoints(t) {
-    const n = R(t) * this.tailWidthFactor, o = w(t[1], t[0], Math.PI / 2, n, !1), r = w(t[1], t[0], Math.PI / 2, n, !0), a = n * this.swallowTailFactor, c = w(t[1], t[0], 0, a, !0);
-    return [o, c, r];
+    const n = R(t) * this.tailWidthFactor, o = w(t[1], t[0], Math.PI / 2, n, !1), r = w(t[1], t[0], Math.PI / 2, n, !0), a = n * this.swallowTailFactor, h = w(t[1], t[0], 0, a, !0);
+    return [o, h, r];
   }
 }
-class gi extends G {
+class Mi extends G {
   constructor(t, e) {
     super(t, e);
-    g(this, "points", []);
-    g(this, "arrowLengthScale", 5);
-    g(this, "maxArrowLength", 3e6);
-    g(this, "minPointsForShape");
+    u(this, "points", []);
+    u(this, "arrowLengthScale", 5);
+    u(this, "maxArrowLength", 3e6);
+    u(this, "minPointsForShape");
     this.minPointsForShape = 2, this.setState("drawing");
   }
   getType() {
@@ -1503,23 +1520,23 @@ class gi extends G {
    */
   createGraphic(t) {
     const [e, n] = t.map(this.cartesianToLnglat);
-    let r = E(e, n) / this.arrowLengthScale;
+    let r = F(e, n) / this.arrowLengthScale;
     r = r > this.maxArrowLength ? this.maxArrowLength : r;
-    const a = w(e, n, Math.PI / 6, r / 2, !1), c = w(e, n, Math.PI / 6, r / 2, !0), l = [...e, ...n, ...a, ...n, ...c];
-    return A.fromDegreesArray(l);
+    const a = w(e, n, Math.PI / 6, r / 2, !1), h = w(e, n, Math.PI / 6, r / 2, !0), l = [...e, ...n, ...a, ...n, ...h];
+    return L.fromDegreesArray(l);
   }
   getPoints() {
     return this.points;
   }
 }
-class ui extends G {
+class bi extends G {
   constructor(t, e) {
     super(t, e);
-    g(this, "points", []);
-    g(this, "arrowLengthScale", 5);
-    g(this, "maxArrowLength", 3e6);
-    g(this, "t");
-    g(this, "minPointsForShape");
+    u(this, "points", []);
+    u(this, "arrowLengthScale", 5);
+    u(this, "maxArrowLength", 3e6);
+    u(this, "t");
+    u(this, "minPointsForShape");
     this.t = 0.3, this.minPointsForShape = 2, this.setState("drawing"), this.onDoubleClick();
   }
   getType() {
@@ -1541,10 +1558,10 @@ class ui extends G {
   }
   createStraightArrow(t) {
     const [e, n] = t.map(this.cartesianToLnglat);
-    let r = E(e, n) / this.arrowLengthScale;
+    let r = F(e, n) / this.arrowLengthScale;
     r = r > this.maxArrowLength ? this.maxArrowLength : r;
-    const a = w(e, n, Math.PI / 6, r / 2, !1), c = w(e, n, Math.PI / 6, r / 2, !0), l = [...e, ...n, ...a, ...n, ...c];
-    return A.fromDegreesArray(l);
+    const a = w(e, n, Math.PI / 6, r / 2, !1), h = w(e, n, Math.PI / 6, r / 2, !0), l = [...e, ...n, ...a, ...n, ...h];
+    return L.fromDegreesArray(l);
   }
   /**
    * In edit mode, drag key points to update corresponding key point data.
@@ -1561,55 +1578,55 @@ class ui extends G {
     const e = t.map((v) => this.cartesianToLnglat(v));
     if (t.length === 2)
       return this.createStraightArrow(t);
-    const n = Gt(this.t, e);
+    const n = Ct(this.t, e);
     e[e.length - 2];
     const o = e[e.length - 1];
-    let a = pt(e) / this.arrowLengthScale;
+    let a = mt(e) / this.arrowLengthScale;
     a = a > this.maxArrowLength ? this.maxArrowLength : a;
-    const c = w(n[n.length - 2], n[n.length - 1], Math.PI / 6, a / 2, !1), l = w(n[n.length - 2], n[n.length - 1], Math.PI / 6, a / 2, !0), p = [...[].concat(...n), ...c, ...o, ...l];
-    return A.fromDegreesArray(p);
+    const h = w(n[n.length - 2], n[n.length - 1], Math.PI / 6, a / 2, !1), l = w(n[n.length - 2], n[n.length - 1], Math.PI / 6, a / 2, !0), p = [...[].concat(...n), ...h, ...o, ...l];
+    return L.fromDegreesArray(p);
   }
   getPoints() {
     return this.points;
   }
 }
-class fi extends we {
+class Ti extends Se {
   constructor(t, e) {
     super(t, e);
-    g(this, "points", []);
-    g(this, "arrowLengthScale", 5);
-    g(this, "maxArrowLength", 2);
-    g(this, "tailWidthFactor");
-    g(this, "neckWidthFactor");
-    g(this, "headWidthFactor");
-    g(this, "headAngle");
-    g(this, "neckAngle");
-    g(this, "minPointsForShape");
+    u(this, "points", []);
+    u(this, "arrowLengthScale", 5);
+    u(this, "maxArrowLength", 2);
+    u(this, "tailWidthFactor");
+    u(this, "neckWidthFactor");
+    u(this, "headWidthFactor");
+    u(this, "headAngle");
+    u(this, "neckAngle");
+    u(this, "minPointsForShape");
     this.tailWidthFactor = 0.08, this.neckWidthFactor = 0.1, this.headWidthFactor = 0.13, this.headAngle = Math.PI / 4, this.neckAngle = Math.PI * 0.17741, this.minPointsForShape = 2, this.setState("drawing");
   }
   createGraphic(t) {
-    const [e, n] = t.map(this.cartesianToLnglat), o = R([e, n]) * 1.5, r = o * this.tailWidthFactor, a = o * this.neckWidthFactor, c = o * this.headWidthFactor, l = w(n, e, Math.PI / 2, r, !0), f = w(n, e, Math.PI / 2, r, !1), p = w(e, n, this.headAngle, c, !1), m = w(e, n, this.headAngle, c, !0), v = w(e, n, this.neckAngle, a, !1), P = w(e, n, this.neckAngle, a, !0), M = [...l, ...v, ...p, ...n, ...m, ...P, ...f];
-    return A.fromDegreesArray(M);
+    const [e, n] = t.map(this.cartesianToLnglat), o = R([e, n]) * 1.5, r = o * this.tailWidthFactor, a = o * this.neckWidthFactor, h = o * this.headWidthFactor, l = w(n, e, Math.PI / 2, r, !0), f = w(n, e, Math.PI / 2, r, !1), p = w(e, n, this.headAngle, h, !1), m = w(e, n, this.headAngle, h, !0), v = w(e, n, this.neckAngle, a, !1), P = w(e, n, this.neckAngle, a, !0), M = [...l, ...v, ...p, ...n, ...m, ...P, ...f];
+    return L.fromDegreesArray(M);
   }
 }
-class pi extends G {
+class Si extends G {
   constructor(t, e) {
     super(t, e);
-    g(this, "points", []);
-    g(this, "arrowLengthScale", 5);
-    g(this, "maxArrowLength", 2);
-    g(this, "neckWidthFactor");
-    g(this, "headWidthFactor");
-    g(this, "headHeightFactor");
-    g(this, "neckHeightFactor");
-    g(this, "connPoint");
-    g(this, "tempPoint4");
-    g(this, "minPointsForShape");
-    g(this, "llBodyPnts", []);
-    g(this, "rrBodyPnts", []);
-    g(this, "curveControlPointLeft");
-    g(this, "curveControlPointRight");
-    g(this, "isClockWise");
+    u(this, "points", []);
+    u(this, "arrowLengthScale", 5);
+    u(this, "maxArrowLength", 2);
+    u(this, "neckWidthFactor");
+    u(this, "headWidthFactor");
+    u(this, "headHeightFactor");
+    u(this, "neckHeightFactor");
+    u(this, "connPoint");
+    u(this, "tempPoint4");
+    u(this, "minPointsForShape");
+    u(this, "llBodyPnts", []);
+    u(this, "rrBodyPnts", []);
+    u(this, "curveControlPointLeft");
+    u(this, "curveControlPointRight");
+    u(this, "isClockWise");
     this.headHeightFactor = 0.25, this.headWidthFactor = 0.3, this.neckHeightFactor = 0.85, this.neckWidthFactor = 0.15, this.connPoint = [0, 0], this.tempPoint4 = [0, 0], this.minPointsForShape = 4, this.setState("drawing");
   }
   getType() {
@@ -1622,7 +1639,7 @@ class pi extends G {
     this.points.push(t), this.points.length < 2 ? this.onMouseMove() : this.points.length === 2 ? (this.setGeometryPoints(this.points), this.drawPolygon()) : this.points.length === 3 ? this.lineEntity && this.viewer.baseMap.remove(this.lineEntity) : this.finishDrawing();
   }
   finishDrawing() {
-    this.curveControlPointLeft = A.fromDegrees(this.llBodyPnts[2][0], this.llBodyPnts[2][1]), this.curveControlPointRight = A.fromDegrees(this.rrBodyPnts[1][0], this.rrBodyPnts[1][1]), super.finishDrawing();
+    this.curveControlPointLeft = L.fromDegrees(this.llBodyPnts[2][0], this.llBodyPnts[2][1]), this.curveControlPointRight = L.fromDegrees(this.rrBodyPnts[1][0], this.rrBodyPnts[1][1]), super.finishDrawing();
   }
   /**
    * Draw a shape based on mouse movement points during the initial drawing.
@@ -1651,52 +1668,52 @@ class pi extends G {
   createGraphic(t) {
     const e = t.map((_) => this.cartesianToLnglat(_)), [n, o, r] = [e[0], e[1], e[2]], a = e.length;
     a === 3 ? (this.tempPoint4 = this.getTempPoint4(n, o, r), this.connPoint = O(n, o)) : a === 4 ? (this.tempPoint4 = e[3], this.connPoint = O(n, o)) : (this.tempPoint4 = e[3], this.connPoint = e[4]);
-    let c, l;
-    this.isClockWise = rt(n, o, r), this.isClockWise ? (c = this.getArrowPoints(n, this.connPoint, this.tempPoint4, !1), l = this.getArrowPoints(this.connPoint, o, r, !0)) : (c = this.getArrowPoints(o, this.connPoint, r, !1), l = this.getArrowPoints(this.connPoint, n, this.tempPoint4, !0));
-    const f = c.length, p = (f - 5) / 2, m = c.slice(0, p), v = c.slice(p, p + 5);
-    let P = c.slice(p + 5, f);
+    let h, l;
+    this.isClockWise = at(n, o, r), this.isClockWise ? (h = this.getArrowPoints(n, this.connPoint, this.tempPoint4, !1), l = this.getArrowPoints(this.connPoint, o, r, !0)) : (h = this.getArrowPoints(o, this.connPoint, r, !1), l = this.getArrowPoints(this.connPoint, n, this.tempPoint4, !0));
+    const f = h.length, p = (f - 5) / 2, m = h.slice(0, p), v = h.slice(p, p + 5);
+    let P = h.slice(p + 5, f);
     this.llBodyPnts = m;
     let M = l.slice(0, p);
     const T = l.slice(p, p + 5), b = l.slice(p + 5, f);
-    this.rrBodyPnts = b, M = Et(M);
-    const L = Et(b.concat(m.slice(1)));
-    P = Et(P);
-    const F = M.concat(T, L, v, P), k = [].concat(...F);
-    return A.fromDegreesArray(k);
+    this.rrBodyPnts = b, M = _t(M);
+    const S = _t(b.concat(m.slice(1)));
+    P = _t(P);
+    const E = M.concat(T, S, v, P), D = [].concat(...E);
+    return L.fromDegreesArray(D);
   }
   getTempPoint4(t, e, n) {
-    const o = O(t, e), r = E(o, n), a = _t(t, o, n);
-    let c = [0, 0], l, f, p;
-    return a < Math.PI / 2 ? (l = r * Math.sin(a), f = r * Math.cos(a), p = w(t, o, Math.PI / 2, l, !1), c = w(o, p, Math.PI / 2, f, !0)) : a >= Math.PI / 2 && a < Math.PI ? (l = r * Math.sin(Math.PI - a), f = r * Math.cos(Math.PI - a), p = w(t, o, Math.PI / 2, l, !1), c = w(o, p, Math.PI / 2, f, !1)) : a >= Math.PI && a < Math.PI * 1.5 ? (l = r * Math.sin(a - Math.PI), f = r * Math.cos(a - Math.PI), p = w(t, o, Math.PI / 2, l, !0), c = w(o, p, Math.PI / 2, f, !0)) : (l = r * Math.sin(Math.PI * 2 - a), f = r * Math.cos(Math.PI * 2 - a), p = w(t, o, Math.PI / 2, l, !0), c = w(o, p, Math.PI / 2, f, !1)), c;
+    const o = O(t, e), r = F(o, n), a = Dt(t, o, n);
+    let h = [0, 0], l, f, p;
+    return a < Math.PI / 2 ? (l = r * Math.sin(a), f = r * Math.cos(a), p = w(t, o, Math.PI / 2, l, !1), h = w(o, p, Math.PI / 2, f, !0)) : a >= Math.PI / 2 && a < Math.PI ? (l = r * Math.sin(Math.PI - a), f = r * Math.cos(Math.PI - a), p = w(t, o, Math.PI / 2, l, !1), h = w(o, p, Math.PI / 2, f, !1)) : a >= Math.PI && a < Math.PI * 1.5 ? (l = r * Math.sin(a - Math.PI), f = r * Math.cos(a - Math.PI), p = w(t, o, Math.PI / 2, l, !0), h = w(o, p, Math.PI / 2, f, !0)) : (l = r * Math.sin(Math.PI * 2 - a), f = r * Math.cos(Math.PI * 2 - a), p = w(t, o, Math.PI / 2, l, !0), h = w(o, p, Math.PI / 2, f, !1)), h;
   }
   getArrowPoints(t, e, n, o) {
-    const r = O(t, e), a = E(r, n);
-    let c = w(n, r, 0, a * 0.3, !0), l = w(n, r, 0, a * 0.5, !0);
-    c = w(r, c, Math.PI / 2, a / 5, o), l = w(r, l, Math.PI / 2, a / 4, o);
-    const f = [r, c, l, n], p = this.getArrowHeadPoints(f);
+    const r = O(t, e), a = F(r, n);
+    let h = w(n, r, 0, a * 0.3, !0), l = w(n, r, 0, a * 0.5, !0);
+    h = w(r, h, Math.PI / 2, a / 5, o), l = w(r, l, Math.PI / 2, a / 4, o);
+    const f = [r, h, l, n], p = this.getArrowHeadPoints(f);
     if (p && Array.isArray(p) && p.length > 0) {
-      const m = p[0], v = p[4], P = E(t, e) / R(f) / 2, M = this.getArrowBodyPoints(f, m, v, P);
+      const m = p[0], v = p[4], P = F(t, e) / R(f) / 2, M = this.getArrowBodyPoints(f, m, v, P);
       if (M) {
         const T = M.length;
-        let b = M.slice(0, T / 2), L = M.slice(T / 2, T);
-        return b.push(m), L.push(v), b = b.reverse(), b.push(e), L = L.reverse(), L.push(t), b.reverse().concat(p, L);
+        let b = M.slice(0, T / 2), S = M.slice(T / 2, T);
+        return b.push(m), S.push(v), b = b.reverse(), b.push(e), S = S.reverse(), S.push(t), b.reverse().concat(p, S);
       }
     } else
       throw new Error("Interpolation Error");
   }
   getArrowBodyPoints(t, e, n, o) {
-    const r = pt(t), c = R(t) * o, l = E(e, n), f = (c - l) / 2;
+    const r = mt(t), h = R(t) * o, l = F(e, n), f = (h - l) / 2;
     let p = 0, m = [], v = [];
     for (let P = 1; P < t.length - 1; P++) {
-      const M = _t(t[P - 1], t[P], t[P + 1]) / 2;
-      p += E(t[P - 1], t[P]);
-      const T = (c / 2 - p / r * f) / Math.sin(M), b = w(t[P - 1], t[P], Math.PI - M, T, !0), L = w(t[P - 1], t[P], M, T, !1);
-      m.push(b), v.push(L);
+      const M = Dt(t[P - 1], t[P], t[P + 1]) / 2;
+      p += F(t[P - 1], t[P]);
+      const T = (h / 2 - p / r * f) / Math.sin(M), b = w(t[P - 1], t[P], Math.PI - M, T, !0), S = w(t[P - 1], t[P], M, T, !1);
+      m.push(b), v.push(S);
     }
     return m.concat(v);
   }
   getArrowHeadPoints(t) {
-    const n = R(t) * this.headHeightFactor, o = t[t.length - 1], r = n * this.headWidthFactor, a = n * this.neckWidthFactor, c = n * this.neckHeightFactor, l = w(t[t.length - 2], o, 0, n, !0), f = w(t[t.length - 2], o, 0, c, !0), p = w(o, l, Math.PI / 2, r, !1), m = w(o, l, Math.PI / 2, r, !0), v = w(o, f, Math.PI / 2, a, !1), P = w(o, f, Math.PI / 2, a, !0);
+    const n = R(t) * this.headHeightFactor, o = t[t.length - 1], r = n * this.headWidthFactor, a = n * this.neckWidthFactor, h = n * this.neckHeightFactor, l = w(t[t.length - 2], o, 0, n, !0), f = w(t[t.length - 2], o, 0, h, !0), p = w(o, l, Math.PI / 2, r, !1), m = w(o, l, Math.PI / 2, r, !0), v = w(o, f, Math.PI / 2, a, !1), P = w(o, f, Math.PI / 2, a, !0);
     return [v, p, o, m, P];
   }
   getPoints() {
@@ -1712,11 +1729,11 @@ class pi extends G {
     };
   }
 }
-class Pi extends G {
+class Li extends G {
   constructor(t, e) {
     super(t, e);
-    g(this, "points", []);
-    g(this, "freehand");
+    u(this, "points", []);
+    u(this, "freehand");
     this.freehand = !0, this.setState("drawing");
   }
   getType() {
@@ -1726,13 +1743,13 @@ class Pi extends G {
    * Add points only on click events
    */
   addPoint(t) {
-    A.vectorScale(t, 10), this.points.push(t), this.points.length < 2 ? this.onMouseMove() : this.finishDrawing();
+    L.vectorScale(t, 10), this.points.push(t), this.points.length < 2 ? this.onMouseMove() : this.finishDrawing();
   }
   /**
    * Draw a shape based on mouse movement points during the initial drawing.
    */
   updateMovingPoint(t) {
-    A.vectorScale(t, 10), this.points.push(t), this.setGeometryPoints(this.points), this.drawLine(), this.eventDispatcher.dispatchEvent("drawUpdate", t);
+    L.vectorScale(t, 10), this.points.push(t), this.setGeometryPoints(this.points), this.drawLine(), this.eventDispatcher.dispatchEvent("drawUpdate", t);
   }
   /**
    * In edit mode, drag key points to update corresponding key point data.
@@ -1744,11 +1761,11 @@ class Pi extends G {
     return this.points;
   }
 }
-class mi extends G {
+class Ai extends G {
   constructor(t, e) {
     super(t, e);
-    g(this, "points", []);
-    g(this, "freehand");
+    u(this, "points", []);
+    u(this, "freehand");
     this.freehand = !0, this.setState("drawing");
   }
   getType() {
@@ -1758,13 +1775,13 @@ class mi extends G {
    * Add points only on click events
    */
   addPoint(t) {
-    A.vectorScale(t, 30), this.points.push(t), this.points.length === 1 ? this.onMouseMove() : this.points.length > 2 && this.finishDrawing();
+    L.vectorScale(t, 30), this.points.push(t), this.points.length === 1 ? this.onMouseMove() : this.points.length > 2 && this.finishDrawing();
   }
   /**
    * Draw a shape based on mouse movement points during the initial drawing.
    */
   updateMovingPoint(t) {
-    A.vectorScale(t, 30), this.points.push(t), this.points.length > 2 && (this.setGeometryPoints(this.points), this.drawPolygon(), this.eventDispatcher.dispatchEvent("drawUpdate", t));
+    L.vectorScale(t, 30), this.points.push(t), this.points.length > 2 && (this.setGeometryPoints(this.points), this.drawPolygon(), this.eventDispatcher.dispatchEvent("drawUpdate", t));
   }
   /**
    * In edit mode, drag key points to update corresponding key point data.
@@ -1776,13 +1793,13 @@ class mi extends G {
     return this.points;
   }
 }
-class yi extends G {
+class Fi extends G {
   constructor(t, e) {
     super(t, e);
-    g(this, "points", []);
-    g(this, "arrowLengthScale", 5);
-    g(this, "maxArrowLength", 3e6);
-    g(this, "t");
+    u(this, "points", []);
+    u(this, "arrowLengthScale", 5);
+    u(this, "maxArrowLength", 3e6);
+    u(this, "t");
     this.t = 0.3, this.setState("drawing"), this.onDoubleClick();
   }
   getType() {
@@ -1814,18 +1831,18 @@ class yi extends G {
    * Generate geometric shape points based on key points..
    */
   createGraphic(t) {
-    const e = t.map((a) => this.cartesianToLnglat(a)), n = Gt(this.t, e), o = [].concat(...n);
-    return A.fromDegreesArray(o);
+    const e = t.map((a) => this.cartesianToLnglat(a)), n = Ct(this.t, e), o = [].concat(...n);
+    return L.fromDegreesArray(o);
   }
   getPoints() {
     return this.points;
   }
 }
-class wi extends G {
+class Ei extends G {
   constructor(t, e) {
     super(t, e);
-    g(this, "points", []);
-    g(this, "freehand");
+    u(this, "points", []);
+    u(this, "freehand");
     this.freehand = !0, this.setState("drawing");
   }
   getType() {
@@ -1853,24 +1870,24 @@ class wi extends G {
     this.setGeometryPoints(n), this.drawPolygon();
   }
   createGraphic(t) {
-    const e = t.map((m) => this.cartesianToLnglat(m)), n = e[0], o = e[1], r = O(n, o), a = Math.abs((n[0] - o[0]) / 2), c = Math.abs((n[1] - o[1]) / 2), l = this.generatePoints(r, a, c), f = [].concat(...l);
-    return A.fromDegreesArray(f);
+    const e = t.map((m) => this.cartesianToLnglat(m)), n = e[0], o = e[1], r = O(n, o), a = Math.abs((n[0] - o[0]) / 2), h = Math.abs((n[1] - o[1]) / 2), l = this.generatePoints(r, a, h), f = [].concat(...l);
+    return L.fromDegreesArray(f);
   }
   generatePoints(t, e, n) {
-    let [o, r, a, c] = [null, null, 0, []];
+    let [o, r, a, h] = [null, null, 0, []];
     for (let l = 0; l <= 100; l++)
-      a = Math.PI * 2 * l / 100, o = t[0] + e * Math.cos(a), r = t[1] + n * Math.sin(a), c.push([o, r]);
-    return c;
+      a = Math.PI * 2 * l / 100, o = t[0] + e * Math.cos(a), r = t[1] + n * Math.sin(a), h.push([o, r]);
+    return h;
   }
   getPoints() {
     return this.points;
   }
 }
-class vi extends G {
+class _i extends G {
   constructor(t, e) {
     super(t, e);
-    g(this, "points", []);
-    g(this, "freehand");
+    u(this, "points", []);
+    u(this, "freehand");
     this.freehand = !0, this.setState("drawing");
   }
   getType() {
@@ -1900,30 +1917,30 @@ class vi extends G {
   createGraphic(t) {
     const e = t.map((T) => this.cartesianToLnglat(T));
     if (e.length === 2) {
-      const T = O(e[0], e[1]), b = E(e[0], T), L = w(e[0], T, Math.PI / 2, b, !1);
-      e.push(L);
+      const T = O(e[0], e[1]), b = F(e[0], T), S = w(e[0], T, Math.PI / 2, b, !1);
+      e.push(S);
     }
-    let [n, o, r, a, c] = [
+    let [n, o, r, a, h] = [
       e[0],
       e[1],
       e[2],
       void 0,
       void 0
     ];
-    const l = ii(n, o, r), f = E(n, l), p = K(n, l), m = K(o, l);
-    rt(n, o, r) ? (a = m, c = p) : (a = p, c = m);
-    let v = ye(l, f, a, c);
+    const l = ui(n, o, r), f = F(n, l), p = Z(n, l), m = Z(o, l);
+    at(n, o, r) ? (a = m, h = p) : (a = p, h = m);
+    let v = Te(l, f, a, h);
     const P = [].concat(...v);
-    return A.fromDegreesArray(P);
+    return L.fromDegreesArray(P);
   }
   getPoints() {
     return this.points;
   }
 }
-class Mi extends G {
+class ki extends G {
   constructor(t, e) {
     super(t, e);
-    g(this, "points", []);
+    u(this, "points", []);
     this.setState("drawing");
   }
   getType() {
@@ -1952,16 +1969,16 @@ class Mi extends G {
   }
   createGraphic(t) {
     const [e, n] = t.map(this.cartesianToLnglat), o = [...e, e[0], n[1], ...n, n[0], e[1], ...e];
-    return A.fromDegreesArray(o);
+    return L.fromDegreesArray(o);
   }
   getPoints() {
     return this.points;
   }
 }
-class bi extends G {
+class Di extends G {
   constructor(t, e) {
     super(t, e);
-    g(this, "points", []);
+    u(this, "points", []);
     this.setState("drawing");
   }
   getType() {
@@ -1977,7 +1994,7 @@ class bi extends G {
    * Draw a shape based on mouse movement points during the initial drawing.
    */
   updateMovingPoint(t) {
-    A.vectorScale(t, 30);
+    L.vectorScale(t, 30);
     const e = [...this.points, t];
     this.setGeometryPoints(e), e.length === 2 ? this.addTempLine() : (this.removeTempLine(), this.drawPolygon());
   }
@@ -1991,11 +2008,11 @@ class bi extends G {
     return this.points;
   }
 }
-class Ti extends G {
+class Ii extends G {
   constructor(t, e) {
     super(t, e);
-    g(this, "points", []);
-    g(this, "height", 30);
+    u(this, "points", []);
+    u(this, "height", 30);
     this.setState("drawing"), this.onDoubleClick();
   }
   getType() {
@@ -2005,13 +2022,13 @@ class Ti extends G {
    * Add points only on click events
    */
   addPoint(t) {
-    A.vectorScale(t, 30), this.points.push(t), this.points.length === 1 && this.onMouseMove();
+    L.vectorScale(t, 30), this.points.push(t), this.points.length === 1 && this.onMouseMove();
   }
   /**
    * Draw a shape based on mouse movement points during the initial drawing.
    */
   updateMovingPoint(t) {
-    A.vectorScale(t, 30);
+    L.vectorScale(t, 30);
     const e = [...this.points, t];
     this.setGeometryPoints(e), e.length === 2 ? this.addTempLine() : (this.removeTempLine(), this.drawPolygon());
   }
@@ -2025,11 +2042,11 @@ class Ti extends G {
     return this.points;
   }
 }
-class Li extends G {
+class Gi extends G {
   constructor(t, e) {
     super(t, e);
-    g(this, "points", []);
-    g(this, "freehand");
+    u(this, "points", []);
+    u(this, "freehand");
     this.freehand = !0, this.setState("drawing");
   }
   getType() {
@@ -2057,24 +2074,24 @@ class Li extends G {
     this.setGeometryPoints(n), this.drawPolygon();
   }
   createGraphic(t) {
-    const e = t.map((f) => this.cartesianToLnglat(f)), n = e[0], o = e[1], r = E(n, o), a = this.generatePoints(n, r), c = [].concat(...a);
-    return A.fromDegreesArray(c);
+    const e = t.map((f) => this.cartesianToLnglat(f)), n = e[0], o = e[1], r = F(n, o), a = this.generatePoints(n, r), h = [].concat(...a);
+    return L.fromDegreesArray(h);
   }
   generatePoints(t, e) {
     let n, o, r;
     const a = [];
-    for (let c = 0; c <= 100; c++)
-      r = Math.PI * 2 * c / 100, n = t[0] + e * Math.cos(r), o = t[1] + e * Math.sin(r), a.push([n, o]);
+    for (let h = 0; h <= 100; h++)
+      r = Math.PI * 2 * h / 100, n = t[0] + e * Math.cos(r), o = t[1] + e * Math.sin(r), a.push([n, o]);
     return a;
   }
   getPoints() {
     return this.points;
   }
 }
-class Ai extends G {
+class xi extends G {
   constructor(t, e) {
     super(t, e);
-    g(this, "points", []);
+    u(this, "points", []);
     this.setState("drawing");
   }
   getType() {
@@ -2100,10 +2117,10 @@ class Ai extends G {
     }
   }
   createGraphic(t) {
-    const e = t.map((v) => this.cartesianToLnglat(v)), [n, o, r] = [e[0], e[1], e[2]], a = E(o, n), c = K(o, n), l = K(r, n), f = ye(n, a, c, l);
+    const e = t.map((v) => this.cartesianToLnglat(v)), [n, o, r] = [e[0], e[1], e[2]], a = F(o, n), h = Z(o, n), l = Z(r, n), f = Te(n, a, h, l);
     f.push(n, f[0]);
     const p = [].concat(...f);
-    return A.fromDegreesArray(p);
+    return L.fromDegreesArray(p);
   }
   /**
    * In edit mode, drag key points to update corresponding key point data.
@@ -2117,34 +2134,34 @@ class Ai extends G {
     return this.points;
   }
 }
-const me = {
-  FineArrow: we,
-  AttackArrow: Ct,
-  SwallowtailAttackArrow: li,
-  SquadCombat: ve,
-  SwallowtailSquadCombat: di,
-  StraightArrow: gi,
-  CurvedArrow: ui,
-  AssaultDirection: fi,
-  DoubleArrow: pi,
-  FreehandLine: Pi,
-  FreehandPolygon: mi,
-  Curve: yi,
-  Ellipse: wi,
-  Lune: vi,
-  Reactangle: Mi,
-  Triangle: bi,
-  Polygon: Ti,
-  Circle: Li,
-  Sector: Ai
+const be = {
+  FineArrow: Se,
+  AttackArrow: Wt,
+  SwallowtailAttackArrow: wi,
+  SquadCombat: Le,
+  SwallowtailSquadCombat: vi,
+  StraightArrow: Mi,
+  CurvedArrow: bi,
+  AssaultDirection: Ti,
+  DoubleArrow: Si,
+  FreehandLine: Li,
+  FreehandPolygon: Ai,
+  Curve: Fi,
+  Ellipse: Ei,
+  Lune: _i,
+  Reactangle: ki,
+  Triangle: Di,
+  Polygon: Ii,
+  Circle: Gi,
+  Sector: xi
 };
-me.createGeometryFromData = (h, i) => {
-  const { type: t, style: e, cartesianPoints: n } = i, o = new me[t](h, e);
+be.createGeometryFromData = (c, i) => {
+  const { type: t, style: e, cartesianPoints: n } = i, o = new be[t](c, e);
   o.points = n;
   const r = o.createGraphic(n);
   return o.setGeometryPoints(r), o.type == "polygon" ? o.drawPolygon() : o.drawLine(), o.finishDrawing(), o.onClick(), o;
 };
 export {
-  me as default
+  be as default
 };
 //# sourceMappingURL=ThreePlot.js.map

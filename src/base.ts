@@ -13,7 +13,9 @@ import EventDispatcher from './events';
 import cloneDeep from 'lodash.clonedeep';
 // import merge from 'lodash.merge';
 import * as Utils from './utils';
-import { BufferGeometry, Color, DoubleSide, Line, LineBasicMaterial, Material, Mesh, MeshBasicMaterial, Shape, ShapeGeometry, SphereGeometry, Vector2, Vector3 } from 'three';
+import { BufferGeometry, Color, DoubleSide, Line, LineBasicMaterial, Material, Mesh, MeshBasicMaterial, Shape, ShapeGeometry, 
+  SphereGeometry, ExtrudeGeometry, Vector2, Vector3, AlwaysStencilFunc, FrontSide, KeepStencilOp, IncrementWrapStencilOp,BackSide,
+  DecrementWrapStencilOp,NotEqualStencilFunc,ReplaceStencilOp,Group} from 'three';
 import UnitUtils from './UnitUtils';
 import Listener from './lsitener';
 
@@ -38,6 +40,10 @@ export default class Base {
   minPointsForShape: number = 0;
   tempLineEntity: Line|undefined;
 
+  extrudeSettings = { depth: 800000, bevelEnabled: false, bevelSegments: 2, steps: 2, bevelSize: 1, bevelThickness: 1 };
+  minHeight = -65536;
+  maxHeight = 65536;
+
   constructor(viewer: any, style?: GeometryStyle) {
     this.viewer = viewer;
     this.type = this.getType();
@@ -53,7 +59,44 @@ export default class Base {
   }
 
   mergeStyle(style: GeometryStyle | undefined) {
+    var front = new MeshBasicMaterial();
+    front.depthWrite = false;
+    front.depthTest = true;
+    front.colorWrite = false;
+    front.stencilWrite = true;
+    front.stencilFunc = AlwaysStencilFunc;
+    front.side = FrontSide;
+    front.stencilFail = KeepStencilOp; // 该处一直是不会执行，因为stencilFunc的比较函数是AlwaysStencilFunc，一直为true
+    front.stencilZFail = KeepStencilOp; // 深度测试失败的为保持不变。 深度测试函数为LessEqualDepth，该函数为别的物体在该物体后面时返回true。所以即为在该物体前面的ref扔保持不变。
+    front.stencilZPass = IncrementWrapStencilOp;  
+    // 该处含义就是：深度测试通过的部分增加ref，未通过的部分保持不变。
+    // baseMat.stencilFunc = THREE.AlwaysStencilFunc;
     
+    var back = new MeshBasicMaterial();
+    back.depthWrite = false;
+    back.depthTest = true;
+    back.colorWrite = false;
+    back.stencilWrite = true;
+    back.stencilFunc = AlwaysStencilFunc;
+    back.side = BackSide ;
+    back.stencilFail = KeepStencilOp;
+    back.stencilZFail = KeepStencilOp;
+    back.stencilZPass = DecrementWrapStencilOp;
+    // 该处含义就是：深度测试通过的部分减少ref，未通过的部分保持不变。
+    
+    
+    var intersect = new MeshBasicMaterial();
+    intersect.depthWrite = false;
+    intersect.depthTest = false; // 这里已经不需要进行深度测试
+    intersect.colorWrite = true;
+    intersect.stencilWrite = true;
+    // intersect.transparent= true;
+    intersect.color.set(0xff8766);
+    intersect.stencilFunc = NotEqualStencilFunc; // 关键点 不等于ref的返回true
+    intersect.stencilFail = ReplaceStencilOp; // 关键点 等于0的部分
+    intersect.stencilZFail = IncrementWrapStencilOp; // 下面两个填任何数都不影响，1、不再进行深度测试
+    intersect.stencilZPass = DecrementWrapStencilOp;
+
       this.style = Object.assign(
         {
           PolygonStyle: new MeshBasicMaterial({
@@ -65,7 +108,9 @@ export default class Base {
           LineStyle: new LineBasicMaterial({
             color: 0xffffff,
             linewidth: 2,
-          })
+          }),
+          materials : [ front,back, intersect]
+          
         },
         style,
       );
@@ -246,6 +291,7 @@ export default class Base {
         list.push(new Vector2(this.geometryPoints[i].x,this.geometryPoints[i].y));
       }
       let geometry = new ShapeGeometry( new Shape( list ));
+      // let geometry = new ExtrudeGeometry( new Shape( list ), this.extrudeSettings )
       for (let i = 0; i < this.geometryPoints.length; i++) {
         geometry.attributes.position.array[i * 3 + 0]=this.geometryPoints[i].x;
         geometry.attributes.position.array[i * 3 + 1]=this.geometryPoints[i].y;
@@ -253,13 +299,42 @@ export default class Base {
       }
       return geometry;
     };
+    const callback_extrude = () => {
+      let list=[];
+      for (let i = 0; i < this.geometryPoints.length; i++) {
+        let lnglat = this.cartesianToLnglat(this.geometryPoints[i]);
+        list.push(new Vector2(lnglat[1],lnglat[0]));
+      }
+      // 先将当前的三维坐标点转换为经纬度信息， 然后再转换为三维坐标点
+      let geometry = new ExtrudeGeometry( new Shape( list ), this.extrudeSettings )
+      // 遍历geometry.attributes.position.array，将经纬度信息转换为三维坐标点
+      let arr = geometry.attributes.position.array;
+      for (let i = 0; i < arr.length; i+=3) {
+        // let dir;
+        // if (arr[i+2]+1000 > this.extrudeSettings.depth)
+        //   dir = UnitUtils.fromDegrees(arr[i], arr[i+1], -10000)
+        // else
+        //   dir = UnitUtils.fromDegrees(arr[i], arr[i+1], 10000)
+        let dir = UnitUtils.fromDegrees(arr[i], arr[i+1], arr[i+2]-400000);
+        arr[i] = dir.x;
+        arr[i+1] = dir.y;
+        arr[i+2] = dir.z;
+      }
+      return geometry;
+    }
+
+    let callGeometry = callback_extrude;
+    // let callGeometry = callback;
     if (!this.polygonEntity) {
       const style = this.style.PolygonStyle;
-      this.polygonEntity = new Mesh(
-        callback(),
-        style
-      );
-      
+      // this.polygonEntity = new Mesh(
+      //   callGeometry(),
+      //   // callback(),
+      //   style
+      // );
+      this.polygonEntity  = this.createMultiMaterialObject( callGeometry(), this.style.materials );
+      // this.polygonEntity.lookAt(0, 0, 0);
+      // this.polygonEntity.rotateY(Math.PI);
       this.polygonEntity.drawed = true;
       this.viewer.baseMap.add(this.polygonEntity);
       let lineStyle = this.style.LineStyle;
@@ -274,11 +349,32 @@ export default class Base {
         this.activeEntity = this.lineEntity;
       }
     } else {
-      this.polygonEntity.geometry = callback();
+      if (this.polygonEntity instanceof Group) {
+        this.polygonEntity.children.forEach((child) => {
+          child.geometry = callGeometry();
+        });
+      }
+      if (this.polygonEntity instanceof Mesh) {
+        this.polygonEntity.geometry = callGeometry();
+      }
       if (this.outlineEntity) {
         this.outlineEntity.geometry = new BufferGeometry().setFromPoints(this.geometryPoints);
       }
     }
+  }
+
+  createMultiMaterialObject( geometry: BufferGeometry, materials: Material[]) {
+  
+    const group = new Group();
+  
+    for ( let i = 0, l = materials.length; i < l; i ++ ) {
+  
+      group.add( new Mesh( geometry, materials[ i ] ) );
+  
+    }
+  
+    return group;
+  
   }
 
   drawLine() {

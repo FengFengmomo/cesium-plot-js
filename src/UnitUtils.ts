@@ -21,9 +21,9 @@ export default class UnitUtils {
         return position;
     }
 
-    static fromDegrees(latitude:number, longitude:number):Vector3{
+    static fromDegrees(latitude:number, longitude:number, extrade = 10):Vector3{
 		let drector = UnitUtils.datumsToVector(latitude, longitude);
-		drector.multiplyScalar(UnitUtils.EARTH_RADIUS_A+10);
+		drector.multiplyScalar(UnitUtils.EARTH_RADIUS_A+extrade);
 		return drector;
 	}
 
