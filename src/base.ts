@@ -39,6 +39,7 @@ export default class Base {
   styleCache: GeometryStyle | undefined;
   minPointsForShape: number = 0;
   tempLineEntity: Line|undefined;
+  color: number = 0xff8766;
 
   extrudeSettings = { depth: 800000, bevelEnabled: false, bevelSegments: 2, steps: 2, bevelSize: 1, bevelThickness: 1 };
   minHeight = -65536;
@@ -91,7 +92,7 @@ export default class Base {
     intersect.colorWrite = true;
     intersect.stencilWrite = true;
     // intersect.transparent= true;
-    intersect.color.set(0xff8766);
+    intersect.color.set(this.color);
     intersect.stencilFunc = NotEqualStencilFunc; // 关键点 不等于ref的返回true
     intersect.stencilFail = ReplaceStencilOp; // 关键点 等于0的部分
     intersect.stencilZFail = IncrementWrapStencilOp; // 下面两个填任何数都不影响，1、不再进行深度测试
