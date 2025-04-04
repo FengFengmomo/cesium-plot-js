@@ -104,10 +104,10 @@
 		// 	token: '588e61bc464868465169f209fe694dd0'
 		// });
 		// Config.outLine.on = true;
-    let test = new DebugProvider(true);
+    // let test = new DebugProvider(true);
 		const map = new WegeoMap(); 
 		map.addBaseSphereMap({
-			providers: [provider, test]
+			providers: [provider]
 		});
     map.fromDegrees(43.905036,88.109167,1000000);
     const axesHelper = new THREE.AxesHelper( 6371008*2);
