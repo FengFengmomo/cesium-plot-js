@@ -17,6 +17,7 @@ import Triangle from './polygon/triangle';
 import Polygon from './polygon/polygon';
 import Circle from './polygon/circle';
 import Sector from './polygon/sector';
+import group from './Group';
 
 import { GeometryStyle } from './interface';
 import { Vector3 } from 'three';
@@ -41,6 +42,7 @@ const ThreePlot: any = {
   Polygon,
   Circle,
   Sector,
+  group,
 };
 
 type CreateGeometryFromDataOpts = {

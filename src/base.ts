@@ -15,9 +15,11 @@ import cloneDeep from 'lodash.clonedeep';
 import * as Utils from './utils';
 import { BufferGeometry, Color, DoubleSide, Line, LineBasicMaterial, Material, Mesh, MeshBasicMaterial, Shape, ShapeGeometry, 
   SphereGeometry, ExtrudeGeometry, Vector2, Vector3, AlwaysStencilFunc, FrontSide, KeepStencilOp, IncrementWrapStencilOp,BackSide,
-  DecrementWrapStencilOp,NotEqualStencilFunc,ReplaceStencilOp,Group} from 'three';
+  DecrementWrapStencilOp,NotEqualStencilFunc,ReplaceStencilOp, Group} from 'three';
 import UnitUtils from './UnitUtils';
 import Listener from './lsitener';
+import group from './Group';
+let ref = 2;
 
 export default class Base {
   viewer: any; // 这里的viewer是wegeo对象
@@ -40,14 +42,16 @@ export default class Base {
   minPointsForShape: number = 0;
   tempLineEntity: Line|undefined;
   color: number = 0xff8766;
+  ref: number;
 
-  extrudeSettings = { depth: 800000, bevelEnabled: false, bevelSegments: 2, steps: 2, bevelSize: 1, bevelThickness: 1 };
+  extrudeSettings = { depth: 10000*2, bevelEnabled: false, bevelSegments: 2, steps: 2, bevelSize: 1, bevelThickness: 1 };
   minHeight = -65536;
   maxHeight = 65536;
 
   constructor(viewer: any, style?: GeometryStyle) {
     this.viewer = viewer;
     this.type = this.getType();
+    this.ref = (ref++) * 3;
 
     this.mergeStyle(style);
     this.cartesianToLnglat = this.cartesianToLnglat.bind(this);
@@ -60,6 +64,7 @@ export default class Base {
   }
 
   mergeStyle(style: GeometryStyle | undefined) {
+    this.ref = (ref++) * 3;
     var front = new MeshBasicMaterial();
     front.depthWrite = false;
     front.depthTest = true;
@@ -69,7 +74,8 @@ export default class Base {
     front.side = FrontSide;
     front.stencilFail = KeepStencilOp; // 该处一直是不会执行，因为stencilFunc的比较函数是AlwaysStencilFunc，一直为true
     front.stencilZFail = KeepStencilOp; // 深度测试失败的为保持不变。 深度测试函数为LessEqualDepth，该函数为别的物体在该物体后面时返回true。所以即为在该物体前面的ref扔保持不变。
-    front.stencilZPass = IncrementWrapStencilOp;  
+    front.stencilZPass = IncrementWrapStencilOp;
+    front.stencilRef = this.ref;
     // 该处含义就是：深度测试通过的部分增加ref，未通过的部分保持不变。
     // baseMat.stencilFunc = THREE.AlwaysStencilFunc;
     
@@ -83,6 +89,7 @@ export default class Base {
     back.stencilFail = KeepStencilOp;
     back.stencilZFail = KeepStencilOp;
     back.stencilZPass = DecrementWrapStencilOp;
+    back.stencilRef = this.ref;
     // 该处含义就是：深度测试通过的部分减少ref，未通过的部分保持不变。
     
     
@@ -97,6 +104,7 @@ export default class Base {
     intersect.stencilFail = ReplaceStencilOp; // 关键点 等于0的部分
     intersect.stencilZFail = IncrementWrapStencilOp; // 下面两个填任何数都不影响，1、不再进行深度测试
     intersect.stencilZPass = DecrementWrapStencilOp;
+    intersect.stencilRef = this.ref;
 
       this.style = Object.assign(
         {
@@ -316,7 +324,7 @@ export default class Base {
         //   dir = UnitUtils.fromDegrees(arr[i], arr[i+1], -10000)
         // else
         //   dir = UnitUtils.fromDegrees(arr[i], arr[i+1], 10000)
-        let dir = UnitUtils.fromDegrees(arr[i], arr[i+1], arr[i+2]-400000);
+        let dir = UnitUtils.fromDegrees(arr[i], arr[i+1], arr[i+2]-1000);
         arr[i] = dir.x;
         arr[i+1] = dir.y;
         arr[i+2] = dir.z;
@@ -328,23 +336,21 @@ export default class Base {
     // let callGeometry = callback;
     if (!this.polygonEntity) {
       const style = this.style.PolygonStyle;
-      // this.polygonEntity = new Mesh(
-      //   callGeometry(),
-      //   // callback(),
-      //   style
-      // );
+      // this.polygonEntity = new Mesh(callGeometry(),style);
       this.polygonEntity  = this.createMultiMaterialObject( callGeometry(), this.style.materials );
       // this.polygonEntity.lookAt(0, 0, 0);
       // this.polygonEntity.rotateY(Math.PI);
       this.polygonEntity.drawed = true;
-      this.viewer.baseMap.add(this.polygonEntity);
+      // this.viewer.baseMap.add(this.polygonEntity);
+      group.add(this.polygonEntity);
       let lineStyle = this.style.LineStyle;
       // Due to limitations in PolygonGraphics outlining, a separate line style is drawn.
       this.outlineEntity = new Line(
         new BufferGeometry().setFromPoints(this.geometryPoints),
         lineStyle,
       );
-      this.viewer.baseMap.add(this.outlineEntity);
+      // this.viewer.baseMap.add(this.outlineEntity);
+      group.add(this.outlineEntity);
       this.activeEntity = this.polygonEntity;
       if (this.type === 'line') {
         this.activeEntity = this.lineEntity;
@@ -420,6 +426,11 @@ export default class Base {
     const lat = lnglat.latitude;
     const lng = lnglat.longitude;
     return [lng, lat];
+  }
+
+  lnglatToCartesian(lnglat: [number, number]): Vector3 {
+    const position = UnitUtils.datumsToVector(lnglat[1], lnglat[0]);
+    return position;
   }
 
   // 将像素坐标转换为笛卡尔坐标

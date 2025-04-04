@@ -89,7 +89,7 @@
 
 	<script type="module">
 		// 需要全量构建geo，目前不能把threejs排除在外
-		import {WegeoMap,MapView, TianDiTuProvider, Config, BingMapsProvider, AngleUtils,  UnitsUtils} from 'Geo';
+		import {WegeoMap,MapView, TianDiTuProvider, Config, DebugProvider, BingMapsProvider, AngleUtils,  UnitsUtils} from 'Geo';
 		import * as THREE from 'three';
 		import ThreePlot from 'ThreePlot';
 		let provider = new BingMapsProvider();
@@ -104,9 +104,10 @@
 		// 	token: '588e61bc464868465169f209fe694dd0'
 		// });
 		// Config.outLine.on = true;
+    let test = new DebugProvider(true);
 		const map = new WegeoMap(); 
 		map.addBaseSphereMap({
-			providers: [provider]
+			providers: [provider, test]
 		});
     map.fromDegrees(43.905036,88.109167,1000000);
     const axesHelper = new THREE.AxesHelper( 6371008*2);
@@ -117,7 +118,8 @@
 		map.animate();
 		// 解析geojson
 		// const geojson = await fetch('./examples/data/xinjiang.json').then( res => res.json() );
-
+    // console.log(map.baseMap.renderer);
+    // map.baseMap.renderer.setClearStencil(0);
 		let viewer = map;
     window.mapThreejs = map;
 		let geometry;
@@ -137,7 +139,21 @@
     // geometry.points = [Vector3,Vector4,Vector5];
     // geometry.updateMovingPoint(Vector6);
     // console.log(geometry.polygonEntity);
-   
+  map.baseMap.add(ThreePlot.group);
+  window.group = ThreePlot.group;
+  function createMultiMaterialObject( geometry, materials) {
+  
+  const group = new THREE.Group();
+
+  for ( let i = 0, l = materials.length; i < l; i ++ ) {
+
+    group.add( new THREE.Mesh( geometry, materials[ i ] ) );
+
+  }
+
+  return group;
+
+}
   const dragStartHandler = () => {
     console.error('start');
   };
@@ -156,6 +172,29 @@
   const editEndHandler = (geometryPoints) => {
     console.error('editEnd', geometryPoints);
   };
+  ThreePlot.group.renderOrder = 0;
+  let geometrys = [];
+  // viewer.baseMap.canvas.addEventListener('keyup', (evt) => {
+  //   if (event.keyCode === 13) {
+      
+  //   }
+  //   console.log(evt.keyCode);
+  // });
+  let added = true;
+  viewer.baseMap.canvas.addEventListener('wheel', (evt) => {
+    // console.log(evt);
+    ThreePlot.group.clear();
+    for (let i = 0; i < geometrys.length; i++) {
+      let obj = geometrys[i];
+      obj.polygonEntity.clear();
+      
+      obj.polygonEntity = undefined;
+      obj.outlineEntity = undefined;
+      obj.mergeStyle();
+      obj.drawPolygon();
+    }
+
+  });
   const buttonGroup = document.getElementById('button-group');
   buttonGroup.onclick = (evt) => {
     const targetElement = evt.target;
@@ -281,6 +320,7 @@
       default:
         break;
     }
+    geometrys.push(geometry);
   };
 		
 	</script>
